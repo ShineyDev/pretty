@@ -30,7 +30,6 @@ import types
 
 _re_comment = re.compile("((?:(?:\"(?:[^\\\"]|(?:\\\\)*\\\")*\")|(?:\'(?:[^\\\']|(?:\\\\)*\\\')*\')|[^#])*)(#.*)?$")
 
-is_builtin = lambda s: s in dir(__builtins__)
 is_keyword = lambda s: s in keyword.kwlist
 is_special_name = lambda s: s.startswith("<") and s.endswith(">")
 
