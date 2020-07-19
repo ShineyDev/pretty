@@ -1,0 +1,1 @@
+import os; exec("if 'PY_PRETTIFY_EXC' in os.environ:\n from prettify_exceptions import hook; hook()")

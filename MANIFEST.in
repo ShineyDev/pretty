@@ -1,0 +1,4 @@
+include LICENSE
+include LICENSE_QIX
+
+include hook.pth

@@ -1,0 +1,8 @@
+# visual studio configuration
+/.vs/
+
+# python cache
+__pycache__/
+
+# project
+/cool.py
