@@ -142,26 +142,29 @@ class TracebackFormatter(_Formatter):
         yield from self.format_exception(
             *sys.exc_info(), limit=limit, chain=chain)
 
-    def format_exception(self, exc_type, exc_value, exc_traceback, *, limit=None, chain=True):
+    def format_exception(self, exc_type, exc_value, exc_traceback, *, limit=None, chain=True, seen=None):
         """
         Essentially :func:`traceback.format_exception`.
         """
+
+        seen = seen or set()
+        seen.add(id(exc_value))
 
         if chain:
             cause = exc_value.__cause__
             context = exc_value.__context__
 
-            if cause is not None:
+            if cause is not None and id(cause) not in seen:
                 yield from self.format_exception(
                     type(cause), cause, cause.__traceback__,
-                    limit=limit, chain=chain)
+                    limit=limit, chain=chain, seen=seen)
 
                 yield self._cause_message
 
-            if context is not None:
+            if context is not None and id(context) not in seen:
                 yield from self.format_exception(
                     type(context), context, context.__traceback__,
-                    limit=limit, chain=chain)
+                    limit=limit, chain=chain, seen=seen)
 
                 yield self._context_message
 
