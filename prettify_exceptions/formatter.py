@@ -39,6 +39,7 @@ class _Formatter():
         "cap_char": "\u2514",
         "pipe_char": "\u2502",
 
+        "_color_enabled": True,
         "comment_fmt": "\x1B[38;2;81;163;69m{0}\x1B[m",
         "inspect_fmt": "\x1B[38;2;244;144;208m{0}\x1B[m",
         "keyword_fmt": "\x1B[38;2;82;153;206m{0}\x1B[m",
@@ -286,7 +287,9 @@ class DefaultFormatter(TracebackFormatter):
         except (SyntaxError) as e:
             return
         
-        line = self.colorize_tree(tree, line)
+        if self.theme["_color_enabled"]:
+            line = self.colorize_tree(tree, line)
+
         yield self._traceback_frame_line_fmt.format(line=line)
 
         values = self.get_relevant_values(tree, frame)
@@ -306,7 +309,9 @@ class DefaultFormatter(TracebackFormatter):
                 self.theme["cap_char"],
                 repr(value))
             
-            line = self.theme["inspect_fmt"].format(line)
+            if self.theme["_color_enabled"]:
+                line = self.theme["inspect_fmt"].format(line)
+
             yield self._traceback_frame_line_fmt.format(line=line)
 
         yield "\n"
