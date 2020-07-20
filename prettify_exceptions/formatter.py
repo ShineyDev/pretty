@@ -40,13 +40,13 @@ class _Formatter():
         "cap_char": "\u2514",
         "pipe_char": "\u2502",
 
-        "_color_enabled": not os.environ.get("NO_COLOR", False),
+        "_ansi_enabled": not os.environ.get("NO_COLOR", False),
         "_bold": "\x1B[1m{0}\x1B[m",
-        "comment_fmt": "\x1B[38;2;81;163;69m{0}\x1B[m",
-        "inspect_fmt": "\x1B[38;2;244;144;208m{0}\x1B[m",
-        "keyword_fmt": "\x1B[38;2;82;153;206m{0}\x1B[m",
-        "literal_str_fmt": "\x1B[38;2;208;154;132m{0}\x1B[m",
-        "literal_int_fmt": "\x1B[38;2;176;203;152m{0}\x1B[m",
+        "comment": "\x1B[38;2;81;163;69m{0}\x1B[m",
+        "inspect": "\x1B[38;2;244;144;208m{0}\x1B[m",
+        "keyword": "\x1B[38;2;82;153;206m{0}\x1B[m",
+        "literal_str": "\x1B[38;2;208;154;132m{0}\x1B[m",
+        "literal_int": "\x1B[38;2;176;203;152m{0}\x1B[m",
     }
 
     _cause_message = traceback._cause_message
@@ -290,7 +290,7 @@ class DefaultFormatter(TracebackFormatter):
             yield self._traceback_frame_line_fmt.format(line=line)
             return
         
-        if self.theme["_color_enabled"]:
+        if self.theme["_ansi_enabled"]:
             line = self.colorize_tree(tree, line)
 
         yield self._traceback_frame_line_fmt.format(line=line)
@@ -313,7 +313,7 @@ class DefaultFormatter(TracebackFormatter):
                 repr(value))
 
             yield self._traceback_frame_line_fmt.format(
-                line=self.colorize(line, "inspect_fmt"))
+                line=self.colorize(line, "inspect"))
 
         yield "\n"
 
@@ -323,7 +323,7 @@ class DefaultFormatter(TracebackFormatter):
             capture_locals=True, lookup_lines=lookup_lines)
 
     def colorize(self, source, theme):
-        if self.theme["_color_enabled"]:
+        if self.theme["_ansi_enabled"]:
             return self.theme[theme].format(source)
 
         return source
@@ -342,14 +342,14 @@ class DefaultFormatter(TracebackFormatter):
             col_offset = node.col_offset
 
             if is_keyword(name.lower()):
-                colorize.append((col_offset, name.lower(), "keyword_fmt"))
+                colorize.append((col_offset, name.lower(), "keyword"))
             elif cls is ast.Constant:
                 if isinstance(node.value, bool):
-                    colorize.append((col_offset, source, "keyword_fmt"))
+                    colorize.append((col_offset, source, "keyword"))
                 elif isinstance(node.value, (complex, float, int)):
-                    colorize.append((col_offset, source, "literal_int_fmt"))
+                    colorize.append((col_offset, source, "literal_int"))
                 elif isinstance(node.value, str):
-                    colorize.append((col_offset, source, "literal_str_fmt"))
+                    colorize.append((col_offset, source, "literal_str"))
 
         colorize.sort(key=lambda e: e[0])
         
@@ -369,7 +369,7 @@ class DefaultFormatter(TracebackFormatter):
         if match and match.group(2):
             line = "{0}{1}".format(
                 match.group(1),
-                self.colorize(match.group(2), "comment_fmt"))
+                self.colorize(match.group(2), "comment"))
 
         return line
 
