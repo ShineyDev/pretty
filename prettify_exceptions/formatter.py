@@ -298,9 +298,9 @@ class DefaultFormatter(TracebackFormatter):
         values = self.get_relevant_values(tree, frame)
         for (i) in reversed(range(len(values))):
             col_offset, value = values[i]
+            value = self.colorize_value(value)
 
             index = 0
-
             line = ""
 
             for (col_offset_) in [col_offset for (col_offset, _) in values[:i]]:
@@ -310,7 +310,7 @@ class DefaultFormatter(TracebackFormatter):
             line += "{0}{1} {2}".format(
                 (" " * (col_offset - index)),
                 self.theme["cap_char"],
-                repr(value))
+                value)
 
             yield self._traceback_frame_line_fmt.format(
                 line=self.colorize(line, "inspect"))
@@ -344,12 +344,8 @@ class DefaultFormatter(TracebackFormatter):
             if is_keyword(name.lower()):
                 colorize.append((col_offset, name.lower(), "keyword"))
             elif cls is ast.Constant:
-                if isinstance(node.value, bool):
-                    colorize.append((col_offset, source, "keyword"))
-                elif isinstance(node.value, (complex, float, int)):
-                    colorize.append((col_offset, source, "literal_int"))
-                elif isinstance(node.value, str):
-                    colorize.append((col_offset, source, "literal_str"))
+                theme = self._get_theme(node.value)
+                colorize.append((col_offset, source, theme))
 
         colorize.sort(key=lambda e: e[0])
         
@@ -372,6 +368,15 @@ class DefaultFormatter(TracebackFormatter):
                 self.colorize(match.group(2), "comment"))
 
         return line
+
+    def colorize_value(self, value):
+        value_repr = repr(value)
+
+        theme = self._get_theme(value)
+        if theme:
+            value_repr = self.colorize(value_repr, theme)
+
+        return value_repr
 
     def get_relevant_values(self, tree, frame):
         values = []
@@ -398,6 +403,18 @@ class DefaultFormatter(TracebackFormatter):
         values.sort(key=lambda e: e[0])
 
         return values
+
+    def _get_theme(self, value):
+        theme = None
+
+        if isinstance(value, bool):
+            theme = "keyword"
+        elif isinstance(value, (complex, float, int)):
+            theme = "literal_int"
+        elif isinstance(value, str):
+            theme = "literal_str"
+
+        return theme
 
 class FrameSummary(traceback.FrameSummary):
     __slots__ = ("filename", "lineno", "name", "_line", "f_code", "locals", "globals")
