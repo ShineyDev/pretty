@@ -261,8 +261,12 @@ class DefaultFormatter(TracebackFormatter):
             fmt = self._traceback_frame_location_fmt[:-1]
             fmt += "{signature}\n"
 
-            signature = inspect.signature(
-                types.FunctionType(frame.f_code, {}))
+            try:
+                signature = inspect.signature(
+                    types.FunctionType(frame.f_code, {}))
+            except (TypeError) as e:
+                # TODO: handle closures
+                signature = "(<unknown>)"
 
             yield fmt.format(
                 filename=filename, lineno=lineno, name=name,
