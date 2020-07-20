@@ -271,17 +271,12 @@ class DefaultFormatter(TracebackFormatter):
                 # TODO: handle closures
                 signature = "(<unknown>)"
 
-            location = fmt.format(
+            yield self.colorize(fmt.format(
                 filename=filename, lineno=lineno, name=name,
-                signature=signature)
+                signature=signature), "_bold")
         else:
-            location = self._traceback_frame_location_fmt.format(
-                filename=filename, lineno=lineno, name=name)
-
-        if self.theme["_color_enabled"]:
-            location = self.theme["_bold"].format(location)
-
-        yield location
+            yield self.colorize(self._traceback_frame_location_fmt.format(
+                filename=filename, lineno=lineno, name=name), "_bold")
 
         if not line:
             # still don't have a line?
@@ -316,11 +311,9 @@ class DefaultFormatter(TracebackFormatter):
                 (" " * (col_offset - index)),
                 self.theme["cap_char"],
                 repr(value))
-            
-            if self.theme["_color_enabled"]:
-                line = self.theme["inspect_fmt"].format(line)
 
-            yield self._traceback_frame_line_fmt.format(line=line)
+            yield self._traceback_frame_line_fmt.format(
+                line=self.colorize(line, "inspect_fmt"))
 
         yield "\n"
 
@@ -328,6 +321,12 @@ class DefaultFormatter(TracebackFormatter):
         return super().format_traceback(
             exc_traceback, limit=limit, capture_globals=True,
             capture_locals=True, lookup_lines=lookup_lines)
+
+    def colorize(self, source, theme):
+        if self.theme["_color_enabled"]:
+            return self.theme[theme].format(source)
+
+        return source
 
     def colorize_tree(self, tree, line):
         colorize = []
@@ -359,7 +358,7 @@ class DefaultFormatter(TracebackFormatter):
 
         for (col_offset, source, theme) in colorize:
             chunks.append(line[offset:col_offset])
-            chunks.append(self.theme[theme].format(source))
+            chunks.append(self.colorize(source, theme))
             offset = col_offset + len(source)
 
         chunks.append(line[offset:])
@@ -370,7 +369,7 @@ class DefaultFormatter(TracebackFormatter):
         if match and match.group(2):
             line = "{0}{1}".format(
                 match.group(1),
-                self.theme["comment_fmt"].format(match.group(2)))
+                self.colorize(match.group(2), "comment_fmt"))
 
         return line
 
