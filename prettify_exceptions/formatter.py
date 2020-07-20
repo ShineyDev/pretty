@@ -44,10 +44,10 @@ class _Formatter():
         "_bold": "\x1B[1m{0}\x1B[m",
         "comment": "\x1B[38;2;81;163;69m{0}\x1B[m",
         "inspect": "\x1B[38;2;244;144;208m{0}\x1B[m",
+        "keyword": "\x1B[38;2;82;153;206m{0}\x1B[m",
         "literal_bool": "\x1B[38;2;82;153;206m{0}\x1B[m",
         "literal_int": "\x1B[38;2;176;203;152m{0}\x1B[m",
         "literal_str": "\x1B[38;2;208;154;132m{0}\x1B[m",
-        "keyword": "\x1B[38;2;82;153;206m{0}\x1B[m",
     }
 
     _cause_message = traceback._cause_message
