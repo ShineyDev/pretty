@@ -320,7 +320,7 @@ class DefaultFormatter(TracebackFormatter):
         colorize = []
         
         for (node) in ast.walk(tree):
-            if not hasattr(node, "col_offset"):
+            if not hasattr(node, "col_offset") or not hasattr(node, "end_col_offset"):
                 continue
 
             cls = node.__class__
