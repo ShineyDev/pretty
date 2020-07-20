@@ -22,6 +22,7 @@ import inspect
 import itertools
 import keyword
 import linecache
+import os
 import re
 import sys
 import traceback
@@ -39,7 +40,7 @@ class _Formatter():
         "cap_char": "\u2514",
         "pipe_char": "\u2502",
 
-        "_color_enabled": True,
+        "_color_enabled": not os.environ.get("NO_COLOR", False),
         "comment_fmt": "\x1B[38;2;81;163;69m{0}\x1B[m",
         "inspect_fmt": "\x1B[38;2;244;144;208m{0}\x1B[m",
         "keyword_fmt": "\x1B[38;2;82;153;206m{0}\x1B[m",
