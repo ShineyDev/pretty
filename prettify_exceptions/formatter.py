@@ -41,6 +41,7 @@ class _Formatter():
         "pipe_char": "\u2502",
 
         "_color_enabled": not os.environ.get("NO_COLOR", False),
+        "_bold": "\x1B[1m{0}\x1B[m",
         "comment_fmt": "\x1B[38;2;81;163;69m{0}\x1B[m",
         "inspect_fmt": "\x1B[38;2;244;144;208m{0}\x1B[m",
         "keyword_fmt": "\x1B[38;2;82;153;206m{0}\x1B[m",
@@ -270,12 +271,17 @@ class DefaultFormatter(TracebackFormatter):
                 # TODO: handle closures
                 signature = "(<unknown>)"
 
-            yield fmt.format(
+            location = fmt.format(
                 filename=filename, lineno=lineno, name=name,
                 signature=signature)
         else:
-            yield from super().format_list_frame(
-                None, filename, lineno, name, None)
+            location = self._traceback_frame_location_fmt.format(
+                filename=filename, lineno=lineno, name=name)
+
+        if self.theme["_color_enabled"]:
+            location = self.theme["_bold"].format(location)
+
+        yield location
 
         if not line:
             # still don't have a line?
