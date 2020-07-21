@@ -300,24 +300,48 @@ class DefaultFormatter(TracebackFormatter):
         yield self._traceback_frame_line_fmt.format(line=line)
 
         values = self.get_relevant_values(tree, frame)
-        for (i) in reversed(range(len(values))):
-            col_offset, value = values[i]
-            value = self.colorize_value(value)
+        values = [(o, v, self.colorize_value(v)) for (o, v) in values]
+        while values:
+            col_offset, value, value_repr = values.pop()
+
+            this_line = list()
+            this_line.append((col_offset, value, value_repr))
+
+            index = col_offset
+            for (i) in reversed(range(len(values))):
+                col_offset, value, value_repr = values[i]
+
+                if col_offset + len(repr(value)) + 2 < index:
+                    values.pop(i)
+                    this_line.append((col_offset, value, value_repr))
+                    index = col_offset
+                else:
+                    this_line.append((col_offset, None, None))
+                    index = col_offset
+
+            this_line.sort(key=lambda e: e[0])
 
             index = 0
             line = ""
 
-            for (col_offset_) in [col_offset for (col_offset, _) in values[:i]]:
-                line += " " * (col_offset_ - index) + self.theme["pipe_char"]
-                index = col_offset_ + 1
+            for (col_offset, value, value_repr) in this_line:
+                line += " " * (col_offset - index)
 
-            line += "{0}{1} {2}".format(
-                (" " * (col_offset - index)),
-                self.theme["cap_char"],
-                value)
+                if value_repr is None:
+                    line += self.colorize(
+                        self.theme["pipe_char"], "inspect")
 
-            yield self._traceback_frame_line_fmt.format(
-                line=self.colorize(line, "inspect"))
+                    index = col_offset + 1
+
+                    continue
+
+                line += "{0} {1}".format(
+                    self.colorize(self.theme["cap_char"], "inspect"),
+                    self.colorize(value_repr, "inspect"))
+
+                index = col_offset + len(repr(value)) + 2
+
+            yield self._traceback_frame_line_fmt.format(line=line)
 
         yield "\n"
 
