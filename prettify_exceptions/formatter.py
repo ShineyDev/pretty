@@ -299,51 +299,8 @@ class DefaultFormatter(TracebackFormatter):
 
         yield self._traceback_frame_line_fmt.format(line=line)
 
-        values = self.get_relevant_values(tree, frame)
-        values = [(o, v, self.colorize_value(v)) for (o, v) in values]
-        while values:
-            col_offset, value, value_repr = values.pop()
-
-            this_line = list()
-            this_line.append((col_offset, value, value_repr))
-
-            index = col_offset
-            for (i) in reversed(range(len(values))):
-                col_offset, value, value_repr = values[i]
-
-                if col_offset + len(repr(value)) + 2 < index:
-                    values.pop(i)
-                    this_line.append((col_offset, value, value_repr))
-                    index = col_offset
-                else:
-                    this_line.append((col_offset, None, None))
-                    index = col_offset
-
-            this_line.sort(key=lambda e: e[0])
-
-            index = 0
-            line = ""
-
-            for (col_offset, value, value_repr) in this_line:
-                line += " " * (col_offset - index)
-
-                if value_repr is None:
-                    line += self.colorize(
-                        self.theme["pipe_char"], "inspect")
-
-                    index = col_offset + 1
-
-                    continue
-
-                line += "{0} {1}".format(
-                    self.colorize(self.theme["cap_char"], "inspect"),
-                    self.colorize(value_repr, "inspect"))
-
-                index = col_offset + len(repr(value)) + 2
-
-            yield self._traceback_frame_line_fmt.format(line=line)
-
-        yield "\n"
+        if frame:
+            yield from self.inspect(tree, frame)
 
     def format_traceback(self, exc_traceback, *, limit=None, lookup_lines=True):
         return super().format_traceback(
@@ -414,7 +371,7 @@ class DefaultFormatter(TracebackFormatter):
                 if not isinstance(node.value, ast.Name):
                     continue
 
-                value = frame.locals.get(node.value.id, frame.globals.get(node.value.id, self._sentinel))
+                value = frame.scope.get(node.value.id, self._sentinel)
 
                 if value is not self._sentinel:
                     value = getattr(value, node.attr, self._sentinel)
@@ -423,7 +380,7 @@ class DefaultFormatter(TracebackFormatter):
                     values.append((node.col_offset + len(node.value.id) + 1, value))
 
             if isinstance(node, ast.Name):
-                value = frame.locals.get(node.id, frame.globals.get(node.id, self._sentinel))
+                value = frame.scope.get(node.id, self._sentinel)
 
                 if value is not self._sentinel:
                     values.append((node.col_offset, value))
@@ -431,6 +388,53 @@ class DefaultFormatter(TracebackFormatter):
         values.sort(key=lambda e: e[0])
 
         return values
+
+    def inspect(self, tree, frame):
+        values = self.get_relevant_values(tree, frame)
+        values = [(o, v, self.colorize_value(v)) for (o, v) in values]
+        while values:
+            col_offset, value, value_repr = values.pop()
+
+            this_line = list()
+            this_line.append((col_offset, value, value_repr))
+
+            index = col_offset
+            for (i) in reversed(range(len(values))):
+                col_offset, value, value_repr = values[i]
+
+                if col_offset + len(repr(value)) + 2 < index:
+                    values.pop(i)
+                    this_line.append((col_offset, value, value_repr))
+                    index = col_offset
+                else:
+                    this_line.append((col_offset, None, None))
+                    index = col_offset
+
+            this_line.sort(key=lambda e: e[0])
+
+            index = 0
+            line = ""
+
+            for (col_offset, value, value_repr) in this_line:
+                line += " " * (col_offset - index)
+
+                if value_repr is None:
+                    line += self.colorize(
+                        self.theme["pipe_char"], "inspect")
+
+                    index = col_offset + 1
+
+                    continue
+
+                line += "{0} {1}".format(
+                    self.colorize(self.theme["cap_char"], "inspect"),
+                    self.colorize(value_repr, "inspect"))
+
+                index = col_offset + len(repr(value)) + 2
+
+            yield self._traceback_frame_line_fmt.format(line=line)
+
+        yield "\n"
 
     def _get_theme(self, value):
         theme = None
@@ -445,7 +449,7 @@ class DefaultFormatter(TracebackFormatter):
         return theme
 
 class FrameSummary(traceback.FrameSummary):
-    __slots__ = ("filename", "lineno", "name", "_line", "f_code", "locals", "globals")
+    __slots__ = ("filename", "lineno", "name", "_line", "f_code", "locals", "globals", "scope")
 
     def __init__(self, filename, lineno, name, *, lookup_line=True, line=None, f_code=None, locals=None, globals=None):
         super().__init__(filename, lineno, name, lookup_line=lookup_line, locals=None, line=line)
@@ -453,3 +457,6 @@ class FrameSummary(traceback.FrameSummary):
         self.f_code = f_code
         self.locals = locals or dict()
         self.globals = globals or dict()
+
+        self.scope = self.globals.copy()
+        self.scope.update(self.locals)
