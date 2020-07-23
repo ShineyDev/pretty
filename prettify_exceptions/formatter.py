@@ -266,9 +266,6 @@ class DefaultFormatter(TracebackFormatter):
         if not isinstance(frame, FrameSummary):
             frame = None
 
-        if not line:
-            line = linecache.getline(filename, lineno, frame.globals)
-
         if frame and not is_special_name(name):
             fmt = self._traceback_frame_location_fmt[:-1]
             fmt += "{signature}\n"
@@ -288,10 +285,12 @@ class DefaultFormatter(TracebackFormatter):
                 filename=filename, lineno=lineno, name=name), "_bold")
 
         if not line:
-            # still don't have a line?
-            # probably in a repl;
-            # let's not expand the trace.
-            return
+            line = linecache.getline(filename, lineno, frame.globals)
+            if not line:
+                # still don't have a line?
+                # probably in a repl;
+                # let's not expand the trace.
+                return
 
         try:
             tree = ast.parse(line, filename, "exec")
