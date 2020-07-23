@@ -194,8 +194,6 @@ class TracebackFormatter(_Formatter):
 
         for (frame) in list_:
             filename, lineno, name, line = frame
-            if not isinstance(frame, traceback.FrameSummary):
-                frame = None
 
             if (last_filename is None or last_filename != filename or
                 last_lineno is None or last_lineno != lineno or
@@ -227,6 +225,9 @@ class TracebackFormatter(_Formatter):
         """
         Essentially :meth:`traceback.StackSummary.format`'s ``row`` logic.
         """
+
+        if not isinstance(frame, traceback.FrameSummary):
+            frame = None
 
         yield self._traceback_frame_location_fmt.format(
             filename=filename, lineno=lineno, name=name)
@@ -262,6 +263,9 @@ class DefaultFormatter(TracebackFormatter):
     _traceback_frame_recursion_fmt = "  [Previous frame repeated {count} more time{s}]\n\n"
 
     def format_list_frame(self, frame, filename, lineno, name, line):
+        if not isinstance(frame, FrameSummary):
+            frame = None
+
         if not line:
             line = linecache.getline(filename, lineno, frame.globals)
 
