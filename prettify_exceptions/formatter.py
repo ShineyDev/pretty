@@ -293,6 +293,7 @@ class DefaultFormatter(TracebackFormatter):
             tree = ast.parse(line, filename, "exec")
         except (SyntaxError) as e:
             yield self._traceback_frame_line_fmt.format(line=line)
+            yield "\n"
             return
         
         if self.theme["_ansi_enabled"]:
