@@ -345,9 +345,7 @@ class DefaultFormatter(TracebackFormatter):
 
             col_offset = node.col_offset
 
-            if is_keyword(name.lower()):
-                colorize.append((col_offset, name.lower(), "keyword"))
-            elif cls is ast.Constant:
+            if cls is ast.Constant:
                 theme = self._get_theme(node.value)
                 colorize.append((col_offset, source, theme))
 
