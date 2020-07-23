@@ -47,6 +47,7 @@ class _Formatter():
         "keyword": "\x1B[38;2;82;153;206m{0}\x1B[m",
         "literal_bool": "\x1B[38;2;82;153;206m{0}\x1B[m",
         "literal_int": "\x1B[38;2;176;203;152m{0}\x1B[m",
+        "literal_none": "\x1B[38;2;82;153;206m{0}\x1B[m",
         "literal_str": "\x1B[38;2;208;154;132m{0}\x1B[m",
     }
 
@@ -413,7 +414,9 @@ class DefaultFormatter(TracebackFormatter):
             theme = "literal_bool"
         elif isinstance(value, (complex, float, int)):
             theme = "literal_int"
-        elif isinstance(value, str):
+        elif isinstance(value, type(None)):
+            theme = "literal_none"
+        elif isinstance(value, (bytes, str)):
             theme = "literal_str"
 
         return theme
