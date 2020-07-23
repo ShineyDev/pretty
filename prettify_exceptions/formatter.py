@@ -327,7 +327,7 @@ class DefaultFormatter(TracebackFormatter):
             capture_locals=True, lookup_lines=lookup_lines)
 
     def colorize(self, source, theme):
-        if self.theme["_ansi_enabled"]:
+        if theme and self.theme["_ansi_enabled"]:
             return self.theme[theme].format(source)
 
         return source
