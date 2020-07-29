@@ -49,6 +49,8 @@ class _Formatter():
         "literal_int": "\x1B[38;2;176;203;152m{0}\x1B[m",
         "literal_none": "\x1B[38;2;82;153;206m{0}\x1B[m",
         "literal_str": "\x1B[38;2;208;154;132m{0}\x1B[m",
+
+        "clean_path_patterns": [],
     }
 
     _cause_message = traceback._cause_message
@@ -266,6 +268,8 @@ class DefaultFormatter(TracebackFormatter):
         if not isinstance(frame, FrameSummary):
             frame = None
 
+        filename = self.clean_filename(filename)
+
         if frame and not is_special_name(name):
             fmt = self._traceback_frame_location_fmt[:-1]
             fmt += "{signature}\n"
@@ -311,6 +315,35 @@ class DefaultFormatter(TracebackFormatter):
         return super().format_traceback(
             exc_traceback, limit=limit, capture_globals=True,
             capture_locals=True, lookup_lines=lookup_lines)
+
+    def clean_filename(self, filename):
+        filename = filename.replace("\\", "/")
+
+        py_paths = sorted({
+            path for path in sys.path
+            if os.path.isdir(path)
+        }, key=lambda p: -len(p))
+
+        for (py_path) in py_paths:
+            py_path = py_path.replace("\\", "/").rstrip("/")
+            if filename.startswith(py_path):
+                return os.path.join("/lib", filename[len(py_path):].lstrip("/")).replace("\\", "/")
+
+        for (path) in self.theme["clean_path_patterns"]:
+            if not isinstance(path, re.Pattern):
+                path = re.compile(path)
+
+            match = path.search(filename)
+            print(match, filename, path)
+            if match:
+                try:
+                    filename = match.group(1)
+                except (IndexError) as e:
+                    filename = match.group(0)
+
+                return filename
+
+        return filename
 
     def colorize(self, source, theme):
         if theme and self.theme["_ansi_enabled"]:
