@@ -334,7 +334,6 @@ class DefaultFormatter(TracebackFormatter):
                 path = re.compile(path)
 
             match = path.search(filename)
-            print(match, filename, path)
             if match:
                 try:
                     filename = match.group(1)
