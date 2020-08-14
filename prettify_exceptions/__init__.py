@@ -17,6 +17,7 @@
 """
 
 import sys
+import traceback
 
 from prettify_exceptions.formatter import DefaultFormatter
 
@@ -32,6 +33,18 @@ def create_excepthook(formatter):
     return excepthook
 
 def hook(cls=DefaultFormatter, **kwargs):
-    override = kwargs.pop("override_hook", False)
-    if not is_hooked() or override:
-        sys.excepthook = create_excepthook(cls(**kwargs))
+    override_hook = kwargs.pop("override_hook", False)
+    override_traceback = kwargs.pop("override_traceback", False)
+
+    formatter = cls(**kwargs)
+
+    if override_traceback:
+        traceback.format_exc = formatter.format_exc
+        traceback.format_exception = formatter.format_exception
+        traceback.format_exception_only = formatter.format_exception_only
+        traceback.format_list = formatter.format_list
+        traceback.format_stack = formatter.format_stack
+        traceback.format_tb = formatter.format_traceback
+
+    if override_hook or not is_hooked():
+        sys.excepthook = create_excepthook(formatter)
