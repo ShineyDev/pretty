@@ -179,10 +179,10 @@ class TracebackFormatter(_Formatter):
 
     def format_exception_only(self, exc_type, exc_value):
         """
-        Alias to :func:`traceback.format_exception_only`.
+        Alias to :meth:`traceback.TracebackException.format_exception_only`.
         """
 
-        yield from traceback.format_exception_only(exc_type, exc_value)
+        yield from traceback.TracebackException(exc_type, exc_value, None).format_exception_only()
 
     def format_list(self, list_):
         """
