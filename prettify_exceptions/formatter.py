@@ -129,7 +129,7 @@ class TracebackFormatter(_Formatter):
 
     def extract_traceback(self, exc_traceback, *, limit=None, capture_globals=None, capture_locals=None, lookup_lines=None):
         """
-        Essentially :func:`traceback.extract_traceback`.
+        Essentially :func:`traceback.extract_tb`.
         """
 
         return self.extract(
@@ -253,7 +253,7 @@ class TracebackFormatter(_Formatter):
 
     def format_traceback(self, exc_traceback, *, limit=None, capture_globals=None, capture_locals=None, lookup_lines=None):
         """
-        Essentially :func:`traceback.format_traceback`.
+        Essentially :func:`traceback.format_tb`.
         """
 
         yield from self.format_list(self.extract_traceback(
