@@ -21,8 +21,8 @@ import sys
 from prettify_exceptions.formatter import DefaultFormatter
 
 
-def _hooked():
-    # we are, or another package is, already hooked
+def is_hooked():
+    # whether we are, or another package is, already hooked
     return sys.excepthook is not sys.__excepthook__
 
 def create_excepthook(formatter):
@@ -33,5 +33,5 @@ def create_excepthook(formatter):
 
 def hook(cls=DefaultFormatter, **kwargs):
     override = kwargs.pop("override_hook", False)
-    if not _hooked() or override:
+    if not is_hooked() or override:
         sys.excepthook = create_excepthook(cls(**kwargs))
