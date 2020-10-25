@@ -11,9 +11,8 @@ Features
 
 #. Everything from ``better-exceptions``, plus;
 #. Support for recent Python versions,
-#. Slightly more complex debugging,
-#. Highly customizable object interface, and;
-#. I rewrote the ``traceback.py`` module to get here. :')
+#. Slightly more complex debugging, and;
+#. A highly customizable object interface
 
 
 Hooking prettify.py
