@@ -3,7 +3,7 @@ prettify.py
 
 For prettier (and helpful) Python exceptions.
 
-Heavily inspired by Qix' `better-exceptions <https://github.com/Qix-/better-exceptions/>`_ module. (`LICENSE <https://github.com/ShineyDev/prettify.py/blob/master/LICENSE_QIX/>`_)
+Heavily inspired by Qix' `better-exceptions <https://github.com/Qix-/better-exceptions/>`_ module.
 
 
 Features
