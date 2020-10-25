@@ -1,2 +1,2 @@
 include LICENSE
-include hook.pth
+include prettify_exceptions_hook.pth
