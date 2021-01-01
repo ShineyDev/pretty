@@ -16,6 +16,7 @@ class BuildPTH(build):
         dest = os.path.join(self.build_lib, os.path.basename(path))
         self.copy_file(path, dest)
 
+
 class DevelopPTH(develop):
     def run(self):
         super().run()
@@ -24,6 +25,7 @@ class DevelopPTH(develop):
         dest = os.path.join(self.install_dir, os.path.basename(path))
         self.copy_file(path, dest)
 
+
 class EasyInstallPTH(easy_install):
     def run(self):
         super().run()
@@ -31,6 +33,7 @@ class EasyInstallPTH(easy_install):
         path = os.path.join(os.path.dirname(__file__), "prettify_exceptions_hook.pth")
         dest = os.path.join(self.install_dir, os.path.basename(path))
         self.copy_file(path, dest)
+
 
 class InstallLibPTH(install_lib):
     def run(self):
@@ -46,15 +49,17 @@ class InstallLibPTH(install_lib):
         return itertools.chain(super().get_outputs(), self.outputs)
 
 
-setup(author="ShineyDev",
-      # https://github.com/pytest-dev/pytest-cov/blob/master/setup.py
-      cmdclass={
-          "build": BuildPTH,
-          "develop": DevelopPTH,
-          "easy_insall": EasyInstallPTH,
-          "install_lib": InstallLibPTH,
-      },
-      license="Apache Software License",
-      name="prettify.py",
-      packages=["prettify_exceptions"],
-      url="https://github.com/ShineyDev/prettify.py")
+setup(
+    author="ShineyDev",
+    # https://github.com/pytest-dev/pytest-cov/blob/master/setup.py
+    cmdclass={
+        "build": BuildPTH,
+        "develop": DevelopPTH,
+        "easy_insall": EasyInstallPTH,
+        "install_lib": InstallLibPTH,
+    },
+    license="Apache Software License",
+    name="prettify.py",
+    packages=["prettify_exceptions"],
+    url="https://github.com/ShineyDev/prettify.py",
+)

@@ -19,7 +19,11 @@
 import sys
 import traceback
 
-from prettify_exceptions.formatter import Formatter, TracebackFormatter, DefaultFormatter
+from prettify_exceptions.formatter import (
+    Formatter,
+    TracebackFormatter,
+    DefaultFormatter,
+)
 
 
 def is_hooked():
@@ -31,6 +35,7 @@ def is_hooked():
     """
 
     return sys.excepthook is not sys.__excepthook__
+
 
 def create_excepthook(formatter):
     """
@@ -53,7 +58,14 @@ def create_excepthook(formatter):
 
     return excepthook
 
-def hook(cls=DefaultFormatter, *, override_hook=False, override_traceback=False, **kwargs):
+
+def hook(
+    cls=DefaultFormatter,
+    *,
+    override_hook=False,
+    override_traceback=False,
+    **kwargs
+):
     """
     Hooks prettify into your Python session.
 
