@@ -31,11 +31,10 @@ import types
 
 _re_comment = re.compile("((?:(?:\"(?:[^\\\"]|(?:\\\\)*\\\")*\")|(?:\'(?:[^\\\']|(?:\\\\)*\\\')*\')|[^#])*)(#.*)?$")
 
-is_keyword = lambda s: s in keyword.kwlist
 is_special_name = lambda s: s.startswith("<") and s.endswith(">")
 
 
-class _Formatter():
+class Formatter():
     _default_theme = {
         "cap_char": "\u2514",
         "pipe_char": "\u2502",
@@ -53,25 +52,26 @@ class _Formatter():
         "clean_path_patterns": [],
     }
 
-    _cause_message = traceback._cause_message
-    _context_message = traceback._context_message
-    _recursive_cutoff = traceback._RECURSIVE_CUTOFF
-    _traceback_message = "Traceback (most recent call last):\n"
-    _traceback_frame_line_fmt = "    {line}\n"
-    _traceback_frame_location_fmt = "  File '{filename}', line {lineno}, in {name}\n"
-    _traceback_frame_recursion_fmt = "  [Previous line repeated {count} more time{s}]\n"
-    _traceback_frame_scope_fmt = "    {name} = {value}\n"
-
-    class _sentinel: pass
-
     def __init__(self, **kwargs):
         self.theme = self._default_theme
         self.theme.update(kwargs.get("theme", dict()))
+        
+    def format_exception(self, exc_type, exc_value, exc_traceback):
+        raise NotImplementedError
 
-class TracebackFormatter(_Formatter):
+class TracebackFormatter(Formatter):
     """
     A formatter with reimplementations of the :mod:`traceback` module.
     """
+
+    cause_message = traceback._cause_message
+    context_message = traceback._context_message
+    recursion_cutoff = traceback._RECURSIVE_CUTOFF
+    traceback_message = "Traceback (most recent call last):\n"
+    traceback_frame_line_fmt = "    {line}\n"
+    traceback_frame_location_fmt = "  File '{filename}', line {lineno}, in {name}\n"
+    traceback_frame_recursion_fmt = "  [Previous line repeated {count} more time{s}]\n"
+    traceback_frame_scope_fmt = "    {name} = {value}\n"
 
     def extract(self, iterator, *, limit=None, capture_globals=None, capture_locals=None, lookup_lines=None):
         """
@@ -162,17 +162,17 @@ class TracebackFormatter(_Formatter):
                     type(cause), cause, cause.__traceback__,
                     limit=limit, chain=chain, seen=seen)
 
-                yield self._cause_message
+                yield self.cause_message
 
             if context is not None and id(context) not in seen:
                 yield from self.format_exception(
                     type(context), context, context.__traceback__,
                     limit=limit, chain=chain, seen=seen)
 
-                yield self._context_message
+                yield self.context_message
 
         if exc_traceback is not None:
-            yield self._traceback_message
+            yield self.traceback_message
 
         yield from self.format_traceback(exc_traceback, limit=limit)
         yield from self.format_exception_only(exc_type, exc_value)
@@ -184,7 +184,7 @@ class TracebackFormatter(_Formatter):
 
         yield from traceback.TracebackException(exc_type, exc_value, None).format_exception_only()
 
-    def format_list(self, list_):
+    def format_frame_list(self, list):
         """
         Essentially :func:`traceback.format_list`.
         """
@@ -194,15 +194,15 @@ class TracebackFormatter(_Formatter):
         last_lineno = None
         last_name = None
 
-        for (frame) in list_:
+        for (frame) in list:
             filename, lineno, name, line = frame
 
             if (last_filename is None or last_filename != filename or
                 last_lineno is None or last_lineno != lineno or
                 last_name is None or last_name != name):
-                if count > self._recursive_cutoff:
-                    count -= self._recursive_cutoff
-                    yield self._traceback_frame_recursion_fmt.format(
+                if count > self.recursion_cutoff:
+                    count -= self.recursion_cutoff
+                    yield self.traceback_frame_recursion_fmt.format(
                         count=count,
                         s=count != 1 and "s" or "")
 
@@ -211,19 +211,19 @@ class TracebackFormatter(_Formatter):
                     filename, lineno, name
 
             count += 1
-            if count > self._recursive_cutoff:
+            if count > self.recursion_cutoff:
                 continue
 
-            yield from self.format_list_frame(
+            yield from self.format_frame(
                 frame, filename, lineno, name, line)
 
-        if count > self._recursive_cutoff:
-            count -= self._recursive_cutoff
-            yield self._traceback_frame_recursion_fmt.format(
+        if count > self.recursion_cutoff:
+            count -= self.recursion_cutoff
+            yield self.traceback_frame_recursion_fmt.format(
                 count=count,
                 s=count != 1 and "s" or "")
 
-    def format_list_frame(self, frame, filename, lineno, name, line):
+    def format_frame(self, frame, filename, lineno, name, line):
         """
         Essentially :meth:`traceback.StackSummary.format`'s ``row`` logic.
         """
@@ -231,15 +231,15 @@ class TracebackFormatter(_Formatter):
         if not isinstance(frame, traceback.FrameSummary):
             frame = None
 
-        yield self._traceback_frame_location_fmt.format(
+        yield self.traceback_frame_location_fmt.format(
             filename=filename, lineno=lineno, name=name)
 
         if line:
-            yield self._traceback_frame_line_fmt.format(line=line)
+            yield self.traceback_frame_line_fmt.format(line=line)
 
         if frame and frame.locals:
             for (name, value) in sorted(frame.locals.items()):
-                yield self._traceback_frame_scope_fmt.format(
+                yield self.traceback_frame_scope_fmt.format(
                     name=name, value=repr(value))
 
     def format_stack(self, frame, *, limit=None, capture_globals=None, capture_locals=None, lookup_lines=None):
@@ -247,7 +247,7 @@ class TracebackFormatter(_Formatter):
         Essentially :func:`traceback.format_stack`.
         """
 
-        yield from self.format_list(self.extract_stack(
+        yield from self.format_frame_list(self.extract_stack(
             frame, limit=limit, capture_globals=capture_globals,
             capture_locals=capture_locals, lookup_lines=lookup_lines))
 
@@ -256,22 +256,24 @@ class TracebackFormatter(_Formatter):
         Essentially :func:`traceback.format_tb`.
         """
 
-        yield from self.format_list(self.extract_traceback(
+        yield from self.format_frame_list(self.extract_traceback(
             exc_traceback, limit=limit, capture_globals=capture_globals,
             capture_locals=capture_locals, lookup_lines=lookup_lines))
 
 class DefaultFormatter(TracebackFormatter):
-    _recursive_cutoff = 1
-    _traceback_frame_recursion_fmt = "  [Previous frame repeated {count} more time{s}]\n\n"
+    recursion_cutoff = 1
+    traceback_frame_recursion_fmt = "  [Previous frame repeated {count} more time{s}]\n\n"
 
-    def format_list_frame(self, frame, filename, lineno, name, line):
+    class _sentinel: pass
+
+    def format_frame(self, frame, filename, lineno, name, line):
         if not isinstance(frame, FrameSummary):
             frame = None
 
         filename = self.clean_filename(filename)
 
         if frame and not is_special_name(name):
-            fmt = self._traceback_frame_location_fmt[:-1]
+            fmt = self.traceback_frame_location_fmt[:-1]
             fmt += "{signature}\n"
 
             try:
@@ -285,7 +287,7 @@ class DefaultFormatter(TracebackFormatter):
                 filename=filename, lineno=lineno, name=name,
                 signature=signature), "_bold")
         else:
-            yield self.colorize(self._traceback_frame_location_fmt.format(
+            yield self.colorize(self.traceback_frame_location_fmt.format(
                 filename=filename, lineno=lineno, name=name), "_bold")
 
         if not line:
@@ -299,14 +301,14 @@ class DefaultFormatter(TracebackFormatter):
         try:
             tree = ast.parse(line, filename, "exec")
         except (SyntaxError) as e:
-            yield self._traceback_frame_line_fmt.format(line=line)
+            yield self.traceback_frame_line_fmt.format(line=line)
             yield "\n"
             return
         
         if self.theme["_ansi_enabled"]:
             line = self.colorize_tree(tree, line)
 
-        yield self._traceback_frame_line_fmt.format(line=line)
+        yield self.traceback_frame_line_fmt.format(line=line)
 
         if frame:
             yield from self.inspect(tree, frame)
@@ -467,7 +469,7 @@ class DefaultFormatter(TracebackFormatter):
 
                 index = col_offset + len(repr(value)) + 2
 
-            yield self._traceback_frame_line_fmt.format(line=line)
+            yield self.traceback_frame_line_fmt.format(line=line)
 
         yield "\n"
 

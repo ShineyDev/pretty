@@ -19,22 +19,63 @@
 import sys
 import traceback
 
-from prettify_exceptions.formatter import DefaultFormatter
+from prettify_exceptions.formatter import Formatter, TracebackFormatter, DefaultFormatter
 
 
 def is_hooked():
-    # whether we are, or another package is, already hooked
+    """
+    Returns
+    -------
+    :class:`bool`
+        Whether prettify, or another module, is hooked into :attr:`sys.excepthook`.
+    """
+
     return sys.excepthook is not sys.__excepthook__
 
 def create_excepthook(formatter):
+    """
+    Creates a callable to replace :attr:`sys.excepthook` from a
+    :class:`~prettify_exceptions.Formatter`.
+
+    Parameters
+    ----------
+    formatter: :class:`~prettify_exceptions.Formatter`
+        The formatter to use.
+
+    Returns
+    -------
+    Callable[[Type[:class:`BaseException`], :class:`BaseException`, :class:`~types.TracebackType`], ``None``]
+        An :attr:`sys.excepthook` callable.
+    """
+
     def excepthook(*args):
         print("".join(formatter.format_exception(*args)).strip())
 
     return excepthook
 
-def hook(cls=DefaultFormatter, **kwargs):
-    override_hook = kwargs.pop("override_hook", False)
-    override_traceback = kwargs.pop("override_traceback", False)
+def hook(cls=DefaultFormatter, *, override_hook=False, override_traceback=False, **kwargs):
+    """
+    Hooks prettify into your Python session.
+
+    Parameters
+    ----------
+    cls: Type[:class:`~prettify_exceptions.Formatter`]
+        The formatter to use.
+
+        Defaults to :class:`~prettify_exceptions.DefaultFormatter`.
+    override_hook: :class:`bool`
+        Whether to override an already-overridden
+        :attr:`sys.excepthook`.
+    override_traceback: :class:`bool`
+        Whether to override :mod:`traceback`'s ``format_*`` methods
+        with methods from the formatter.
+
+        Useful for overriding tracebacks printed by strange third-party
+        modules. But, probably don't ever use this.
+    **kwargs
+        Additional keyword arguments are passed to
+        :meth:`Formatter.__init__ <prettify_exceptions.Formatter.__init__>`.
+    """
 
     formatter = cls(**kwargs)
 
