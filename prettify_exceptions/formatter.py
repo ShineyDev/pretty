@@ -318,7 +318,7 @@ class TracebackFormatter(Formatter):
                 limit=limit,
                 capture_globals=capture_globals,
                 capture_locals=capture_locals,
-                lookup_lines=lookup_lines
+                lookup_lines=lookup_lines,
             )
         )
 
@@ -341,9 +341,10 @@ class TracebackFormatter(Formatter):
                 limit=limit,
                 capture_globals=capture_globals,
                 capture_locals=capture_locals,
-                lookup_lines=lookup_lines
+                lookup_lines=lookup_lines,
             )
         )
+
 
 class DefaultFormatter(TracebackFormatter):
     recursion_cutoff = 1
@@ -427,7 +428,7 @@ class DefaultFormatter(TracebackFormatter):
             py_path = py_path.replace("\\", "/").rstrip("/")
             if filename.startswith(py_path):
                 return os.path.join(
-                    "/lib", filename[len(py_path):].lstrip("/"),
+                    "/lib", filename[len(py_path) :].lstrip("/"),
                 ).replace("\\", "/")
 
         for path in self.theme["clean_path_patterns"]:
