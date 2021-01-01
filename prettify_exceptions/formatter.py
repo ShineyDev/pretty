@@ -30,7 +30,7 @@ import types
 
 
 _re_comment = re.compile(
-    "((?:(?:\"(?:[^\\\"]|(?:\\\\)*\\\")*\")|(?:\'(?:[^\\\']|(?:\\\\)*\\\')*\')|[^#])*)(#.*)?$"
+    "((?:(?:\"(?:[^\\\"]|(?:\\\\)*\\\")*\")|(?:'(?:[^\\']|(?:\\\\)*\\')*')|[^#])*)(#.*)?$"
 )
 
 is_special_name = lambda s: s.startswith("<") and s.endswith(">")
@@ -113,15 +113,17 @@ class TracebackFormatter(Formatter):
             locals = capture_locals and frame.f_locals or None
             globals = capture_globals and frame.f_globals or None
 
-            result.append(FrameSummary(
-                filename,
-                lineno,
-                name,
-                lookup_line=False,
-                f_code=frame.f_code,
-                locals=locals,
-                globals=globals
-            ))
+            result.append(
+                FrameSummary(
+                    filename,
+                    lineno,
+                    name,
+                    lookup_line=False,
+                    f_code=frame.f_code,
+                    locals=locals,
+                    globals=globals,
+                )
+            )
 
         for filename in filenames:
             linecache.checkcache(filename)
@@ -150,7 +152,7 @@ class TracebackFormatter(Formatter):
             limit=limit,
             capture_globals=capture_globals,
             capture_locals=capture_locals,
-            lookup_lines=lookup_lines
+            lookup_lines=lookup_lines,
         )
 
     def extract_traceback(
@@ -171,7 +173,7 @@ class TracebackFormatter(Formatter):
             limit=limit,
             capture_globals=capture_globals,
             capture_locals=capture_locals,
-            lookup_lines=lookup_lines
+            lookup_lines=lookup_lines,
         )
 
     def format_exc(self, *, limit=None, chain=True):
@@ -182,14 +184,7 @@ class TracebackFormatter(Formatter):
         yield from self.format_exception(*sys.exc_info(), limit=limit, chain=chain)
 
     def format_exception(
-        self,
-        exc_type,
-        exc_value,
-        exc_traceback,
-        *,
-        limit=None,
-        chain=True,
-        seen=None
+        self, exc_type, exc_value, exc_traceback, *, limit=None, chain=True, seen=None
     ):
         """
         Essentially :func:`traceback.format_exception`.
@@ -209,7 +204,7 @@ class TracebackFormatter(Formatter):
                     cause.__traceback__,
                     limit=limit,
                     chain=chain,
-                    seen=seen
+                    seen=seen,
                 )
 
                 yield self.cause_message
@@ -221,7 +216,7 @@ class TracebackFormatter(Formatter):
                     context.__traceback__,
                     limit=limit,
                     chain=chain,
-                    seen=seen
+                    seen=seen,
                 )
 
                 yield self.context_message
@@ -238,9 +233,7 @@ class TracebackFormatter(Formatter):
         """
 
         yield from traceback.TracebackException(
-            exc_type,
-            exc_value,
-            None
+            exc_type, exc_value, None
         ).format_exception_only()
 
     def format_frame_list(self, list):
@@ -256,7 +249,8 @@ class TracebackFormatter(Formatter):
         for frame in list:
             filename, lineno, name, line = frame
 
-            if (last_filename is None
+            if (
+                last_filename is None
                 or last_filename != filename
                 or last_lineno is None
                 or last_lineno != lineno
@@ -318,13 +312,15 @@ class TracebackFormatter(Formatter):
         Essentially :func:`traceback.format_stack`.
         """
 
-        yield from self.format_frame_list(self.extract_stack(
-            frame,
-            limit=limit,
-            capture_globals=capture_globals,
-            capture_locals=capture_locals,
-            lookup_lines=lookup_lines
-        ))
+        yield from self.format_frame_list(
+            self.extract_stack(
+                frame,
+                limit=limit,
+                capture_globals=capture_globals,
+                capture_locals=capture_locals,
+                lookup_lines=lookup_lines
+            )
+        )
 
     def format_traceback(
         self,
@@ -339,18 +335,21 @@ class TracebackFormatter(Formatter):
         Essentially :func:`traceback.format_tb`.
         """
 
-        yield from self.format_frame_list(self.extract_traceback(
-            exc_traceback,
-            limit=limit,
-            capture_globals=capture_globals,
-            capture_locals=capture_locals,
-            lookup_lines=lookup_lines
-        ))
+        yield from self.format_frame_list(
+            self.extract_traceback(
+                exc_traceback,
+                limit=limit,
+                capture_globals=capture_globals,
+                capture_locals=capture_locals,
+                lookup_lines=lookup_lines
+            )
+        )
 
 class DefaultFormatter(TracebackFormatter):
     recursion_cutoff = 1
-    traceback_frame_recursion_fmt = \
+    traceback_frame_recursion_fmt = (
         "  [Previous frame repeated {count} more time{s}]\n\n"
+    )
 
     class _sentinel:
         pass
@@ -373,19 +372,14 @@ class DefaultFormatter(TracebackFormatter):
 
             yield self.colorize(
                 fmt.format(
-                    filename=filename,
-                    lineno=lineno,
-                    name=name,
-                    signature=signature
+                    filename=filename, lineno=lineno, name=name, signature=signature
                 ),
                 "_bold",
             )
         else:
             yield self.colorize(
                 self.traceback_frame_location_fmt.format(
-                    filename=filename,
-                    lineno=lineno,
-                    name=name
+                    filename=filename, lineno=lineno, name=name
                 ),
                 "_bold",
             )
@@ -419,23 +413,21 @@ class DefaultFormatter(TracebackFormatter):
             limit=limit,
             capture_globals=True,
             capture_locals=True,
-            lookup_lines=lookup_lines
+            lookup_lines=lookup_lines,
         )
 
     def clean_filename(self, filename):
         filename = filename.replace("\\", "/")
 
         py_paths = sorted(
-            {path for path in sys.path if os.path.isdir(path)},
-            key=lambda p: -len(p),
+            {path for path in sys.path if os.path.isdir(path)}, key=lambda p: -len(p),
         )
 
         for py_path in py_paths:
             py_path = py_path.replace("\\", "/").rstrip("/")
             if filename.startswith(py_path):
                 return os.path.join(
-                    "/lib",
-                    filename[len(py_path):].lstrip("/"),
+                    "/lib", filename[len(py_path):].lstrip("/"),
                 ).replace("\\", "/")
 
         for path in self.theme["clean_path_patterns"]:
@@ -493,8 +485,7 @@ class DefaultFormatter(TracebackFormatter):
         match = _re_comment.fullmatch(line)
         if match and match.group(2):
             line = "{0}{1}".format(
-                match.group(1),
-                self.colorize(match.group(2), "comment"),
+                match.group(1), self.colorize(match.group(2), "comment"),
             )
 
         return line
@@ -605,7 +596,7 @@ class FrameSummary(traceback.FrameSummary):
         "f_code",
         "locals",
         "globals",
-        "scope"
+        "scope",
     )
 
     def __init__(
@@ -621,12 +612,7 @@ class FrameSummary(traceback.FrameSummary):
         globals=None
     ):
         super().__init__(
-            filename,
-            lineno,
-            name,
-            lookup_line=lookup_line,
-            locals=None,
-            line=line,
+            filename, lineno, name, lookup_line=lookup_line, locals=None, line=line,
         )
 
         self.f_code = f_code
