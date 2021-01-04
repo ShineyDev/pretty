@@ -1,2 +1,5 @@
 include LICENSE
 include prettify_exceptions_hook.pth
+include prettify_exceptions/py.typed
+include requirements.txt
+recursive-include prettify_exceptions *.pyi
