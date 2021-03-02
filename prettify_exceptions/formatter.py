@@ -215,7 +215,7 @@ class TracebackFormatter(Formatter):
         Alias to :meth:`traceback.TracebackException.format_exception_only`.
         """
 
-        yield from traceback.TracebackException( exc_type, exc_value, None).format_exception_only()
+        yield from traceback.TracebackException(exc_type, exc_value, None).format_exception_only()
 
     def format_frame_list(self, list):
         """
@@ -240,7 +240,9 @@ class TracebackFormatter(Formatter):
             ):
                 if count > self.recursion_cutoff:
                     count -= self.recursion_cutoff
-                    yield self.traceback_frame_recursion_fmt.format(count=count, s=count != 1 and "s" or "")
+                    yield self.traceback_frame_recursion_fmt.format(
+                        count=count, s=count != 1 and "s" or ""
+                    )
 
                 count = 0
                 last_filename, last_lineno, last_name = filename, lineno, name
