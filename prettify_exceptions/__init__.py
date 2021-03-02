@@ -59,9 +59,7 @@ def create_excepthook(formatter):
     return excepthook
 
 
-def hook(
-    cls=DefaultFormatter, *, override_hook=False, override_traceback=False, **kwargs
-):
+def hook(cls=DefaultFormatter, *, override_hook=False, override_traceback=False, **kwargs):
     """
     Hooks prettify into your Python session.
 

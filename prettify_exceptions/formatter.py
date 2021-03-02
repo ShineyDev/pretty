@@ -75,13 +75,7 @@ class TracebackFormatter(Formatter):
     traceback_frame_scope_fmt = "    {name} = {value}\n"
 
     def extract(
-        self,
-        iterator,
-        *,
-        limit=None,
-        capture_globals=None,
-        capture_locals=None,
-        lookup_lines=None
+        self, iterator, *, limit=None, capture_globals=None, capture_locals=None, lookup_lines=None
     ):
         """
         Essentially :meth:`traceback.StackSummary.extract`.
@@ -135,13 +129,7 @@ class TracebackFormatter(Formatter):
         return result
 
     def extract_stack(
-        self,
-        frame,
-        *,
-        limit=None,
-        capture_globals=None,
-        capture_locals=None,
-        lookup_lines=None
+        self, frame, *, limit=None, capture_globals=None, capture_locals=None, lookup_lines=None
     ):
         """
         Essentially :func:`traceback.extract_stack`.
@@ -199,12 +187,7 @@ class TracebackFormatter(Formatter):
 
             if cause is not None and id(cause) not in seen:
                 yield from self.format_exception(
-                    type(cause),
-                    cause,
-                    cause.__traceback__,
-                    limit=limit,
-                    chain=chain,
-                    seen=seen,
+                    type(cause), cause, cause.__traceback__, limit=limit, chain=chain, seen=seen,
                 )
 
                 yield self.cause_message
@@ -232,9 +215,7 @@ class TracebackFormatter(Formatter):
         Alias to :meth:`traceback.TracebackException.format_exception_only`.
         """
 
-        yield from traceback.TracebackException(
-            exc_type, exc_value, None
-        ).format_exception_only()
+        yield from traceback.TracebackException( exc_type, exc_value, None).format_exception_only()
 
     def format_frame_list(self, list):
         """
@@ -259,9 +240,7 @@ class TracebackFormatter(Formatter):
             ):
                 if count > self.recursion_cutoff:
                     count -= self.recursion_cutoff
-                    yield self.traceback_frame_recursion_fmt.format(
-                        count=count, s=count != 1 and "s" or ""
-                    )
+                    yield self.traceback_frame_recursion_fmt.format(count=count, s=count != 1 and "s" or "")
 
                 count = 0
                 last_filename, last_lineno, last_name = filename, lineno, name
@@ -274,9 +253,7 @@ class TracebackFormatter(Formatter):
 
         if count > self.recursion_cutoff:
             count -= self.recursion_cutoff
-            yield self.traceback_frame_recursion_fmt.format(
-                count=count, s=count != 1 and "s" or ""
-            )
+            yield self.traceback_frame_recursion_fmt.format(count=count, s=count != 1 and "s" or "")
 
     def format_frame(self, frame, filename, lineno, name, line):
         """
@@ -286,27 +263,17 @@ class TracebackFormatter(Formatter):
         if not isinstance(frame, traceback.FrameSummary):
             frame = None
 
-        yield self.traceback_frame_location_fmt.format(
-            filename=filename, lineno=lineno, name=name
-        )
+        yield self.traceback_frame_location_fmt.format(filename=filename, lineno=lineno, name=name)
 
         if line:
             yield self.traceback_frame_line_fmt.format(line=line)
 
         if frame and frame.locals:
             for (name, value) in sorted(frame.locals.items()):
-                yield self.traceback_frame_scope_fmt.format(
-                    name=name, value=repr(value)
-                )
+                yield self.traceback_frame_scope_fmt.format(name=name, value=repr(value))
 
     def format_stack(
-        self,
-        frame,
-        *,
-        limit=None,
-        capture_globals=None,
-        capture_locals=None,
-        lookup_lines=None
+        self, frame, *, limit=None, capture_globals=None, capture_locals=None, lookup_lines=None
     ):
         """
         Essentially :func:`traceback.format_stack`.
@@ -348,9 +315,7 @@ class TracebackFormatter(Formatter):
 
 class DefaultFormatter(TracebackFormatter):
     recursion_cutoff = 1
-    traceback_frame_recursion_fmt = (
-        "  [Previous frame repeated {count} more time{s}]\n\n"
-    )
+    traceback_frame_recursion_fmt = "  [Previous frame repeated {count} more time{s}]\n\n"
 
     class _sentinel:
         pass
@@ -372,9 +337,7 @@ class DefaultFormatter(TracebackFormatter):
                 signature = "(<unknown>)"
 
             yield self.colorize(
-                fmt.format(
-                    filename=filename, lineno=lineno, name=name, signature=signature
-                ),
+                fmt.format(filename=filename, lineno=lineno, name=name, signature=signature),
                 "_bold",
             )
         else:
@@ -427,9 +390,9 @@ class DefaultFormatter(TracebackFormatter):
         for py_path in py_paths:
             py_path = py_path.replace("\\", "/").rstrip("/")
             if filename.startswith(py_path):
-                return os.path.join(
-                    "/lib", filename[len(py_path) :].lstrip("/"),
-                ).replace("\\", "/")
+                return os.path.join("/lib", filename[len(py_path) :].lstrip("/"),).replace(
+                    "\\", "/"
+                )
 
         for path in self.theme["clean_path_patterns"]:
             if not isinstance(path, re.Pattern):
@@ -485,9 +448,7 @@ class DefaultFormatter(TracebackFormatter):
 
         match = _re_comment.fullmatch(line)
         if match and match.group(2):
-            line = "{0}{1}".format(
-                match.group(1), self.colorize(match.group(2), "comment"),
-            )
+            line = "{0}{1}".format(match.group(1), self.colorize(match.group(2), "comment"))
 
         return line
 
