@@ -2,9 +2,9 @@ from typing import Callable, Type
 
 from types import TracebackType
 
-from prettify_exceptions.formatter import Formatter as Formatter
-from prettify_exceptions.formatter import TracebackFormatter as TracebackFormatter
-from prettify_exceptions.formatter import DefaultFormatter as DefaultFormatter
+from pretty.formatter import Formatter as Formatter
+from pretty.formatter import TracebackFormatter as TracebackFormatter
+from pretty.formatter import DefaultFormatter as DefaultFormatter
 
 
 def is_hooked() -> bool: ...

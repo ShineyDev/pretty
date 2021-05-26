@@ -1,5 +1,5 @@
 """
-/prettify_exceptions/__init__.py
+/pretty/__init__.py
 
     Copyright (c) 2020 ShineyDev
 
@@ -19,7 +19,7 @@
 import sys
 import traceback
 
-from prettify_exceptions.formatter import (
+from pretty.formatter import (
     Formatter,
     TracebackFormatter,
     DefaultFormatter,
@@ -31,7 +31,7 @@ def is_hooked():
     Returns
     -------
     :class:`bool`
-        Whether prettify, or another module, is hooked into :attr:`sys.excepthook`.
+        Whether pretty, or another module, is hooked into :attr:`sys.excepthook`.
     """
 
     return sys.excepthook is not sys.__excepthook__
@@ -40,11 +40,11 @@ def is_hooked():
 def create_excepthook(formatter):
     """
     Creates a callable to replace :attr:`sys.excepthook` from a
-    :class:`~prettify_exceptions.Formatter`.
+    :class:`~pretty.Formatter`.
 
     Parameters
     ----------
-    formatter: :class:`~prettify_exceptions.Formatter`
+    formatter: :class:`~pretty.Formatter`
         The formatter to use.
 
     Returns
@@ -61,14 +61,14 @@ def create_excepthook(formatter):
 
 def hook(cls=DefaultFormatter, *, override_hook=False, override_traceback=False, **kwargs):
     """
-    Hooks prettify into your Python session.
+    Hooks pretty into your Python session.
 
     Parameters
     ----------
-    cls: Type[:class:`~prettify_exceptions.Formatter`]
+    cls: Type[:class:`~pretty.Formatter`]
         The formatter to use.
 
-        Defaults to :class:`~prettify_exceptions.DefaultFormatter`.
+        Defaults to :class:`~pretty.DefaultFormatter`.
     override_hook: :class:`bool`
         Whether to override an already-overridden
         :attr:`sys.excepthook`.
@@ -80,7 +80,7 @@ def hook(cls=DefaultFormatter, *, override_hook=False, override_traceback=False,
         modules. But, probably don't ever use this.
     **kwargs
         Additional keyword arguments are passed to
-        :meth:`Formatter.__init__ <prettify_exceptions.Formatter.__init__>`.
+        :meth:`Formatter.__init__ <pretty.Formatter.__init__>`.
     """
 
     formatter = cls(**kwargs)

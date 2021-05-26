@@ -1,5 +1,5 @@
 """
-/prettify_exceptions/formatter.py
+/pretty/formatter.py
 
     Copyright (c) 2020 ShineyDev
 
