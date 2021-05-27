@@ -1,14 +1,14 @@
+import distutils.command.build
+import setuptools.command.develop
+import setuptools.command.easy_install
+import setuptools.command.install_lib
+
 import itertools
 import os
-
-from distutils.core import setup
-from distutils.command.build import build
-from setuptools.command.develop import develop
-from setuptools.command.easy_install import easy_install
-from setuptools.command.install_lib import install_lib
+import re
 
 
-class BuildPTH(build):
+class BuildPTH(distutils.command.build.build):
     def run(self):
         super().run()
 
@@ -17,7 +17,7 @@ class BuildPTH(build):
         self.copy_file(path, dest)
 
 
-class DevelopPTH(develop):
+class DevelopPTH(setuptools.command.develop.develop):
     def run(self):
         super().run()
 
@@ -26,7 +26,7 @@ class DevelopPTH(develop):
         self.copy_file(path, dest)
 
 
-class EasyInstallPTH(easy_install):
+class EasyInstallPTH(setuptools.command.easy_install.easy_install):
     def run(self):
         super().run()
 
@@ -35,7 +35,7 @@ class EasyInstallPTH(easy_install):
         self.copy_file(path, dest)
 
 
-class InstallLibPTH(install_lib):
+class InstallLibPTH(setuptools.command.install_lib.install_lib):
     def run(self):
         super().run()
 
@@ -49,17 +49,58 @@ class InstallLibPTH(install_lib):
         return itertools.chain(super().get_outputs(), self.outputs)
 
 
-setup(
+cmdclass={
+    "build": BuildPTH,
+    "develop": DevelopPTH,
+    "easy_insall": EasyInstallPTH,
+    "install_lib": InstallLibPTH,
+}
+
+extras_require = {
+    "docs": [
+        "sphinx",
+        "sphinxcontrib_trio",
+        "sphinx-rtd-theme",
+    ],
+}
+
+packages = [
+    "pretty",
+]
+
+_version_regex = r"^version = ('|\")((?:[0-9]+\.)*[0-9]+(?:\.?([a-z]+)(?:\.?[0-9])?)?)\1$"
+
+with open("pretty/__init__.py") as stream:
+    match = re.search(_version_regex, stream.read(), re.MULTILINE)
+
+version = match.group(2)
+
+if match.group(3) is not None:
+    try:
+        import subprocess
+
+        process = subprocess.Popen(["git", "rev-list", "--count", "HEAD"], stdout=subprocess.PIPE)
+        out, _ = process.communicate()
+        if out:
+            version += out.decode("utf-8").strip()
+
+        process = subprocess.Popen(["git", "rev-parse", "--short", "HEAD"], stdout=subprocess.PIPE)
+        out, _ = process.communicate()
+        if out:
+            version += "+g" + out.decode("utf-8").strip()
+    except (Exception) as e:
+        pass
+
+
+setuptools.setup(
     author="ShineyDev",
-    # https://github.com/pytest-dev/pytest-cov/blob/master/setup.py
-    cmdclass={
-        "build": BuildPTH,
-        "develop": DevelopPTH,
-        "easy_insall": EasyInstallPTH,
-        "install_lib": InstallLibPTH,
-    },
+    cmdclass=cmdclass,
+    description="",
+    extras_require=extras_require,
     license="Apache Software License",
     name="pretty",
-    packages=["pretty"],
+    packages=packages,
+    python_requires=">=3.6.0",
     url="https://github.com/ShineyDev/pretty",
+    version=version,
 )
