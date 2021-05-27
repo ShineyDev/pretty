@@ -1,0 +1,4 @@
+include LICENSE
+include README.rst
+include pretty/py.typed
+recursive-include pretty *.pyi

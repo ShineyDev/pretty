@@ -97,6 +97,7 @@ setuptools.setup(
     cmdclass=cmdclass,
     description="",
     extras_require=extras_require,
+    include_package_data=True,
     license="Apache Software License",
     name="pretty",
     packages=packages,
