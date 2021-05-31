@@ -1,3 +1,4 @@
+import collections
 import sys
 import traceback
 
@@ -6,6 +7,12 @@ from pretty.formatter import (
     TracebackFormatter,
     DefaultFormatter,
 )
+
+
+_VersionInfo = collections.namedtuple("_VersionInfo", "major minor micro release serial")
+
+version = "1.0.0"
+version_info = _VersionInfo(1, 0, 0, "final", 0)
 
 
 def is_hooked():
