@@ -24,7 +24,7 @@
 
     <h1 align="center">pretty</h1>
     <p align="center">A Python module for prettier (and far more useful) stack traces.</p>
-    <h6 align="center">Copyright 2019-present ShineyDev</h6>
+    <h6 align="center">Copyright 2020-present ShineyDev</h6>
     <h6 align="center">Inspired by Qix' <a href="https://github.com/Qix-/better-exceptions/">better-exceptions</a></h6>
 
 
