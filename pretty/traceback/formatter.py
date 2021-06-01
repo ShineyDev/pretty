@@ -46,7 +46,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def write_frames(self, frames, *, file=None):
         """
-        Writes an iterable of traceback frames.
+        Writes an iterable of traceback frames to a file.
 
         This function is synonymous to ``traceback.print_list()``.
 
