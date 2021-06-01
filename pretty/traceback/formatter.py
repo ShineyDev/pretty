@@ -33,7 +33,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: Iterable[:class:`~pretty.traceback.Frame`]
+        frames
             An iterable of traceback frames.
 
         Yields
@@ -56,7 +56,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: Iterable[:class:`~pretty.traceback.Frame`]
+        frames
             An iterable of traceback frames.
         file
             The file to write to.
