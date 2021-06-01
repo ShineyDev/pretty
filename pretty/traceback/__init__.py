@@ -15,22 +15,44 @@ def hook(cls=None, *, override_builtin=None, override_hook=None, **kwargs):
     ----------
     cls: Type[:class:`~pretty.traceback.TracebackFormatter`]
         The formatter to use. Defaults to
-        :class:`~pretty.PrettyTracebackFormatter`.
+        :class:`~pretty.traceback.PrettyTracebackFormatter`.
     override_builtin: :class:`bool`
         Whether to override :mod:`traceback`'s methods with methods
         from the formatter.
 
-        Providing this parameter will override the
-        :term:`corresponding environment variable \
-        <PYTHONPRETTYTRACEBACKOVERRIDEBUILTIN>`, which defaults to
-        ``False``.
+        .. tip::
+
+            Providing this parameter will override the
+            :term:`corresponding environment variable \
+            <PYTHONPRETTYTRACEBACKOVERRIDEBUILTIN>`, which defaults to
+            ``False``.
+
+        .. note::
+
+            The following **cannot** change when a
+            :class:`TracebackFormatter` subclass overrides the builtin
+            :mod:`traceback` methods.
+
+            - The parameter kind, name, or type of any function.
+            - The return or yield type of any function.
+
+        .. warning::
+
+            The following **can** change when a
+            :class:`TracebackFormatter` subclass overrides the builtin
+            :mod:`traceback` methods.
+
+            - The number (and content) of lines yielded by ``format_*``
+              functions.
     override_hook: :class:`bool`
         Whether to override :func:`sys.excepthook <sys.excepthook>`.
 
-        Providing this parameter will override the
-        :term:`corresponding environment variable \
-        <PYTHONPRETTYTRACEBACKOVERRIDEHOOK>`, which defaults to
-        ``True``.
+        .. tip::
+
+            Providing this parameter will override the
+            :term:`corresponding environment variable \
+            <PYTHONPRETTYTRACEBACKOVERRIDEHOOK>`, which defaults to
+            ``True``.
     **kwargs
         Additional keyword arguments are passed to
         :meth:`TracebackFormatter.__init__ \
