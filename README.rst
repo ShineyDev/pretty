@@ -39,28 +39,28 @@ Install
 Use
 ---
 
-If you wish to hook pretty into **all of your future Python sessions**, set the ``PY_PRETTIFY_EXC`` environment variable to ``1``.
+If you wish to hook pretty**.traceback** into **all of your Python sessions**, set the ``PYTHONPRETTYTRACEBACK`` environment variable to a `truthy value <https://docs.shiney.dev/pretty/latest/environment#term-boolean>`_.
 
 
 .. code:: shell
 
-    $ export PY_PRETTIFY_EXC=1
+    $ export PYTHONPRETTYTRACEBACK=1
 
 
-If you wish to hook pretty into **a single Python session**, call ``pretty.hook()``.
+If you wish to hook pretty**.traceback** into **a single Python session**, call ``pretty.traceback.hook()``.
 
 
 .. code:: python
 
     >>> import pretty
-    >>> pretty.hook()
+    >>> pretty.traceback.hook()
 
 
-If you wish to use the formatters directly, they're `documented <https://docs.shiney.dev/pretty>`_ in the ``pretty.formatter`` module.
+If you wish to use the formatters directly, they're `documented <https://docs.shiney.dev/pretty/latest/traceback/generic>`_ in the ``pretty.traceback`` module.
 
 
 .. code:: python
 
-    >>> from pretty.formatter import DefaultFormatter
-    >>> formatter = DefaultFormatter()
+    >>> import pretty
+    >>> formatter = pretty.traceback.PrettyTracebackFormatter()
     >>> print("".join(formatter.format_exception(type(e), e, e.__traceback__)))
