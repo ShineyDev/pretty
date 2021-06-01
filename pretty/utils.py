@@ -45,7 +45,7 @@ _default_theme = {
     "path_substitutions": "",
 }
 
-_unicode_re = re.compile(r"[uU]\+([0-9]{1,8})")
+_unicode_re = re.compile(r"u\+[0-9]{4}|U\+[0-9]{8}")
 
 
 def environment_to_theme(name, default):
@@ -68,7 +68,7 @@ def environment_to_theme(name, default):
                 value = value.strip()
 
                 def _repl(match):
-                    return chr(int(match.group(1)))
+                    return chr(int(match.group(0)[2:]))
 
                 value = re.sub(_unicode_re, _repl, value)
 
