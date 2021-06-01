@@ -65,3 +65,10 @@ if match.group(3) is not None:
         pass
 
 release = version
+
+rst_prolog = """
+
+.. |iter| replace:: This function returns an |iter_link|_.
+.. |iter_link| replace:: iterator
+.. _iter_link: https://docs.python.org/3/glossary.html#term-iterator
+"""
