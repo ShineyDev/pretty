@@ -59,7 +59,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         frames
             An iterable of traceback frames.
         file
-            The file to write to.
+            The file to write to. Defaults to :data:`sys.stderr`.
         """
 
         print("".join(self.format_frames(frames)), end="", file=file or sys.stderr)
