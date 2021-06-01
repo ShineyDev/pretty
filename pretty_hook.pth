@@ -1,1 +1,1 @@
-import os; exec("if 'PY_PRETTIFY_EXC' in os.environ:\n from pretty import hook; hook()")
+from pretty import main; main()
