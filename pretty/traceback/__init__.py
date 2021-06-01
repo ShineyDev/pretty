@@ -42,8 +42,8 @@ def hook(cls=None, *, override_builtin=None, override_hook=None, **kwargs):
             :class:`TracebackFormatter` subclass overrides the builtin
             :mod:`traceback` methods.
 
-            - The number (and content) of lines yielded by ``format_*``
-              functions.
+            - The number and content of lines yielded by any
+              ``format_*`` function.
     override_hook: :class:`bool`
         Whether to override :func:`sys.excepthook <sys.excepthook>`.
 
