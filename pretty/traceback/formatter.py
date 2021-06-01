@@ -13,9 +13,36 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def __init__(self, *, theme):
         self.theme = theme
 
+    @utils.wrap(traceback.format_list)
+    def _format_frames(self, extracted_list):
+        self.format_frames(extracted_list)
+
     @utils.wrap(traceback.print_list)
     def _write_frames(self, extracted_list, file=None):
         self.write_frames(extracted_list, file=file)
+
+    @abc.abstractmethod
+    def format_frames(self, frames):
+        """
+        |iter|
+
+        Formats an iterable of traceback frames to be written to a
+        file.
+
+        This function is synonymous to :func:`traceback.format_list`.
+
+        Parameters
+        ----------
+        frames: Iterable[:class:`~pretty.traceback.Frame`]
+            An iterable of traceback frames.
+
+        Yields
+        ------
+        :class:`str`
+            Lines to be written.
+        """
+
+        raise NotImplementedError
 
     def write_frames(self, frames, *, file=None):
         """
