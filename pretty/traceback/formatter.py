@@ -15,7 +15,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.format_list)
     def _format_frames(self, extracted_list):
-        self.format_frames(extracted_list)
+        return list(self.format_frames(extracted_list))
 
     @utils.wrap(traceback.print_list)
     def _write_frames(self, extracted_list, file=None):
