@@ -5,6 +5,9 @@ import traceback
 from pretty import utils
 
 
+_sentinel = object()
+
+
 class TracebackFormatter(metaclass=abc.ABCMeta):
     """
     An abstract class for building a traceback formatter.
@@ -23,8 +26,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         return traceback.StackSummary(self.extract_frames(tb, limit=limit))
 
     if sys.version_info >= (3, 10):
-        _sentinel = object()
-
         @utils.wrap(traceback.format_exception)
         def _format_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, chain=True):
             if (value is _sentinel) != (tb is _sentinel):
@@ -52,8 +53,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         return list(self.format_traceback(tb, limit=limit))
 
     if sys.version_info >= (3, 10):
-        _sentinel = object()
-
         @utils.wrap(traceback.print_exception)
         def _write_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, file=None, chain=True):
             if (value is _sentinel) != (tb is _sentinel):
