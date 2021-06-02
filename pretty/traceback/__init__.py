@@ -86,6 +86,7 @@ def hook(cls=None, *, override_builtin=None, override_hook=None, **kwargs):
         if sys.version_info >= (3, 10):
             traceback._parse_value_tb = formatter._extract_value_traceback
 
+        # TODO: traceback._format_final_exc_line = ...
         traceback._some_str = formatter._try_str
 
     if override_hook is None:
