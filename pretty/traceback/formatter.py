@@ -66,8 +66,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Formats an iterable of traceback frames to be written to a
-        file.
+        Formats an iterable of frames to be written to a file.
 
         This function is synonymous to :func:`traceback.format_list`.
 
@@ -109,7 +108,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def write_frames(self, frames, *, file=None):
         """
-        Writes an iterable of traceback frames to a file.
+        Writes an iterable of frames to a file.
 
         This function is synonymous to ``traceback.print_list()``.
 
