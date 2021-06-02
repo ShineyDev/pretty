@@ -82,6 +82,9 @@ def hook(cls=None, *, override_builtin=None, override_hook=None, **kwargs):
             traceback._cause_message = formatter.cause_message
             traceback._context_message = formatter.context_message
 
+        if sys.version_info >= (3, 10):
+            traceback._parse_value_tb = formatter._extract_value_traceback
+
     if override_hook is None:
         override_hook = utils.environment_to_bool(utils._env_traceback_override_hook, True)
 
