@@ -78,6 +78,7 @@ def hook(cls=None, *, override_builtin=None, override_hook=None, **kwargs):
 
         if isinstance(formatter, DefaultTracebackFormatter):
             traceback._cause_message = formatter.cause_message
+            traceback._context_message = formatter.context_message
 
     if override_hook is None:
         override_hook = utils.environment_to_bool(utils._env_traceback_override_hook, True)

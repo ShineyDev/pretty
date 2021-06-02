@@ -152,6 +152,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
     """
 
     cause_message = traceback._cause_message
+    context_message = traceback._context_message
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
