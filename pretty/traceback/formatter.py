@@ -22,8 +22,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         return list(self.format_frames(extracted_list))
 
     @utils.wrap(traceback.format_tb)
-    def _format_traceback(self, traceback, limit=None):
-        return list(self.format_traceback(traceback, limit=limit))
+    def _format_traceback(self, tb, limit=None):
+        return list(self.format_traceback(tb, limit=limit))
 
     @utils.wrap(traceback.print_list)
     def _write_frames(self, extracted_list, file=None):
