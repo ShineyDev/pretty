@@ -17,6 +17,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def _format_frames(self, extracted_list):
         return list(self.format_frames(extracted_list))
 
+    @utils.wrap(traceback.format_tb)
+    def _format_traceback(self, traceback, limit=None):
+        return list(self.format_traceback(traceback, limit=limit))
+
     @utils.wrap(traceback.print_list)
     def _write_frames(self, extracted_list, file=None):
         self.write_frames(extracted_list, file=file)
@@ -47,6 +51,24 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
 
         raise NotImplementedError
+
+    def format_traceback(self, traceback, *, limit=None):
+        """
+        |iter|
+
+        Formats a traceback to be written to a file.
+
+        This function is synonymous to :func:`traceback.format_tb`.
+
+        Parameters
+        ----------
+        traceback: :class:`~types.TracebackType`
+            A traceback.
+        limit: :class:`int`
+            The maximum number of frames to format.
+        """
+
+        yield from self.format_frames(self.extract_frames(traceback, limit=limit))
 
     def write_frames(self, frames, *, file=None):
         """
