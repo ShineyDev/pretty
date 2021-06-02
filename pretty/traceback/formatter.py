@@ -55,7 +55,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         _sentinel = object()
 
         @utils.wrap(traceback.print_exception)
-        def _write_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, file=None, chain=None):
+        def _write_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, file=None, chain=True):
             if (value is _sentinel) != (tb is _sentinel):
                 raise ValueError("Both or neither of value and tb must be given")
             elif value is tb is _sentinel:
