@@ -5,9 +5,6 @@ import traceback
 from pretty import utils
 
 
-_sentinel = object()
-
-
 class TracebackFormatter(metaclass=abc.ABCMeta):
     """
     An abstract class for building a traceback formatter.
@@ -245,10 +242,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         except:
             return self._unprintable.format(value)
 
+    _sentinel = object()
+
     def _extract_value_traceback(self, type, value, traceback):
-        if (value is _sentinel) != (traceback is _sentinel):
+        if (value is self._sentinel) != (traceback is self._sentinel):
             raise ValueError("Both or neither of value and tb must be given")
-        elif value is _sentinel:
+        elif value is self._sentinel:
             if type is None:
                 return None, None
             else:
