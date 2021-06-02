@@ -8,6 +8,11 @@ from pretty import utils
 class TracebackFormatter(metaclass=abc.ABCMeta):
     """
     An abstract class for building a traceback formatter.
+
+    Attributes
+    ----------
+    theme: :class:`dict`
+        A theme.
     """
 
     def __init__(self, *, theme):
