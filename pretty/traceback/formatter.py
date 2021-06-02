@@ -87,6 +87,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         raise NotImplementedError
 
+        yield
+
     @abc.abstractmethod
     def format_frames(self, frames):
         """
@@ -108,6 +110,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
 
         raise NotImplementedError
+
+        yield
 
     def format_traceback(self, traceback, *, limit=None):
         """
