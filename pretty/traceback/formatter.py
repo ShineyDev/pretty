@@ -102,7 +102,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A traceback.
         file
             The file to write to. Defaults to :data:`sys.stderr`.
-        limit: int
+        limit: :class:`int`
             The maximum number of frames to format and write.
         """
 
