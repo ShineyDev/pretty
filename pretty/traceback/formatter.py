@@ -151,7 +151,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
     :mod:`traceback` module.
     """
 
-    ...
+    cause_message = traceback._cause_message
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):

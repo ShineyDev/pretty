@@ -76,6 +76,9 @@ def hook(cls=None, *, override_builtin=None, override_hook=None, **kwargs):
         traceback.print_list = formatter._write_frames
         traceback.print_tb = formatter._write_traceback
 
+        if isinstance(formatter, DefaultTracebackFormatter):
+            traceback._cause_message = formatter.cause_message
+
     if override_hook is None:
         override_hook = utils.environment_to_bool(utils._env_traceback_override_hook, True)
 
