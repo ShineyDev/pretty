@@ -195,6 +195,13 @@ class DefaultTracebackFormatter(TracebackFormatter):
     """
     A :class:`.TracebackFormatter` with reimplementations of the
     :mod:`traceback` module.
+
+    Attributes
+    ----------
+    cause_message: :class:`str`
+        The message yielded before an exception's ``__cause__``.
+    context_message: :class:`str`
+        The message yielded before an exception's ``__context__``.
     """
 
     cause_message = traceback._cause_message
