@@ -226,6 +226,20 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     # endregion
     # region private methods
 
+    _unprintable = "<unprintable {0.__class__.__qualname__} object>"
+
+    def _try_repr(self, value, default=_unprintable):
+        try:
+            return repr(value)
+        except:
+            return default.format(value)
+
+    def _try_str(self, value, default=_unprintable):
+        try:
+            return str(value)
+        except:
+            return default.format(value)
+
     def _extract_value_traceback(self, type, value, traceback):
         if (value is _sentinel) != (traceback is _sentinel):
             raise ValueError("Both or neither of value and tb must be given")
