@@ -233,17 +233,17 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     _unprintable = "<unprintable {0.__class__.__qualname__} object>"
 
-    def _try_repr(self, value, default=_unprintable):
+    def _try_repr(self, value):
         try:
             return repr(value)
         except:
-            return default.format(value)
+            return self._unprintable.format(value)
 
-    def _try_str(self, value, default=_unprintable):
+    def _try_str(self, value):
         try:
             return str(value)
         except:
-            return default.format(value)
+            return self._unprintable.format(value)
 
     def _extract_value_traceback(self, type, value, traceback):
         if (value is _sentinel) != (traceback is _sentinel):
