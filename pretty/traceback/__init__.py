@@ -33,7 +33,7 @@ def hook(cls=None, *, override_builtin=None, override_hook=None, **kwargs):
             :class:`TracebackFormatter` subclass overrides the builtin
             :mod:`traceback` methods.
 
-            - The parameter kind, name, or type of any function.
+            - The parameter kind, name, order, or type of any function.
             - The return or yield type of any function.
 
         .. warning::
