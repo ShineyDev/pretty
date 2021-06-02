@@ -216,6 +216,13 @@ class DefaultTracebackFormatter(TracebackFormatter):
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
     """
     A pretty :class:`.TracebackFormatter`.
+
+    Attributes
+    ----------
+    cause_message: :class:`str`
+        The message yielded before an exception's ``__cause__``.
+    context_message: :class:`str`
+        The message yielded before an exception's ``__context__``.
     """
 
     ...
