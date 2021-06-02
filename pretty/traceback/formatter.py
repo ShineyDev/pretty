@@ -12,6 +12,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     """
     An abstract class for building a traceback formatter.
 
+    Parameters
+    ----------
+    theme: :class:`dict`
+        A theme.
+
     Attributes
     ----------
     theme: :class:`dict`
