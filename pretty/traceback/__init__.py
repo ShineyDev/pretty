@@ -86,7 +86,7 @@ def hook(cls=None, *, override_builtin=None, override_hook=None, **kwargs):
 
     if override_hook:
         def excepthook(*args):
-            print("".join(formatter.format_exception(*args)).strip())
+            formatter.write_exception(*args)
 
         sys.excepthook = excepthook
 
