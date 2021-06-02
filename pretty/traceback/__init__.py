@@ -70,6 +70,7 @@ def hook(cls=None, *, override_builtin=None, override_hook=None, **kwargs):
         override_builtin = utils.environment_to_bool(utils._env_traceback_override_builtin, False)
 
     if override_builtin:
+        traceback.extract_tb = formatter._extract_traceback
         traceback.format_list = formatter._format_frames
         traceback.format_tb = formatter._format_traceback
         traceback.print_list = formatter._write_frames

@@ -13,6 +13,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def __init__(self, *, theme):
         self.theme = theme
 
+    @utils.wrap(traceback.extract_tb)
+    def _extract_traceback(self, tb, limit=None):
+        return traceback.StackSummary(self.extract_frames(tb, limit=limit))
+
     @utils.wrap(traceback.format_list)
     def _format_frames(self, extracted_list):
         return list(self.format_frames(extracted_list))
@@ -28,6 +32,34 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @utils.wrap(traceback.print_tb)
     def _write_traceback(self, tb, limit=None, file=None):
         self.write_traceback(tb, file=file, limit=limit)
+
+    @abc.abstractmethod
+    def extract_frames(self, obj, *, limit=None):
+        """
+        |iter|
+
+        Extracts frames from a :data:`~types.FrameType` or
+        :class:`~types.TracebackType`.
+
+        This function is synonymous to both
+        :func:`traceback.extract_stack` and
+        :func:`traceback.extract_tb`.
+
+        Parameters
+        ----------
+        obj: Union[:data:`~types.FrameType`, \
+                   :class:`~types.TracebackType`]
+            A frame or traceback.
+        limit: :class:`int`
+            The maximum number of frames to extract.
+
+        Yields
+        ------
+        Any
+            Frames to be formatted.
+        """
+
+        raise NotImplementedError
 
     @abc.abstractmethod
     def format_frames(self, frames):
