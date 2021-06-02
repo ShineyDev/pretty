@@ -18,8 +18,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         A theme.
     """
 
-    def __init__(self, *, theme):
-        self.theme = theme
+    def __init__(self, *, theme=None):
+        self.theme = theme or utils._default_theme
 
     # region public methods
 
