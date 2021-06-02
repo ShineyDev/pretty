@@ -122,7 +122,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         traceback: :class:`~types.TracebackType`
             A traceback.
         limit: :class:`int`
-            The maximum number of frames to format.
+            The maximum number of frames to extract and format.
 
         Yields
         ------
@@ -190,7 +190,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         file
             The file to write to. Defaults to :data:`sys.stderr`.
         limit: :class:`int`
-            The maximum number of frames to format and write.
+            The maximum number of frames to extract, format, and write.
         """
 
         print("".join(self.format_traceback(traceback, limit=limit)), end="", file=file or sys.stderr)
