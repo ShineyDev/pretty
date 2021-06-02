@@ -66,6 +66,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A traceback.
         limit: :class:`int`
             The maximum number of frames to format.
+
+        Yields
+        ------
+        :class:`str`
+            Lines to be written.
         """
 
         yield from self.format_frames(self.extract_frames(traceback, limit=limit))
