@@ -25,6 +25,27 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def _format_traceback(self, tb, limit=None):
         return list(self.format_traceback(tb, limit=limit))
 
+    if sys.version_info >= (3, 10):
+        _sentinel = object()
+
+        @utils.wrap(traceback.print_exception)
+        def _write_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, file=None, chain=None):
+            if (value is _sentinel) != (tb is _sentinel):
+                raise ValueError("Both or neither of value and tb must be given")
+            elif value is tb is _sentinel:
+                if exc is None:
+                    value, tb = None, None
+                else:
+                    exc, value, tb = type(exc), exc, exc.__traceback__
+            else:
+                exc = type(value)
+
+            self.write_exception(exc, value, tb, chain=chain, file=file, limit=limit)
+    else:
+        @utils.wrap(traceback.print_exception)
+        def _write_exception(self, etype, value, tb, limit=None, file=None, chain=True):
+            self.write_exception(type(value), value, tb, chain=chain, file=file, limit=limit)
+
     @utils.wrap(traceback.print_list)
     def _write_frames(self, extracted_list, file=None):
         self.write_frames(extracted_list, file=file)
@@ -105,6 +126,31 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
 
         yield from self.format_frames(self.extract_frames(traceback, limit=limit))
+
+    def write_exception(self, type, value, traceback, *, chain=True, file=None, limit=None):
+        """
+        Writes an exception to a file.
+
+        This function is synonymous to
+        :func:`traceback.print_exception`.
+
+        Parameters
+        ----------
+        type: Type[:class:`BaseException`]
+            An exception type.
+        value: :class:`BaseException`
+            An exception.
+        traceback: :class:`~types.TracebackType`
+            A traceback.
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        file
+            The file to write to. Defaults to :data:`sys.stderr`.
+        limit: :class:`int`
+            The maximum number of frames to extract, format, and write.
+        """
+
+        print("".join(self.format_exception(type, value, traceback, chain=chain, limit=limit)), end="", file=file or sys.stderr)
 
     def write_frames(self, frames, *, file=None):
         """
