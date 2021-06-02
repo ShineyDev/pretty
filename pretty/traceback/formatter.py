@@ -43,10 +43,21 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             exc = type(value)
 
             return list(self.format_exception(exc, value, tb, chain=chain, limit=limit))
+
+        @utils.wrap(traceback.format_exception_only)
+        def _format_exception_only(self, exc, value=_sentinel):
+            value, _ = self._extract_value_traceback(exc, value, None)
+            exc = type(value)
+
+            return list(self.format_exception_only(exc, value))
     else:
         @utils.wrap(traceback.format_exception)
         def _format_exception(self, etype, value, tb, limit=None, chain=True):
             return list(self.format_exception(type(value), value, tb, chain=chain, limit=limit))
+
+        @utils.wrap(traceback.format_exception_only)
+        def _format_exception_only(self, etype, value):
+            return list(self.format_exception_only(type(value), value))
 
     @utils.wrap(traceback.format_list)
     def _format_frames(self, extracted_list):
@@ -128,6 +139,33 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             Whether to follow the traceback tree.
         limit: :class:`int`
             The maximum number of frames to extract and format.
+
+        Yields
+        ------
+        :class:`str`
+            Lines to be written.
+        """
+
+        raise NotImplementedError
+
+        yield
+
+    @abc.abstractmethod
+    def format_exception_only(self, type, value):
+        """
+        |iter|
+
+        Formats an exception to be written to a file.
+
+        This function is synonymous to
+        :func:`traceback.format_exception_only`.
+
+        Parameters
+        ----------
+        type: Type[:class:`BaseException`]
+            An exception type.
+        value: :class:`BaseException`
+            An exception.
 
         Yields
         ------
