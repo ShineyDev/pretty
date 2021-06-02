@@ -71,6 +71,7 @@ def hook(cls=None, *, override_builtin=None, override_hook=None, **kwargs):
 
     if override_builtin:
         traceback.extract_tb = formatter._extract_traceback
+        traceback.format_exception = formatter._format_exception
         traceback.format_list = formatter._format_frames
         traceback.format_tb = formatter._format_traceback
         traceback.print_exception = formatter._write_exception

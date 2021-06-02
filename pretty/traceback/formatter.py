@@ -22,6 +22,27 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def _extract_traceback(self, tb, limit=None):
         return traceback.StackSummary(self.extract_frames(tb, limit=limit))
 
+    if sys.version_info >= (3, 10):
+        _sentinel = object()
+
+        @utils.wrap(traceback.format_exception)
+        def _format_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, chain=True):
+            if (value is _sentinel) != (tb is _sentinel):
+                raise ValueError("Both or neither of value and tb must be given")
+            elif value is tb is _sentinel:
+                if exc is None:
+                    value, tb = None, None
+                else:
+                    exc, value, tb = type(exc), exc, exc.__traceback__
+            else:
+                exc = type(value)
+
+            return list(self.format_exception(exc, value, tb, chain=chain, limit=limit))
+    else:
+        @utils.wrap(traceback.format_exception)
+        def _format_exception(self, etype, value, tb, limit=None, chain=True):
+            return list(self.format_exception(type(value), value, tb, chain=chain, limit=limit))
+
     @utils.wrap(traceback.format_list)
     def _format_frames(self, extracted_list):
         return list(self.format_frames(extracted_list))
@@ -83,6 +104,39 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ------
         Any
             Frames to be formatted.
+        """
+
+        raise NotImplementedError
+
+        yield
+
+    @abc.abstractmethod
+    def format_exception(self, type, value, traceback, *, chain=True, limit=None):
+        """
+        |iter|
+
+        Formats an exception to be written to a file.
+
+        This function is synonymous to
+        :func:`traceback.format_exception`.
+
+        Parameters
+        ----------
+        type: Type[:class:`BaseException`]
+            An exception type.
+        value: :class:`BaseException`
+            An exception.
+        traceback: :class:`~types.TracebackType`
+            A traceback.
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        limit: :class:`int`
+            The maximum number of frames to extract and format.
+
+        Yields
+        ------
+        :class:`str`
+            Lines to be written.
         """
 
         raise NotImplementedError
