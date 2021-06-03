@@ -65,10 +65,10 @@ def hook(cls=None, **kwargs):
     traceback.format_list = formatter._format_frames
     traceback.format_tb = formatter._format_traceback
     traceback.print_exc = formatter._print_current_exception
-    traceback.print_exception = formatter._write_exception
+    traceback.print_exception = formatter._print_exception
     traceback.print_last = formatter._print_last_exception
-    traceback.print_list = formatter._write_frames
-    traceback.print_tb = formatter._write_traceback
+    traceback.print_list = formatter._print_frames
+    traceback.print_tb = formatter._print_traceback
 
     if isinstance(formatter, DefaultTracebackFormatter):
         traceback._cause_message = formatter.cause_message
@@ -81,7 +81,7 @@ def hook(cls=None, **kwargs):
     traceback._some_str = formatter._try_str
 
     def excepthook(*args):
-        formatter.write_exception(*args)
+        formatter.print_exception(*args)
 
     sys.excepthook = excepthook
 
