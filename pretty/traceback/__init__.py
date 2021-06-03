@@ -76,15 +76,15 @@ def hook(cls=None, **kwargs):
     traceback.print_stack = formatter._print_stack
     traceback.print_tb = formatter._print_traceback
 
-    if isinstance(formatter, DefaultTracebackFormatter):
-        traceback._cause_message = formatter.cause_message
-        traceback._context_message = formatter.context_message
+    # TODO: traceback._format_final_exc_line = ...
+    traceback._some_str = formatter._try_str
 
     if sys.version_info >= (3, 10):
         traceback._parse_value_tb = formatter._extract_value_traceback
 
-    # TODO: traceback._format_final_exc_line = ...
-    traceback._some_str = formatter._try_str
+    if isinstance(formatter, DefaultTracebackFormatter):
+        traceback._cause_message = formatter.cause_message
+        traceback._context_message = formatter.context_message
 
     def excepthook(*args):
         formatter.print_exception(*args)
