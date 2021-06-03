@@ -306,6 +306,24 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         print("".join(self.format_frames(frames)), end="", file=file or sys.stderr)
 
+    def print_stack(self, frame, *, file=None, limit=None):
+        """
+        Prints a stack to a file.
+
+        This function is synonymous to :func:`traceback.print_stack`.
+
+        Parameters
+        ----------
+        frame
+            A frame.
+        file
+            The file to print to. Defaults to :data:`sys.stderr`.
+        limit: :class:`int`
+            The maximum number of frames to extract, format, and print.
+        """
+
+        print("".join(self.format_stack(frame, limit=limit)), end="", file=file or sys.stderr)
+
     def print_traceback(self, traceback, *, file=None, limit=None):
         """
         Prints a traceback to a file.
@@ -410,6 +428,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @utils.wrap(traceback.print_list)
     def _print_frames(self, extracted_list, file=None):
         self.print_frames(extracted_list, file=file)
+
+    @utils.wrap(traceback.print_stack)
+    def _print_stack(self, f=None, limit=None, file=None):
+        self.print_stack(f or sys._getframe().f_back, file=file, limit=limit)
 
     @utils.wrap(traceback.print_tb)
     def _print_traceback(self, tb, limit=None, file=None):
