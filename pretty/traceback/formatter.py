@@ -318,12 +318,19 @@ class DefaultTracebackFormatter(TracebackFormatter):
     A :class:`.TracebackFormatter` with reimplementations of the
     :mod:`traceback` module.
 
+    Parameters
+    ----------
+    theme: :class:`dict`
+        A theme.
+
     Attributes
     ----------
     cause_message: :class:`str`
         The message yielded before an exception's ``__cause__``.
     context_message: :class:`str`
         The message yielded before an exception's ``__context__``.
+    theme: :class:`dict`
+        A theme.
     """
 
     cause_message = traceback._cause_message
@@ -334,12 +341,19 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
     """
     A pretty :class:`.TracebackFormatter`.
 
+    Parameters
+    ----------
+    theme: :class:`dict`
+        A theme.
+
     Attributes
     ----------
     cause_message: :class:`str`
         The message yielded before an exception's ``__cause__``.
     context_message: :class:`str`
         The message yielded before an exception's ``__context__``.
+    theme: :class:`dict`
+        A theme.
     """
 
     ...
