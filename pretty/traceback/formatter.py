@@ -186,6 +186,29 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
+    def format_stack(self, frame, *, limit=None):
+        """
+        |iter|
+
+        Formats a stack to be written to a file.
+
+        This function is synonymous to :func:`traceback.format_stack`.
+
+        Parameters
+        ----------
+        frame: :class:`~types.FrameType`
+            A frame.
+        limit: :class:`int`
+            The maximum number of frames to extract and format.
+
+        Yields
+        ------
+        :class:`str`
+            Lines to be written.
+        """
+
+        yield from self.format_frames(self.extract_frames(frame, limit=limit))
+
     def format_traceback(self, traceback, *, limit=None):
         """
         |iter|
@@ -402,6 +425,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @utils.wrap(traceback.format_list)
     def _format_frames(self, extracted_list):
         return list(self.format_frames(extracted_list))
+
+    @utils.wrap(traceback.format_stack)
+    def _format_stack(self, f=None, limit=None):
+        return list(self.format_stack(f or sys._getframe().f_back, limit=limit))
 
     @utils.wrap(traceback.format_tb)
     def _format_traceback(self, tb, limit=None):

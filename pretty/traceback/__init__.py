@@ -63,6 +63,7 @@ def hook(cls=None, **kwargs):
     traceback.format_exception = formatter._format_exception
     traceback.format_exception_only = formatter._format_exception_only
     traceback.format_list = formatter._format_frames
+    traceback.format_stack = formatter._format_stack
     traceback.format_tb = formatter._format_traceback
     traceback.print_exc = formatter._print_current_exception
     traceback.print_exception = formatter._print_exception
