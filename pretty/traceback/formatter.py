@@ -162,9 +162,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield from self.format_frames(self.extract_frames(traceback, limit=limit))
 
-    def write_exception(self, type, value, traceback, *, chain=True, file=None, limit=None):
+    def print_exception(self, type, value, traceback, *, chain=True, file=None, limit=None):
         """
-        Writes an exception to a file.
+        Prints an exception to a file.
 
         This function is synonymous to
         :func:`traceback.print_exception`.
@@ -180,16 +180,16 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         chain: :class:`bool`
             Whether to follow the traceback tree.
         file
-            The file to write to. Defaults to :data:`sys.stderr`.
+            The file to print to. Defaults to :data:`sys.stderr`.
         limit: :class:`int`
-            The maximum number of frames to extract, format, and write.
+            The maximum number of frames to extract, format, and print.
         """
 
         print("".join(self.format_exception(type, value, traceback, chain=chain, limit=limit)), end="", file=file or sys.stderr)
 
-    def write_frames(self, frames, *, file=None):
+    def print_frames(self, frames, *, file=None):
         """
-        Writes an iterable of frames to a file.
+        Prints an iterable of frames to a file.
 
         This function is synonymous to ``traceback.print_list()``.
 
@@ -202,14 +202,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         frames
             An iterable of traceback frames.
         file
-            The file to write to. Defaults to :data:`sys.stderr`.
+            The file to print to. Defaults to :data:`sys.stderr`.
         """
 
         print("".join(self.format_frames(frames)), end="", file=file or sys.stderr)
 
-    def write_traceback(self, traceback, *, file=None, limit=None):
+    def print_traceback(self, traceback, *, file=None, limit=None):
         """
-        Writes a traceback to a file.
+        Prints a traceback to a file.
 
         This function is synonymous to :func:`traceback.print_tb`.
 
@@ -218,9 +218,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         traceback: :class:`~types.TracebackType`
             A traceback.
         file
-            The file to write to. Defaults to :data:`sys.stderr`.
+            The file to print to. Defaults to :data:`sys.stderr`.
         limit: :class:`int`
-            The maximum number of frames to extract, format, and write.
+            The maximum number of frames to extract, format, and print.
         """
 
         print("".join(self.format_traceback(traceback, limit=limit)), end="", file=file or sys.stderr)
@@ -292,23 +292,23 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     if sys.version_info >= (3, 10):
         @utils.wrap(traceback.print_exception)
-        def _write_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, file=None, chain=True):
+        def _print_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, file=None, chain=True):
             value, tb = self._extract_value_traceback(exc, value, tb)
             exc = type(value)
 
-            self.write_exception(exc, value, tb, chain=chain, file=file, limit=limit)
+            self.print_exception(exc, value, tb, chain=chain, file=file, limit=limit)
     else:
         @utils.wrap(traceback.print_exception)
-        def _write_exception(self, etype, value, tb, limit=None, file=None, chain=True):
-            self.write_exception(type(value), value, tb, chain=chain, file=file, limit=limit)
+        def _print_exception(self, etype, value, tb, limit=None, file=None, chain=True):
+            self.print_exception(type(value), value, tb, chain=chain, file=file, limit=limit)
 
     @utils.wrap(traceback.print_list)
-    def _write_frames(self, extracted_list, file=None):
-        self.write_frames(extracted_list, file=file)
+    def _print_frames(self, extracted_list, file=None):
+        self.print_frames(extracted_list, file=file)
 
     @utils.wrap(traceback.print_tb)
-    def _write_traceback(self, tb, limit=None, file=None):
-        self.write_traceback(tb, file=file, limit=limit)
+    def _print_traceback(self, tb, limit=None, file=None):
+        self.print_traceback(tb, file=file, limit=limit)
 
     # endregion
 
