@@ -395,6 +395,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         else:
             return value, traceback
 
+    @utils.wrap(traceback.extract_stack)
+    def _extract_stack(self, f=None, limit=None):
+        return traceback.StackSummary(self.extract_frames(f or sys._getframe().f_back, limit=limit))
+
     @utils.wrap(traceback.extract_tb)
     def _extract_traceback(self, tb, limit=None):
         return traceback.StackSummary(self.extract_frames(tb, limit=limit))
