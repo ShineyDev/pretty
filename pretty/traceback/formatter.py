@@ -523,7 +523,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         for frame in self.walk_stack(f):
             yield frame, frame.f_lineno
 
-    @utils.wrap(traceback.walk_traceback)
+    @utils.wrap(traceback.walk_tb)
     def _walk_traceback(self, tb):
         for frame in self.walk_traceback(tb):
             yield frame, frame.f_lineno
