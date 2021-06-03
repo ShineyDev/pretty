@@ -58,6 +58,8 @@ def hook(cls=None, **kwargs):
 
     formatter = cls and cls(**kwargs) or PrettyTracebackFormatter(**kwargs)
 
+    # TODO: traceback.FrameSummary
+
     # TODO: traceback.clear_frames = ...
     traceback.extract_stack = formatter._extract_stack
     traceback.extract_tb = formatter._extract_traceback
