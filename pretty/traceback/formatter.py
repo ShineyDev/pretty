@@ -55,6 +55,29 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
+    def format_current_exception(self, chain=True, limit=None):
+        """
+        |iter|
+
+        Formats the current exception to be written to a file.
+
+        This function is synonymous to :func:`traceback.format_exc`.
+
+        Parameters
+        ----------
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        limit: :class:`int`
+            The maximum number of frames to extract and format.
+
+        Yields
+        ------
+        :class:`str`
+            Lines to be written.
+        """
+
+        yield from self.format_exception(*sys.exc_info(), chain=chain, limit=limit)
+
     @abc.abstractmethod
     def format_exception(self, type, value, traceback, *, chain=True, limit=None):
         """
@@ -276,6 +299,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @utils.wrap(traceback.extract_tb)
     def _extract_traceback(self, tb, limit=None):
         return traceback.StackSummary(self.extract_frames(tb, limit=limit))
+
+    @utils.wrap(traceback.format_exc)
+    def _format_current_exception(self, limit=None, chain=True):
+        return "".join(self.format_current_exception(chain=chain, limit=limit))
 
     if sys.version_info >= (3, 10):
         @utils.wrap(traceback.format_exception)

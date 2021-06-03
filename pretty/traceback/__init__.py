@@ -59,6 +59,7 @@ def hook(cls=None, **kwargs):
     formatter = cls and cls(**kwargs) or PrettyTracebackFormatter(**kwargs)
 
     traceback.extract_tb = formatter._extract_traceback
+    traceback.format_exc = formatter._format_current_exception
     traceback.format_exception = formatter._format_exception
     traceback.format_exception_only = formatter._format_exception_only
     traceback.format_list = formatter._format_frames
