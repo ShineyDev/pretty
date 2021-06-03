@@ -76,6 +76,7 @@ def hook(cls=None, **kwargs):
     traceback.print_stack = formatter._print_stack
     traceback.print_tb = formatter._print_traceback
     traceback.walk_stack = formatter._walk_stack
+    traceback.walk_tb = formatter._walk_traceback
 
     # TODO: traceback._format_final_exc_line = ...
     traceback._some_str = formatter._try_str

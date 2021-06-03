@@ -389,6 +389,30 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
             frame = frame.f_back
 
+    def walk_traceback(self, traceback):
+        """
+        |iter|
+
+        Walks a traceback.
+
+        This function is synonymous to :func:`traceback.walk_tb`.
+
+        Parameters
+        ----------
+        traceback: :class:`~types.TracebackType`
+            A traceback.
+
+        Yields
+        ------
+        :class:`~types.FrameType`
+            Frames.
+        """
+
+        while traceback is not None:
+            yield traceback.tb_frame
+
+            traceback = traceback.tb_next
+
     # endregion
     # region private methods
 
@@ -497,6 +521,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         f = f or sys._getframe().f_back.f_back
 
         for frame in self.walk_stack(f):
+            yield frame, frame.f_lineno
+
+    @utils.wrap(traceback.walk_traceback)
+    def _walk_traceback(self, tb):
+        for frame in self.walk_traceback(tb):
             yield frame, frame.f_lineno
 
     # endregion
