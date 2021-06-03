@@ -174,7 +174,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         Parameters
         ----------
         frames
-            An iterable of traceback frames.
+            An iterable of frames.
 
         Yields
         ------
@@ -299,7 +299,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         Parameters
         ----------
         frames
-            An iterable of traceback frames.
+            An iterable of frames.
         file
             The file to print to. Defaults to :data:`sys.stderr`.
         """
