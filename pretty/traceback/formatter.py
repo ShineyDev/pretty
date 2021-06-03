@@ -365,6 +365,30 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         print("".join(self.format_traceback(traceback, limit=limit)), end="", file=file or sys.stderr)
 
+    def walk_stack(self, frame):
+        """
+        |iter|
+
+        Walks a stack.
+
+        This function is synonymous to :func:`traceback.walk_stack`.
+
+        Parameters
+        ----------
+        frame: :class:`~types.FrameType`
+            A frame.
+
+        Yields
+        ------
+        :class:`~types.FrameType`
+            Frames.
+        """
+
+        while frame is not None:
+            yield frame
+
+            frame = frame.f_back
+
     # endregion
     # region private methods
 
@@ -467,6 +491,13 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @utils.wrap(traceback.print_tb)
     def _print_traceback(self, tb, limit=None, file=None):
         self.print_traceback(tb, file=file, limit=limit)
+
+    @utils.wrap(traceback.walk_stack)
+    def _walk_stack(self, f):
+        f = f or sys._getframe().f_back.f_back
+
+        for frame in self.walk_stack(f):
+            yield frame, frame.f_lineno
 
     # endregion
 
