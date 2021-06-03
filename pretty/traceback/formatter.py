@@ -55,7 +55,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def format_current_exception(self, chain=True, limit=None):
+    def format_current_exception(self, *, chain=True, limit=None):
         """
         |iter|
 
@@ -185,7 +185,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield from self.format_frames(self.extract_frames(traceback, limit=limit))
 
-    def print_current_exception(self, chain=True, file=None, limit=None):
+    def print_current_exception(self, *, chain=True, file=None, limit=None):
         """
         Prints the current exception to a file.
 
@@ -201,7 +201,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The maximum number of frames to extract, format, and print.
         """
 
-        self.print_exception(*sys.exc_info(), chain=chain, file=file, limit=limit)
+        print("".join(self.format_current_exception(chain=chain, limit=limit)), end="", file=file or sys.stderr)
 
     def print_exception(self, type, value, traceback, *, chain=True, file=None, limit=None):
         """
