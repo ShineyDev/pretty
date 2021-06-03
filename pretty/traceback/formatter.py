@@ -162,6 +162,24 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield from self.format_frames(self.extract_frames(traceback, limit=limit))
 
+    def print_current_exception(self, chain=True, file=None, limit=None):
+        """
+        Prints the current exception to a file.
+
+        This function is synonymous to :func:`traceback.print_exc`.
+
+        Parameters
+        ----------
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        file
+            The file to print to. Defaults to :data:`sys.stderr`.
+        limit: :class:`int`
+            The maximum number of frames to extract, format, and print.
+        """
+
+        self.print_exception(*sys.exc_info(), chain=chain, file=file, limit=limit)
+
     def print_exception(self, type, value, traceback, *, chain=True, file=None, limit=None):
         """
         Prints an exception to a file.
@@ -285,6 +303,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @utils.wrap(traceback.format_tb)
     def _format_traceback(self, tb, limit=None):
         return list(self.format_traceback(tb, limit=limit))
+
+    @utils.wrap(traceback.print_exc)
+    def _print_current_exception(self, limit=None, file=None, chain=True):
+        self.print_current_exception(chain=chain, file=file, limit=limit)
 
     if sys.version_info >= (3, 10):
         @utils.wrap(traceback.print_exception)

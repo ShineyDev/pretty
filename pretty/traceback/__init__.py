@@ -23,7 +23,7 @@ def hook(cls=None, **kwargs):
         :mod:`traceback` module with attributes and methods from the
         formatter.
         
-        .. , falling back to :mod:`traceback` methods if the
+        .. TODO: , falling back to :mod:`traceback` methods if the
            formatter fails.
 
         The following **cannot** change when a
@@ -63,6 +63,7 @@ def hook(cls=None, **kwargs):
     traceback.format_exception_only = formatter._format_exception_only
     traceback.format_list = formatter._format_frames
     traceback.format_tb = formatter._format_traceback
+    traceback.print_exc = formatter._print_current_exception
     traceback.print_exception = formatter._write_exception
     traceback.print_list = formatter._write_frames
     traceback.print_tb = formatter._write_traceback
