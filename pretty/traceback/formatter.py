@@ -138,6 +138,30 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
+    def format_last_exception(self, *, chain=True, limit=None):
+        """
+        |iter|
+
+        Formats the last exception to be written to a file.
+
+        Parameters
+        ----------
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        limit: :class:`int`
+            The maximum number of frames to extract and format.
+
+        Yields
+        ------
+        :class:`str`
+            Lines to be written.
+        """
+
+        if not hasattr(sys, "last_type"):
+            raise ValueError("no last exception")
+
+        yield from self.format_exception(sys.last_type, sys.last_value, sys.last_traceback, chain=chain, limit=limit)
+
     @abc.abstractmethod
     def format_frames(self, frames):
         """
