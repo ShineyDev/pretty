@@ -375,12 +375,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frame: :class:`~types.FrameType`
+        frame: :data:`~types.FrameType`
             A frame.
 
         Yields
         ------
-        :class:`~types.FrameType`
+        :data:`~types.FrameType`
             Frames.
         """
 
@@ -404,7 +404,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Yields
         ------
-        :class:`~types.FrameType`
+        :data:`~types.FrameType`
             Frames.
         """
 
