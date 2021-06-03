@@ -47,7 +47,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Yields
         ------
-        :class:`~types.FrameType`
+        :data:`~types.FrameType`
             Frames to be formatted.
         """
 
@@ -173,7 +173,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: Iterable[:class:`~types.FrameType`]
+        frames: Iterable[:data:`~types.FrameType`]
             An iterable of frames.
 
         Yields
@@ -196,7 +196,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frame: :class:`~types.FrameType`
+        frame: :data:`~types.FrameType`
             A frame.
         limit: :class:`int`
             The maximum number of frames to extract and format.
@@ -321,7 +321,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: :class:`~types.FrameType`
+        frames: :data:`~types.FrameType`
             An iterable of frames.
         file
             The file to print to. Defaults to :data:`sys.stderr`.
@@ -337,7 +337,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frame: :class:`~types.FrameType`
+        frame: :data:`~types.FrameType`
             A frame.
         file
             The file to print to. Defaults to :data:`sys.stderr`.
