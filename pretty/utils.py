@@ -5,8 +5,6 @@ import re
 _env_all = "PYTHONPRETTY"
 _env_theme = "PYTHONPRETTYTHEME"
 _env_traceback = "PYTHONPRETTYTRACEBACK"
-_env_traceback_override_builtin = "PYTHONPRETTYTRACEBACKOVERRIDEBUILTIN"
-_env_traceback_override_hook = "PYTHONPRETTYTRACEBACKOVERRIDEHOOK"
 
 
 _bool_map = {
