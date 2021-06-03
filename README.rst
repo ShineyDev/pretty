@@ -39,7 +39,7 @@ Install
 Use
 ---
 
-If you wish to hook pretty**.traceback** into **all of your Python sessions**, set the ``PYTHONPRETTYTRACEBACK`` environment variable to a `truthy value <https://docs.shiney.dev/pretty/latest/environment#term-boolean>`_.
+If you wish to hook pretty**.traceback** into **all of your Python sessions**, set the ``PYTHONPRETTYTRACEBACK`` environment variable to a `truthy value <https://docs.shiney.dev/pretty/latest/environment#term-boolean-value>`_.
 
 
 .. code:: shell
