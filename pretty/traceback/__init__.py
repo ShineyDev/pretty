@@ -87,6 +87,7 @@ def hook(cls=None, **kwargs):
     if isinstance(formatter, DefaultTracebackFormatter):
         traceback._cause_message = formatter.cause_message
         traceback._context_message = formatter.context_message
+        traceback._RECURSIVE_CUTOFF = formatter.recursion_cutoff
 
     def excepthook(*args):
         formatter.print_exception(*args)

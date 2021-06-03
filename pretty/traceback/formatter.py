@@ -547,12 +547,16 @@ class DefaultTracebackFormatter(TracebackFormatter):
         The message yielded before an exception's ``__cause__``.
     context_message: :class:`str`
         The message yielded before an exception's ``__context__``.
+    recursion_cutoff: :class:`int`
+        The number of the same frame to display before instead
+        displaying a recursion message.
     theme: :class:`dict`
         A theme.
     """
 
     cause_message = traceback._cause_message
     context_message = traceback._context_message
+    recursion_cutoff = traceback._RECURSIVE_CUTOFF
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
@@ -570,6 +574,9 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
         The message yielded before an exception's ``__cause__``.
     context_message: :class:`str`
         The message yielded before an exception's ``__context__``.
+    recursion_cutoff: :class:`int`
+        The number of the same frame to display before instead
+        displaying a recursion message.
     theme: :class:`dict`
         A theme.
     """
