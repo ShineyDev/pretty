@@ -228,6 +228,22 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         print("".join(self.format_exception(type, value, traceback, chain=chain, limit=limit)), end="", file=file or sys.stderr)
 
+    def print_exception_only(self, type, value, *, file=None):
+        """
+        Prints an exception to a file.
+
+        Parameters
+        ----------
+        type: Type[:class:`BaseException`]
+            An exception type.
+        value: :class:`BaseException`
+            An exception.
+        file
+            The file to print to. Defaults to :data:`sys.stderr`.
+        """
+
+        print("".join(self.format_exception_only(type, value)), end="", file=file or sys.stderr)
+
     def print_frames(self, frames, *, file=None):
         """
         Prints an iterable of frames to a file.
