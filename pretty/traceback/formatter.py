@@ -244,6 +244,24 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         print("".join(self.format_exception_only(type, value)), end="", file=file or sys.stderr)
 
+    def print_last_exception(self, *, chain=True, file=None, limit=None):
+        """
+        Prints the last exception to a file.
+
+        This function is synonymous to :func:`traceback.print_last`.
+
+        Parameters
+        ----------
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        file
+            The file to print to. Defaults to :data:`sys.stderr`.
+        limit: :class:`int`
+            The maximum number of frames to extract, format, and print.
+        """
+
+        print("".join(self.format_last_exception(chain=chain, limit=limit)), end="", file=file or sys.stderr)
+
     def print_frames(self, frames, *, file=None):
         """
         Prints an iterable of frames to a file.
@@ -360,6 +378,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         @utils.wrap(traceback.print_exception)
         def _print_exception(self, etype, value, tb, limit=None, file=None, chain=True):
             self.print_exception(type(value), value, tb, chain=chain, file=file, limit=limit)
+
+    @utils.wrap(traceback.print_last)
+    def _print_last_exception(self, limit=None, file=None, chain=True):
+        self.print_last_exception(chain=chain, file=file, limit=limit)
 
     @utils.wrap(traceback.print_list)
     def _print_frames(self, extracted_list, file=None):
