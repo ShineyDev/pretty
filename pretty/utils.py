@@ -1,3 +1,4 @@
+import functools
 import os
 import re
 
@@ -13,6 +14,7 @@ _bool_map = {
 }
 
 
+@functools.lru_cache
 def environment_to_bool(name, default):
     try:
         value = os.environ[name]
@@ -46,6 +48,7 @@ _default_theme = {
 _unicode_re = re.compile(r"u\+[0-9]{4}|U\+[0-9]{8}")
 
 
+@functools.lru_cache
 def environment_to_theme(name, default):
     try:
         value = os.environ[name]
