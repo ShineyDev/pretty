@@ -547,9 +547,9 @@ class DefaultTracebackFormatter(TracebackFormatter):
     Attributes
     ----------
     cause_header: :class:`str`
-        The message yielded before an exception's ``__cause__``.
+        The message yielded after an exception's ``__cause__``.
     context_header: :class:`str`
-        The message yielded before an exception's ``__context__``.
+        The message yielded after an exception's ``__context__``.
     recursion_cutoff: :class:`int`
         The number of the same frame to display before instead
         displaying a recursion message.
@@ -583,9 +583,9 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
     Attributes
     ----------
     cause_header: :class:`str`
-        The message yielded before an exception's ``__cause__``.
+        The message yielded after an exception's ``__cause__``.
     context_header: :class:`str`
-        The message yielded before an exception's ``__context__``.
+        The message yielded after an exception's ``__context__``.
     recursion_cutoff: :class:`int`
         The number of the same frame to display before instead
         displaying a recursion message.
