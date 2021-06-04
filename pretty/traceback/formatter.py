@@ -555,11 +555,14 @@ class DefaultTracebackFormatter(TracebackFormatter):
         displaying a recursion message.
     theme: :class:`dict`
         A theme.
+    traceback_header: :class:`str`
+        The message yielded before an exception's traceback.
     """
 
     cause_header = traceback._cause_message
     context_header = traceback._context_message
     recursion_cutoff = traceback._RECURSIVE_CUTOFF
+    traceback_header = "Traceback (most recent call last):\n"
 
     def format_current_exception(self, *, chain=True, limit=None):
         yield from self.format_exception(*sys.exc_info(), chain=chain, limit=limit)
@@ -591,6 +594,8 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
         displaying a recursion message.
     theme: :class:`dict`
         A theme.
+    traceback_header: :class:`str`
+        The message yielded before an exception's traceback.
     """
 
     ...
