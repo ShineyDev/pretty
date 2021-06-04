@@ -55,6 +55,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
+    @abc.abstractmethod
     def format_current_exception(self, *, chain=True, limit=None):
         """
         |iter|
@@ -76,7 +77,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             Lines to be written.
         """
 
-        yield from self.format_exception(*sys.exc_info(), chain=chain, limit=limit)
+        raise NotImplementedError
+
+        yield
 
     @abc.abstractmethod
     def format_exception(self, type, value, traceback, *, chain=True, limit=None):
@@ -138,6 +141,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
+    @abc.abstractmethod
     def format_last_exception(self, *, chain=True, limit=None):
         """
         |iter|
@@ -157,10 +161,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             Lines to be written.
         """
 
-        if not hasattr(sys, "last_type"):
-            raise ValueError("no last exception")
+        raise NotImplementedError
 
-        yield from self.format_exception(sys.last_type, sys.last_value, sys.last_traceback, chain=chain, limit=limit)
+        yield
 
     @abc.abstractmethod
     def format_frames(self, frames):
@@ -557,6 +560,15 @@ class DefaultTracebackFormatter(TracebackFormatter):
     cause_header = traceback._cause_message
     context_header = traceback._context_message
     recursion_cutoff = traceback._RECURSIVE_CUTOFF
+
+    def format_current_exception(self, *, chain=True, limit=None):
+        yield from self.format_exception(*sys.exc_info(), chain=chain, limit=limit)
+
+    def format_last_exception(self, *, chain=True, limit=None):
+        if not hasattr(sys, "last_type"):
+            raise ValueError("no last exception")
+
+        yield from self.format_exception(sys.last_type, sys.last_value, sys.last_traceback, chain=chain, limit=limit)
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
