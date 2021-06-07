@@ -189,6 +189,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
+    @abc.abstractmethod
     def format_stack(self, frame, *, limit=None):
         """
         |iter|
@@ -210,8 +211,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             Lines to be written.
         """
 
-        yield from self.format_frames(self.extract_frames(frame, limit=limit))
+        raise NotImplementedError
 
+        yield
+
+    @abc.abstractmethod
     def format_traceback(self, traceback, *, limit=None):
         """
         |iter|
@@ -233,7 +237,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             Lines to be written.
         """
 
-        yield from self.format_frames(self.extract_frames(traceback, limit=limit))
+        raise NotImplementedError
+
+        yield
 
     def print_current_exception(self, *, chain=True, file=None, limit=None):
         """
@@ -595,6 +601,12 @@ class DefaultTracebackFormatter(TracebackFormatter):
             raise ValueError("no last exception")
 
         yield from self.format_exception(sys.last_type, sys.last_value, sys.last_traceback, chain=chain, limit=limit)
+
+    def format_stack(self, frame, *, limit=None):
+        yield from self.format_frames(self.extract_frames(frame, limit=limit))
+
+    def format_traceback(self, traceback, *, limit=None):
+        yield from self.format_frames(self.extract_frames(traceback, limit=limit))
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
