@@ -1,6 +1,10 @@
 import abc
+import collections
+import itertools
+import linecache
 import sys
 import traceback
+import types
 
 from pretty import utils
 
@@ -569,6 +573,29 @@ class DefaultTracebackFormatter(TracebackFormatter):
     context_header = traceback._context_message
     recursion_cutoff = traceback._RECURSIVE_CUTOFF
     traceback_header = "Traceback (most recent call last):\n"
+
+    def extract_frames(self, obj, *, limit=None):
+        if isinstance(obj, types.FrameType):
+            generator = reversed(list(self.walk_stack(obj)))
+        elif isinstance(obj, types.TracebackType):
+            generator = self.walk_traceback(obj)
+        else:
+            generator = obj
+
+        limit = limit or getattr(sys, "tracebacklimit", None)
+        if limit is not None:
+            if limit >= 0:
+                generator = itertools.islice(generator, limit)
+            else:
+                generator = collections.deque(generator, -limit)
+
+        for frame in generator:
+            if isinstance(frame, tuple):
+                frame, _ = frame
+
+            linecache.lazycache(frame.f_code.co_filename, frame.f_globals)
+
+            yield frame
 
     def format_current_exception(self, *, chain=True, limit=None):
         yield from self.format_exception(*sys.exc_info(), chain=chain, limit=limit)
