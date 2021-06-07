@@ -429,19 +429,32 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     # endregion
     # region private methods
 
-    _unprintable = "<unprintable {0.__class__.__qualname__} object>"
+    _unprintable = "<unprintable object>"
+    _unprintable_fmt = "<unprintable {0.__class__.__qualname__} object>"
 
     def _try_repr(self, value):
         try:
-            return repr(value)
+            value = repr(value)
         except:
-            return self._unprintable.format(value)
+            value = self._try_unprintable(value)
+        finally:
+            return value
 
     def _try_str(self, value):
         try:
-            return str(value)
+            value = str(value)
         except:
-            return self._unprintable.format(value)
+            value = self._try_unprintable(value)
+        finally:
+            return value
+
+    def _try_unprintable(self, value):
+        try:
+            value = self._unprintable_fmt.format(value)
+        except:
+            value = self._unprintable
+        finally:
+            return value
 
     _sentinel = object()
 
