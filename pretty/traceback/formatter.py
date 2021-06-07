@@ -575,13 +575,13 @@ class DefaultTracebackFormatter(TracebackFormatter):
             cause = value.__cause__
 
             if cause is not None and id(cause) not in seen:
-                yield from self.format_exception(type(cause), cause, cause.__traceback__, chain=True, limit=limit, seen=seen)
+                yield from self.format_exception(type(cause), cause, cause.__traceback__, chain=chain, limit=limit, seen=seen)
                 yield self.cause_header
 
             context = value.__context__
 
             if context is not None and id(context) not in seen:
-                yield from self.format_exception(type(context), context, context.__traceback__, chain=True, limit=limit, seen=seen)
+                yield from self.format_exception(type(context), context, context.__traceback__, chain=chain, limit=limit, seen=seen)
                 yield self.context_header
 
         if traceback is not None:
