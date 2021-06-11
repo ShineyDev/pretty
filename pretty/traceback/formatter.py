@@ -429,9 +429,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     # endregion
     # region private methods
 
-    _unprintable = "<unprintable object>"
-    _unprintable_fmt = "<unprintable {0.__class__.__qualname__} object>"
-
     def _try_name(self, type):
         try:
             name = type.__name__
@@ -460,6 +457,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             value = self._try_unprintable(value)
         finally:
             return value
+
+    _unprintable = "<unprintable object>"
+    _unprintable_fmt = "<unprintable {0.__class__.__qualname__} object>"
 
     def _try_unprintable(self, value):
         try:
