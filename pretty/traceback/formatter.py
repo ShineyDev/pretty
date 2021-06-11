@@ -432,6 +432,19 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     _unprintable = "<unprintable object>"
     _unprintable_fmt = "<unprintable {0.__class__.__qualname__} object>"
 
+    def _try_name(self, type):
+        try:
+            name = type.__name__
+        except AttributeError:
+            name = self._try_unprintable(type)
+        else:
+            module = type.__module__
+
+            if module not in ("__main__", "builtins"):
+                name = f"{module}.{name}"
+        finally:
+            return name
+
     def _try_repr(self, value):
         try:
             value = repr(value)
