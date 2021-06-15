@@ -638,8 +638,9 @@ class DefaultTracebackFormatter(TracebackFormatter):
                 yield self.cause_header
 
             context = value.__context__
+            context_suppressed = value.__suppress_context__
 
-            if context is not None and id(context) not in seen:
+            if cause is None and context is not None and not context_suppressed and id(context) not in seen:
                 yield from self.format_exception(type(context), context, context.__traceback__, chain=chain, limit=limit, seen=seen)
                 yield self.context_header
 
