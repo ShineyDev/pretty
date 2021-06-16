@@ -662,6 +662,17 @@ class DefaultTracebackFormatter(TracebackFormatter):
     def format_traceback(self, traceback, *, limit=None):
         yield from self.format_frames(self.extract_frames(traceback, limit=limit))
 
+    @utils.wrap(traceback._format_final_exc_line)
+    def _format_final_exc_line(self, etype, value):
+        value_str = self._try_str(value)
+
+        if value is None or not value_str:
+            line = f"{etype}\n"
+        else:
+            line = f"{etype}: {value_str}\n"
+
+        return line
+
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
     """
