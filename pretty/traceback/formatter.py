@@ -652,6 +652,11 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield from self.format_exception_only(type, value)
 
+    def format_exception_line(self, type, value):
+        type_name = self._try_name(type)
+
+        yield self._format_final_exc_line(type_name, value)
+
     def format_last_exception(self, *, chain=True, limit=None):
         if not hasattr(sys, "last_type"):
             raise ValueError("no last exception")
