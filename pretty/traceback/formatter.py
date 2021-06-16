@@ -600,6 +600,8 @@ class DefaultTracebackFormatter(TracebackFormatter):
     recursion_cutoff = traceback._RECURSIVE_CUTOFF
     traceback_header = "Traceback (most recent call last):\n"
 
+    # region public methods
+
     def extract_frames(self, obj, *, limit=None):
         if isinstance(obj, types.FrameType):
             generator = reversed(list(self.walk_stack(obj)))
@@ -662,6 +664,9 @@ class DefaultTracebackFormatter(TracebackFormatter):
     def format_traceback(self, traceback, *, limit=None):
         yield from self.format_frames(self.extract_frames(traceback, limit=limit))
 
+    # endregion
+    # region private methods
+
     @utils.wrap(traceback._format_final_exc_line)
     def _format_final_exc_line(self, etype, value):
         value_str = self._try_str(value)
@@ -672,6 +677,8 @@ class DefaultTracebackFormatter(TracebackFormatter):
             line = f"{etype}: {value_str}\n"
 
         return line
+
+    # endregion
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
