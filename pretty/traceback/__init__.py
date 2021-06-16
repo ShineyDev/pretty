@@ -22,7 +22,7 @@ def hook(cls=None, **kwargs):
         This will replace attributes and functions in the
         :mod:`traceback` module with attributes and methods from the
         formatter.
-        
+
         .. TODO: , falling back to :mod:`traceback` methods if the
            formatter fails.
 
