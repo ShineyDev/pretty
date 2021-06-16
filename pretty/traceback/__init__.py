@@ -80,10 +80,10 @@ def hook(cls=None, **kwargs):
     traceback.walk_stack = formatter._walk_stack
     traceback.walk_tb = formatter._walk_traceback
 
+    traceback._some_str = formatter._try_str
+
     if isinstance(formatter, DefaultTracebackFormatter):
         traceback._format_final_exc_line = formatter._format_final_exc_line
-
-    traceback._some_str = formatter._try_str
 
     if sys.version_info >= (3, 10):
         traceback._parse_value_tb = formatter._extract_value_traceback
