@@ -89,7 +89,7 @@ def hook(cls=DefaultFormatter, *, override_hook=False, override_traceback=False,
         traceback.format_exc = formatter.format_exc
         traceback.format_exception = formatter.format_exception
         traceback.format_exception_only = formatter.format_exception_only
-        traceback.format_list = formatter.format_list
+        traceback.format_list = formatter.format_frame_list
         traceback.format_stack = formatter.format_stack
         traceback.format_tb = formatter.format_traceback
 
