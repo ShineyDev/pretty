@@ -41,31 +41,31 @@ Install
 Use
 ---
 
-If you wish to hook pretty**.traceback** into **all of your Python sessions**, set the ``PYTHONPRETTYTRACEBACK`` environment variable to a `truthy value <https://docs.shiney.dev/pretty/latest/environment#term-boolean-value>`_.
-
+If you wish to hook pretty.traceback into **all Python sessions**, set the `PYTHONPRETTYTRACEBACK <https://docs.shiney.dev/pretty/latest/environment#term-PYTHONPRETTYTRACEBACK>`_ environment variable to a `truthy value <https://docs.shiney.dev/pretty/latest/environment#term-boolean-value>`_.
 
 .. code:: shell
 
     $ export PYTHONPRETTYTRACEBACK=1
 
-
-If you wish to hook pretty**.traceback** into **a single Python session**, call ``pretty.traceback.hook()``.
-
+If you wish to hook pretty.traceback into **a single Python session**, call `pretty.traceback.hook() <https://docs.shiney.dev/pretty/latest/traceback/hook>`_.
 
 .. code:: python
 
     >>> import pretty
     >>> pretty.traceback.hook()
 
-
-If you wish to use the formatters directly, they're `documented <https://docs.shiney.dev/pretty/latest/traceback/generic>`_ in the ``pretty.traceback`` module.
-
+If you wish to use a formatter directly, initialize a new `PrettyTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/pretty>`_ or `DefaultTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/default>`_, or build your own implementation on `TracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/generic>`_.
 
 .. code:: python
 
     >>> import pretty
+    >>>
     >>> formatter = pretty.traceback.PrettyTracebackFormatter()
-    >>> print("".join(formatter.format_exception(type(e), e, e.__traceback__)))
+    >>>
+    >>> try:
+    >>>     1 / 0
+    >>> except Exception as e:
+    >>>     print("".join(formatter.format_exception(type(e), e, e.__traceback__)))
 
 
 .. raw:: html
