@@ -1,19 +1,23 @@
 .. raw:: html
 
     <p align="center">
-        <a href="https://github.com/ShineyDev/pretty/actions?query=workflow%3AAnalyze+event%3Apush">
+        <a href="https://github.com/ShineyDev/pretty/actions?query=workflow%3AAnalyze">
             <img alt="Analyze Status" src="https://github.com/ShineyDev/pretty/workflows/Analyze/badge.svg?event=push" />
         </a>
 
-        <a href="https://github.com/ShineyDev/pretty/actions?query=workflow%3ABuild+event%3Apush">
+        <a href="https://github.com/ShineyDev/pretty/actions?query=workflow%3ABuild">
             <img alt="Build Status" src="https://github.com/ShineyDev/pretty/workflows/Build/badge.svg?event=push" />
         </a>
 
-        <a href="https://github.com/ShineyDev/pretty/actions?query=workflow%3ACheck+event%3Apush">
+        <a href="https://github.com/ShineyDev/pretty/actions?query=workflow%3ACheck">
             <img alt="Check Status" src="https://github.com/ShineyDev/pretty/workflows/Check/badge.svg?event=push" />
         </a>
 
-        <a href="https://github.com/ShineyDev/pretty/actions?query=workflow%3ALint+event%3Apush">
+        <a href="https://github.com/ShineyDev/pretty/actions?query=workflow%3ADeploy">
+            <img alt="Deploy Status" src="https://github.com/ShineyDev/pretty/workflows/Deploy/badge.svg?event=push" />
+        </a>
+
+        <a href="https://github.com/ShineyDev/pretty/actions?query=workflow%3ALint">
             <img alt="Lint Status" src="https://github.com/ShineyDev/pretty/workflows/Lint/badge.svg?event=push" />
         </a>
     </p>
@@ -22,10 +26,8 @@
 
 .. raw:: html
 
-    <h1 align="center">pretty</h1>
-    <p align="center">A Python module for prettier (and far more useful) stack traces.</p>
-    <h6 align="center">Copyright 2020-present ShineyDev</h6>
-    <h6 align="center">Inspired by <a href="https://github.com/Qix-/better-exceptions/">Qix-/better-exceptions</a></h6>
+    <h1 align="center">ShineyDev/pretty</h1>
+    <p align="center">A Python module for prettier (and far more useful) stack traces.<br><a href="https://github.com/ShineyDev/pretty">source</a> | <a href="https://docs.shiney.dev/pretty">documentation</a></p>
 
 
 Install
@@ -64,3 +66,8 @@ If you wish to use the formatters directly, they're `documented <https://docs.sh
     >>> import pretty
     >>> formatter = pretty.traceback.PrettyTracebackFormatter()
     >>> print("".join(formatter.format_exception(type(e), e, e.__traceback__)))
+
+
+.. raw:: html
+
+    <h6 align="center">Copyright 2020-present ShineyDev<br>Inspired by <a href="https://github.com/Qix-/better-exceptions/">Qix-/better-exceptions</a>.</h6>
