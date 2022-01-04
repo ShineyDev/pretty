@@ -5,12 +5,6 @@ A Python module for prettier (and far more useful) stack traces.
 
 
 .. toctree::
-    :maxdepth: 2
-
-    introduction
-
-
-.. toctree::
     :caption: Traceback
     :maxdepth: 1
 
