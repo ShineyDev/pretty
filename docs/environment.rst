@@ -15,14 +15,6 @@ Environment Variables
 
         ...
 
-    PYTHONPRETTYTRACEBACKOVERRIDEBUILTIN
-
-        ...
-
-    PYTHONPRETTYTRACEBACKOVERRIDEHOOK
-
-        ...
-
     boolean value
 
         ...
