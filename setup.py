@@ -1,4 +1,5 @@
 import distutils.command.build
+import setuptools
 import setuptools.command.develop
 import setuptools.command.easy_install
 import setuptools.command.install_lib
@@ -49,28 +50,28 @@ class InstallLibPTH(setuptools.command.install_lib.install_lib):
         return itertools.chain(super().get_outputs(), self.outputs)
 
 
-cmdclass={
+cmdclass = {
     "build": BuildPTH,
     "develop": DevelopPTH,
     "easy_insall": EasyInstallPTH,
     "install_lib": InstallLibPTH,
 }
 
+with open("docs/requirements.txt", "r") as stream:
+    extras_require_docs = stream.read().splitlines()
+
 extras_require = {
-    "docs": [
-        "sphinx",
-        "sphinxcontrib_trio",
-        "sphinx-rtd-theme",
-    ],
+    "docs": extras_require_docs,
 }
 
 packages = [
     "pretty",
+    "pretty.traceback",
 ]
 
 _version_regex = r"^version = ('|\")((?:[0-9]+\.)*[0-9]+(?:\.?([a-z]+)(?:\.?[0-9])?)?)\1$"
 
-with open("pretty/__init__.py") as stream:
+with open("github/__init__.py") as stream:
     match = re.search(_version_regex, stream.read(), re.MULTILINE)
 
 version = match.group(2)
