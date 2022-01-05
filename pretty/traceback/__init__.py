@@ -9,13 +9,13 @@ from pretty.traceback.formatter import PrettyTracebackFormatter
 
 def hook(cls=None, **kwargs):
     """
-    Hooks pretty.traceback into your Python session.
+    Hooks pretty.traceback into the current Python session.
 
     .. note::
 
-        Set the :term:`PYTHONPRETTYTRACEBACK` environment variable to a
-        :term:`truthy value <boolean value>` to hook pretty.traceback
-        into all future Python sessions.
+        You can set the :term:`PYTHONPRETTYTRACEBACK` environment
+        variable to a :term:`truthy value <boolean value>` to hook
+        pretty.traceback into all Python sessions.
 
     .. warning::
 
@@ -43,7 +43,7 @@ def hook(cls=None, **kwargs):
     Parameters
     ----------
     cls: Type[:class:`~pretty.traceback.TracebackFormatter`]
-        The formatter to use. Defaults to
+        The formatter class to use. Defaults to
         :class:`~pretty.traceback.PrettyTracebackFormatter`.
     **kwargs
         Keyword arguments are passed to
@@ -53,7 +53,7 @@ def hook(cls=None, **kwargs):
     Returns
     -------
     :class:`~pretty.traceback.TracebackFormatter`
-        The formatter hooked into your Python session.
+        The formatter.
     """
 
     formatter = cls and cls(**kwargs) or PrettyTracebackFormatter(**kwargs)
