@@ -1,5 +1,5 @@
-Environment Variables
-=====================
+Glossary
+========
 
 .. glossary::
 

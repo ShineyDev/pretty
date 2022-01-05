@@ -15,10 +15,10 @@ A Python module for prettier (and far more useful) stack traces.
     traceback/pretty
 
 .. toctree::
-    :caption: Other
+    :caption: Meta
     :maxdepth: 1
 
-    environment
+    meta/glossary
 
 
 Still can't find what you're looking for?
