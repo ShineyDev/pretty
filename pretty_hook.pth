@@ -1,1 +1,1 @@
-from pretty import main; main()
+import pretty; pretty.main()
