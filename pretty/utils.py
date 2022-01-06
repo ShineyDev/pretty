@@ -67,7 +67,7 @@ def environment_to_theme(name, default):
                 value = value.strip()
 
                 def _repl(match):
-                    return chr(int(match.group(0)[2:]))
+                    return chr(int(match.group(0)[2:], 16))
 
                 value = re.sub(_unicode_re, _repl, value)
 
