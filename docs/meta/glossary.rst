@@ -31,7 +31,7 @@ Glossary
         An environment variable with this value type will correspond to
         either the boolean value TRUE or the boolean value FALSE.
 
-        The following values are considered TRUE:
+        The following case-insensitive values are considered TRUE:
 
         - ``1``
         - ``true``
@@ -40,7 +40,7 @@ Glossary
         - ``yes``
         - ``y``
 
-        The following values are considered FALSE:
+        The following case-insensitive values are considered FALSE:
 
         - ``0``
         - ``false``
