@@ -33,7 +33,6 @@ def environment_to_bool(name, default):
 _default_theme = {
     "cap": "\u2514",
     "pipe": "\u2502",
-
     "comment": "32",
     "introspection": "35",
     "keyword": "34",
@@ -41,7 +40,6 @@ _default_theme = {
     "literal_int": "36",
     "literal_none": "94",
     "literal_str": "31",
-
     "path_substitutions": "",
 }
 
