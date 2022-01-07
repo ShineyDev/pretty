@@ -162,19 +162,17 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Formats an iterable of frames to be written to a file.
+        Formats an iterable of frames.
 
         This function is synonymous to :func:`traceback.format_list`.
 
         Parameters
         ----------
-        frames: Iterable[:data:`~types.FrameType`]
+        frames: Iterable[Union[:data:`~types.FrameType`, :class:`~traceback.FrameSummary`]]
             An iterable of frames.
 
-        Yields
-        ------
-        :class:`str`
-            Lines to be written.
+
+        :yields: :class:`str`
         """
 
         raise NotImplementedError
