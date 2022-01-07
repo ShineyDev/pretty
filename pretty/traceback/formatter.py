@@ -17,8 +17,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def __init__(self, **kwargs):
         pass
 
-    # region public methods
-
     @abc.abstractmethod
     def extract_frames(self, obj, *, limit=None):
         """
@@ -416,9 +414,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
             traceback = traceback.tb_next
 
-    # endregion
-    # region private methods
-
     def _try_name(self, type):
         try:
             name = type.__name__
@@ -563,8 +558,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         for frame in self.walk_traceback(tb):
             yield frame, frame.f_lineno
 
-    # endregion
-
 
 class DefaultTracebackFormatter(TracebackFormatter):
     """
@@ -588,8 +581,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
     context_header = traceback._context_message
     recursion_cutoff = traceback._RECURSIVE_CUTOFF
     traceback_header = "Traceback (most recent call last):\n"
-
-    # region public methods
 
     def extract_frames(self, obj, *, limit=None):
         if isinstance(obj, types.FrameType):
@@ -658,9 +649,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
     def format_traceback(self, traceback, *, limit=None):
         yield from self.format_frames(self.extract_frames(traceback, limit=limit))
 
-    # endregion
-    # region private methods
-
     @utils.wrap(traceback._format_final_exc_line)
     def _format_final_exc_line(self, etype, value):
         value_str = self._try_str(value)
@@ -671,8 +659,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
             line = f"{etype}: {value_str}\n"
 
         return line
-
-    # endregion
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
