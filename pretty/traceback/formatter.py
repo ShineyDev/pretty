@@ -12,20 +12,10 @@ from pretty import utils
 class TracebackFormatter(metaclass=abc.ABCMeta):
     """
     An abstract class for building a traceback formatter.
-
-    Parameters
-    ----------
-    theme: :class:`dict`
-        A theme.
-
-    Attributes
-    ----------
-    theme: :class:`dict`
-        A theme.
     """
 
-    def __init__(self, *, theme=None):
-        self.theme = theme or utils._default_theme
+    def __init__(self, **kwargs):
+        pass
 
     # region public methods
 
@@ -581,11 +571,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
     A :class:`.TracebackFormatter` with reimplementations of the
     :mod:`traceback` module.
 
-    Parameters
-    ----------
-    theme: :class:`dict`
-        A theme.
-
     Attributes
     ----------
     cause_header: :class:`str`
@@ -595,8 +580,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
     recursion_cutoff: :class:`int`
         The number of the same frame to display before instead
         displaying a recursion message.
-    theme: :class:`dict`
-        A theme.
     traceback_header: :class:`str`
         The message yielded before an exception's traceback.
     """
@@ -716,7 +699,9 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
         The message yielded before an exception's traceback.
     """
 
-    ...
+    def __init__(self, *, theme=None, **kwargs):
+        self.theme = theme or utils._default_theme
+        super().__init__(**kwargs)
 
 
 __all__ = [
