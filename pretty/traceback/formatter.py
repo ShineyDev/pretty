@@ -168,7 +168,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: Iterable[Union[:data:`~types.FrameType`, :class:`~traceback.FrameSummary`]]
+        frames: Iterable[Union[:class:`~traceback.FrameSummary`, :data:`~types.FrameType`]]
             An iterable of frames.
 
 
@@ -320,7 +320,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: Iterable[:data:`~types.FrameType`]
+        frames: Iterable[Union[:class:`~traceback.FrameSummary`, :data:`~types.FrameType`]]
             An iterable of frames.
         file: :func:`TextIO <open>`
             The file to print to. Defaults to :data:`sys.stderr`.
