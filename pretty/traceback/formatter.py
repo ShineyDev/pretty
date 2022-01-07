@@ -322,9 +322,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: :data:`~types.FrameType`
+        frames: Iterable[:data:`~types.FrameType`]
             An iterable of frames.
-        file
+        file: :func:`TextIO <open>`
             The file to print to. Defaults to :data:`sys.stderr`.
         """
 
