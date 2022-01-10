@@ -1,7 +1,8 @@
 from abc import ABCMeta, abstractmethod
+from collections.abc import Iterable, Iterator
 from traceback import FrameSummary
 from types import FrameType, TracebackType
-from typing import Iterable, Iterator, TextIO, TypeVar, Union
+from typing import TextIO, TypeVar, Union
 
 
 _E = TypeVar("_E", bound=BaseException)
