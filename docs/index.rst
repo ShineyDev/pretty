@@ -10,9 +10,9 @@ A Python module for prettier (and far more useful) stack traces.
 
     traceback/hook
 
-    traceback/generic
-    traceback/default
-    traceback/pretty
+    traceback/formatter/generic
+    traceback/formatter/default
+    traceback/formatter/pretty
 
 .. toctree::
     :caption: Meta
