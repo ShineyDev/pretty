@@ -2,9 +2,8 @@ import sys
 import traceback
 
 from pretty import utils
-from pretty.traceback.formatter import TracebackFormatter
-from pretty.traceback.formatter import DefaultTracebackFormatter
-from pretty.traceback.formatter import PrettyTracebackFormatter
+from pretty.traceback.formatter import *
+from pretty.traceback.formatter import __all__ as _formatter__all__
 
 
 def hook(cls=None, **kwargs):
@@ -102,8 +101,6 @@ def hook(cls=None, **kwargs):
 
 
 __all__ = [
-    "TracebackFormatter",
-    "DefaultTracebackFormatter",
-    "PrettyTracebackFormatter",
+    *_formatter__all__,
     "hook",
 ]
