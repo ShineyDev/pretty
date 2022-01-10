@@ -1,11 +1,9 @@
 from typing import TypeVar
 
-from pretty.traceback.formatter import TracebackFormatter as TracebackFormatter
-from pretty.traceback.formatter import DefaultTracebackFormatter as DefaultTracebackFormatter
-from pretty.traceback.formatter import PrettyTracebackFormatter as PrettyTracebackFormatter
+from pretty.traceback.formatter import *
 
 
-T = TypeVar("T", bound=TracebackFormatter)
+_F = TypeVar("_F", bound=TracebackFormatter)
 
 
-def hook(cls: type[T]=..., **kwargs) -> T: ...
+def hook(cls: type[_F]=..., **kwargs) -> _F: ...
