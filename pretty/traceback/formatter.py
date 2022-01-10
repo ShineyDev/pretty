@@ -14,6 +14,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     An abstract class for building a traceback formatter.
     """
 
+    __slots__ = ()
+
     def __init__(self, **kwargs):
         pass
 
@@ -575,6 +577,8 @@ class DefaultTracebackFormatter(TracebackFormatter):
         The message yielded before an exception's traceback.
     """
 
+    __slots__ = ()
+
     cause_header = traceback._cause_message
     context_header = traceback._context_message
     recursion_cutoff = traceback._RECURSIVE_CUTOFF
@@ -682,6 +686,8 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
     traceback_header: :class:`str`
         The message yielded before an exception's traceback.
     """
+
+    __slots__ = ("theme",)
 
     def __init__(self, *, theme=None, **kwargs):
         self.theme = theme or utils._default_theme
