@@ -3,11 +3,6 @@ import os
 import re
 
 
-_env_all = "PYTHONPRETTY"
-_env_theme = "PYTHONPRETTYTHEME"
-_env_traceback = "PYTHONPRETTYTRACEBACK"
-
-
 _bool_map = {
     False: ["false", "0", "no", "n", "disable", "off"],
     True: ["true", "1", "yes", "y", "enable", "on"],

@@ -20,14 +20,14 @@ def main():
     #
     #       See https://docs.python.org/3/library/site.html.
 
-    all = utils.environment_to_bool(utils._env_all, None)
+    all = utils.environment_to_bool("PYTHONPRETTY", None)
 
     if all is False:
         return
 
-    theme = utils.environment_to_theme(utils._env_theme, None)
+    theme = utils.environment_to_theme("PYTHONPRETTYTHEME", None)
 
-    if all or utils.environment_to_bool(utils._env_traceback, False):
+    if all or utils.environment_to_bool("PYTHONPRETTYTRACEBACK", False):
         try:
             traceback.hook(theme=theme)
         except BaseException as e:
