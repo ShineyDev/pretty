@@ -22,14 +22,11 @@ def hook(cls=None, **kwargs):
         :mod:`traceback` module with attributes and methods from the
         formatter.
 
-        .. TODO: , falling back to :mod:`traceback` methods if the
-           formatter fails.
-
         The following **cannot** change when a
         :class:`~pretty.traceback.TracebackFormatter` subclass
         overrides built-in :mod:`traceback` methods:
 
-        - The parameter kind, name, order, or type of any function.
+        - Any parameter kind, name, order, or type of any function.
         - The return or yield type of any function.
 
         The following **can** change when a
@@ -37,7 +34,8 @@ def hook(cls=None, **kwargs):
         overrides built-in :mod:`traceback` methods:
 
         - The number and content of lines yielded by any ``format_*``
-          method.
+          function.
+        - The content printed by any ``print_*`` function.
 
     Parameters
     ----------
