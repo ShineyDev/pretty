@@ -690,7 +690,7 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
     __slots__ = ("theme",)
 
     def __init__(self, *, theme=None, **kwargs):
-        self.theme = theme or utils._default_theme
+        self.theme = theme or utils.pretty_theme
         super().__init__(**kwargs)
 
 

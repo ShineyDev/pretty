@@ -24,7 +24,7 @@ def main():
     if all is False:
         return
 
-    theme = utils.environment_to_theme(utils._env_theme, utils._default_theme)
+    theme = utils.environment_to_theme(utils._env_theme, None)
 
     if all or utils.environment_to_bool(utils._env_traceback, False):
         traceback.hook(theme=theme)

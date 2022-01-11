@@ -29,17 +29,29 @@ def environment_to_bool(name, default):
         return default
 
 
-_default_theme = {
-    "cap": "\u2514",
-    "pipe": "\u2502",
-    "comment": "32",
-    "introspection": "35",
-    "keyword": "34",
-    "literal_bool": "34",
-    "literal_int": "36",
-    "literal_none": "94",
-    "literal_str": "31",
-    "path_substitutions": "",
+pretty_theme = {
+    "ast_braces_sgr": "38;2;179;179;179",
+    "ast_brackets_sgr": "38;2;179;179;179",
+    "ast_comment_sgr": "38;2;179;255;179",
+    "ast_keyword_sgr": "38;2;179;179;255",
+    "ast_operator_sgr": "38;2;179;179;255",
+    "ast_parenthesis_sgr": "38;2;179;179;179",
+
+    "char_cap": "\u2514",
+    "char_pipe": "\u2502",
+    "char_quote": "\"",
+
+    "introspection_sgr": "38;2;255;179;255",
+
+    "traceback_exception_sgr": "38;2;255;179;179",
+
+    "type_bool_sgr": "38;2;179;179;255",
+    "type_bytes_sgr": "38;2;255;217;179",
+    "type_complex_sgr": "38;2;179;255;255",
+    "type_float_sgr": "38;2;179;255;255",
+    "type_int_sgr": "38;2;179;255;255",
+    "type_none_sgr": "38;2;179;179;255",
+    "type_str_sgr": "38;2;255;217;179",
 }
 
 _unicode_re = re.compile(r"u\+[0-9]{4}|U\+[0-9]{8}")
