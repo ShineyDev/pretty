@@ -41,7 +41,7 @@ Install
 Use
 ---
 
-If you wish to hook pretty.traceback into **all Python sessions**, set the `PYTHONPRETTYTRACEBACK <https://docs.shiney.dev/pretty/latest/environment#term-PYTHONPRETTYTRACEBACK>`_ environment variable to a `truthy value <https://docs.shiney.dev/pretty/latest/environment#term-boolean-value>`_.
+If you wish to hook pretty.traceback into **all Python sessions**, set the `PYTHONPRETTYTRACEBACK <https://docs.shiney.dev/pretty/latest/meta/glossary#term-PYTHONPRETTYTRACEBACK>`_ environment variable to a `truthy value <https://docs.shiney.dev/pretty/latest/meta/glossary#term-boolean-value>`_.
 
 .. code:: shell
 
@@ -54,7 +54,7 @@ If you wish to hook pretty.traceback into **a single Python session**, call `pre
     >>> import pretty
     >>> pretty.traceback.hook()
 
-If you wish to use a formatter directly, initialize a new `PrettyTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/pretty>`_ or `DefaultTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/default>`_, or build your own implementation on `TracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/generic>`_.
+If you wish to use a formatter directly, initialize a new `PrettyTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/pretty>`_ or `DefaultTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/default>`_, or build your own implementation on `TracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/generic>`_.
 
 .. code:: python
 
