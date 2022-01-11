@@ -54,8 +54,6 @@ pretty_theme = {
     "type_str_sgr": "38;2;255;217;179",
 }
 
-_unicode_re = re.compile(r"u\+[0-9]{4}|U\+[0-9]{8}")
-
 
 def environment_to_theme(name, default):
     try:
@@ -79,7 +77,7 @@ def environment_to_theme(name, default):
                 def _repl(match):
                     return chr(int(match.group(0)[2:], 16))
 
-                value = re.sub(_unicode_re, _repl, value)
+                value = re.sub(r"u\+[0-9]{4}|U\+[0-9]{8}", _repl, value)
 
                 theme[name] = value
 
