@@ -2,25 +2,33 @@ import os
 import re
 
 
-_bool_map = {
-    False: ["false", "0", "no", "n", "disable", "off"],
-    True: ["true", "1", "yes", "y", "enable", "on"],
+boolean_map = {
+    "1": True,
+    "true": True,
+    "on": True,
+    "enable": True,
+    "yes": True,
+    "y": True,
+
+    "0": False,
+    "false": False,
+    "off": False,
+    "disable": False,
+    "no": False,
+    "n": False,
 }
 
 
-def environment_to_bool(name, default):
+def environment_to_boolean(name, default):
     try:
         value = os.environ[name]
     except KeyError:
         return default
     else:
-        value = value.lower()
-
-        for (boolean, values) in _bool_map.items():
-            if value in values:
-                return boolean
-
-        return default
+        try:
+            return boolean_map[value.lower()]
+        except KeyError:
+            return default
 
 
 pretty_theme = {
@@ -90,7 +98,7 @@ def wrap(wrapped):
 
 
 __all__ = [
-    "environment_to_bool",
+    "environment_to_boolean",
     "environment_to_theme",
     "wrap",
 ]
