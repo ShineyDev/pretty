@@ -1,4 +1,5 @@
 import collections
+import sys
 
 from pretty import utils
 from pretty import traceback
@@ -27,4 +28,8 @@ def main():
     theme = utils.environment_to_theme(utils._env_theme, None)
 
     if all or utils.environment_to_bool(utils._env_traceback, False):
-        traceback.hook(theme=theme)
+        try:
+            traceback.hook(theme=theme)
+        except BaseException as e:
+            print("ERROR:pretty:failed to hook pretty.traceback, see traceback.print_last()")
+            sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
