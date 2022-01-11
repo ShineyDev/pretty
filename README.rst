@@ -65,7 +65,7 @@ If you wish to use a formatter directly, initialize a new `PrettyTracebackFormat
     >>> try:
     >>>     1 / 0
     >>> except Exception as e:
-    >>>     print("".join(formatter.format_exception(type(e), e, e.__traceback__)))
+    >>>     formatter.print_current_exception()
 
 
 .. raw:: html
