@@ -35,7 +35,7 @@ pretty_theme = {
     "ast_brackets_sgr": "38;2;179;179;179",
     "ast_comment_sgr": "38;2;179;255;179",
     "ast_keyword_sgr": "38;2;179;179;255",
-    "ast_operator_sgr": "38;2;179;179;255",
+    "ast_operator_sgr": "38;2;179;179;179",
     "ast_parenthesis_sgr": "38;2;179;179;179",
     "char_cap": "\u2514",
     "char_pipe": "\u2502",
