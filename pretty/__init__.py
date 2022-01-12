@@ -31,5 +31,8 @@ def main():
         try:
             traceback.hook(theme=theme)
         except BaseException as e:
-            print("ERROR:pretty:failed to hook pretty.traceback, see traceback.print_last()")
-            sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
+            if hasattr(sys, "last_value"):
+                print("ERROR:pretty:failed to hook pretty.traceback")
+            else:
+                print("ERROR:pretty:failed to hook pretty.traceback, see traceback.print_last()")
+                sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
