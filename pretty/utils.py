@@ -68,9 +68,6 @@ def environment_to_theme(name, default):
             except ValueError:
                 pass
             else:
-                name = name.lower().strip()
-                value = value.strip()
-
                 try:
                     value = boolean_map[value.lower()]
                 except KeyError:
