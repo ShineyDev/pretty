@@ -71,6 +71,11 @@ def environment_to_theme(name, default):
                 name = name.lower().strip()
                 value = value.strip()
 
+                try:
+                    value = boolean_map[value.lower()]
+                except KeyError:
+                    pass
+
                 def _repl(match):
                     return chr(int(match.group(0)[2:], 16))
 
