@@ -54,7 +54,7 @@ If you wish to hook pretty.traceback into **a single Python session**, call `pre
     >>> import pretty
     >>> pretty.traceback.hook()
 
-If you wish to use a formatter directly, initialize a new `PrettyTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/pretty>`_ or `DefaultTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/default>`_, or build your own implementation on `TracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/generic>`_.
+If you wish to use a formatter directly, initialize a new `PrettyTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/pretty>`_ or `DefaultTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/default>`_, or build your own implementation on `TracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/abstract>`_.
 
 .. code:: python
 

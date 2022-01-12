@@ -10,7 +10,7 @@ A Python module for prettier (and far more useful) stack traces.
 
     traceback/hook
 
-    traceback/formatter/generic
+    traceback/formatter/abstract
     traceback/formatter/default
     traceback/formatter/pretty
 
