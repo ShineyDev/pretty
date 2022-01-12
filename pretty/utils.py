@@ -9,7 +9,6 @@ boolean_map = {
     "enable": True,
     "yes": True,
     "y": True,
-
     "0": False,
     "false": False,
     "off": False,
@@ -38,15 +37,11 @@ pretty_theme = {
     "ast_keyword_sgr": "38;2;179;179;255",
     "ast_operator_sgr": "38;2;179;179;255",
     "ast_parenthesis_sgr": "38;2;179;179;179",
-
     "char_cap": "\u2514",
     "char_pipe": "\u2502",
-    "char_quote": "\"",
-
+    "char_quote": "\u0022",
     "introspection_sgr": "38;2;255;179;255",
-
     "traceback_exception_sgr": "38;2;255;179;179",
-
     "type_bool_sgr": "38;2;179;179;255",
     "type_bytes_sgr": "38;2;255;217;179",
     "type_complex_sgr": "38;2;179;255;255",
