@@ -40,6 +40,7 @@ pretty_theme = {
     "char_cap": "\u2514",
     "char_pipe": "\u2502",
     "char_quote": "\u0022",
+    "traceback_sgr": None,
     "traceback_exception_sgr": "38;2;255;179;179",
     "traceback_frame_sgr": "1",
     "traceback_introspection_sgr": "38;2;255;179;255",
