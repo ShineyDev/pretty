@@ -636,8 +636,14 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     def format_exception_line(self, type, value):
         type_name = self._try_name(type)
+        value_str = self._try_str(value)
 
-        yield self._format_final_exc_line(type_name, value)
+        if value is None or not value_str:
+            line = f"{type_name}\n"
+        else:
+            line = f"{type_name}: {value_str}\n"
+
+        yield line
 
     def format_last_exception(self, *, chain=True, limit=None):
         if not hasattr(sys, "last_type"):
@@ -650,17 +656,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     def format_traceback(self, traceback, *, limit=None):
         yield from self.format_frames(self.extract_frames(traceback, limit=limit))
-
-    @utils.wrap(traceback._format_final_exc_line)
-    def _format_final_exc_line(self, etype, value):
-        value_str = self._try_str(value)
-
-        if value is None or not value_str:
-            line = f"{etype}\n"
-        else:
-            line = f"{etype}: {value_str}\n"
-
-        return line
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
