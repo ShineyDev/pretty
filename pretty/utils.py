@@ -63,7 +63,7 @@ def environment_to_theme(name, default):
     else:
         values = value.split("|")
 
-        theme = _default_theme.copy()
+        theme = pretty_theme.copy()
 
         for value in values:
             try:
