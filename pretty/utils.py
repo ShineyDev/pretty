@@ -34,6 +34,7 @@ pretty_theme = {
     "ast_brace_sgr": ("38;2;179;179;179", "39"),
     "ast_bracket_sgr": ("38;2;179;179;179", "39"),
     "ast_comment_sgr": ("38;2;179;255;179", "39"),
+    "ast_extra_sgr": ("38;2;179;179;179", "39"),
     "ast_keyword_sgr": ("38;2;179;179;255", "39"),
     "ast_operator_sgr": ("38;2;179;179;179", "39"),
     "ast_parenthesis_sgr": ("38;2;179;179;179", "39"),
