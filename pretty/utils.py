@@ -69,7 +69,6 @@ pretty_theme = {
     "char_pipe": "\u2502",
     "char_quote": "\u0022",
     # pretty.traceback
-    "traceback_sgr": None,
     "traceback_exception_sgr": ("38;2;255;179;179", "39"),
     "traceback_frame_sgr": "1",
     "traceback_introspection_sgr": ("38;2;255;179;255", "39"),
