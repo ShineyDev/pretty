@@ -104,6 +104,9 @@ def environment_to_theme(name, default):
                     value = boolean_map[value.lower()]
                 except KeyError:
                     pass
+                else:
+                    theme[name] = value
+                    continue
 
                 def _repl(match):
                     return chr(int(match.group(0)[2:], 16))
