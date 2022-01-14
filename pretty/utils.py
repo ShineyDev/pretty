@@ -108,12 +108,17 @@ def environment_to_theme(name, default):
                     theme[name] = value
                     continue
 
+                value = value.split(",")
+
                 def _repl(match):
                     return chr(int(match.group(0)[2:], 16))
 
-                value = re.sub(r"u\+[0-9]{4}|U\+[0-9]{8}", _repl, value)
+                value = tuple(re.sub(r"u\+[0-9]{4}|U\+[0-9]{8}", _repl, v) for v in value)
 
-                theme[name] = value
+                if len(value) == 1:
+                    theme[name] = value[0]
+                else:
+                    theme[name] = value
 
         return theme
 
