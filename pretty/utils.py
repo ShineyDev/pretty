@@ -86,17 +86,17 @@ pretty_theme = {
 
 def environment_to_theme(name, default):
     try:
-        value = os.environ[name]
+        environment = os.environ[name]
     except KeyError:
         return default
     else:
-        values = value.split("|")
+        items = environment.split("|")
 
         theme = pretty_theme.copy()
 
-        for value in values:
+        for item in items:
             try:
-                name, value = value.split("=")
+                name, value = item.split("=")
             except ValueError:
                 pass
             else:
