@@ -52,15 +52,15 @@ def environment_to_boolean(name, default):
 #       y     SGR           name
 #       --    -----------   -----
 #       10    26;26;26      black
-#       70    179;179;179   gray
+#       50    128;128;128   gray
 #       90    230;230;230   white
 #
 pretty_theme = {
     # colorizing abstract syntax trees
     "ast_comment_sgr": ("38;2;179;255;179", "39"),
-    "ast_delimiter_sgr": ("38;2;179;179;179", "39"),
+    "ast_delimiter_sgr": ("38;2;128;128;128", "39"),
     "ast_keyword_sgr": ("38;2;179;179;255", "39"),
-    "ast_operator_sgr": ("38;2;179;179;179", "39"),
+    "ast_operator_sgr": ("38;2;128;128;128", "39"),
     # customizing character display
     "char_cap": "\u2514",
     "char_pipe": "\u2502",
