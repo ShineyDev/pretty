@@ -111,7 +111,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Formats an exception to be written to a file.
+        Formats an exception line.
 
         This function is synonymous to
         :func:`traceback.format_exception_only`.
@@ -125,10 +125,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         **kwargs
             Keyword arguments are optional.
 
-        Yields
-        ------
-        :class:`str`
-            Lines to be written.
+
+        :yields: :class:`str`
         """
 
         raise NotImplementedError
