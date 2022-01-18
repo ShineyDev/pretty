@@ -138,21 +138,19 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Formats the last exception to be written to a file.
+        Formats the last exception.
 
         Parameters
         ----------
         chain: :class:`bool`
             Whether to follow the traceback tree.
         limit: :class:`int`
-            The maximum number of frames to extract and format.
+            The maximum number of frames to extract.
         **kwargs
             Additional keyword arguments are optional.
 
-        Yields
-        ------
-        :class:`str`
-            Lines to be written.
+
+        :yields: :class:`str`
         """
 
         raise NotImplementedError
