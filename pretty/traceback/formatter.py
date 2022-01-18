@@ -24,8 +24,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Extracts frames from a :data:`~types.FrameType` or
-        :class:`~types.TracebackType`.
+        Extracts frames from a :data:`frame <types.FrameType>` or
+        :class:`traceback <types.TracebackType>`.
 
         This function is synonymous to both
         :func:`traceback.extract_stack` and
@@ -39,10 +39,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         limit: :class:`int`
             The maximum number of frames to extract.
 
-        Yields
-        ------
-        :data:`~types.FrameType`
-            Frames to be formatted.
+
+        :yields: :data:`~types.FrameType`
         """
 
         raise NotImplementedError
