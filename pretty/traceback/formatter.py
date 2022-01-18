@@ -289,7 +289,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_frames(self, frames, *, file=None):
         """
-        Prints an iterable of frames to a file.
+        Prints an iterable of frames to :data:`~sys.stderr`.
 
         This function is synonymous to ``traceback.print_list()``.
 
@@ -299,10 +299,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: Iterable[Union[:class:`~traceback.FrameSummary`, :data:`~types.FrameType`]]
+        frames: Iterable[Union[:class:`~traceback.FrameSummary`, \
+                               :data:`~types.FrameType`]]
             An iterable of frames.
         file: :func:`TextIO <open>`
-            The file to print to. Defaults to :data:`sys.stderr`.
+            The file to print to. Defaults to :data:`~sys.stderr`.
         """
 
         file = file or sys.stderr
