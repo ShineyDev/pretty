@@ -263,7 +263,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The maximum number of frames to extract, format, and print.
         """
 
-        print("".join(self.format_current_exception(chain=chain, limit=limit)), end="", file=file or sys.stderr)
+        file = file or sys.stderr
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        print("".join(self.format_current_exception(chain=chain, limit=limit, tty=tty)), end="", file=file)
 
     def print_exception(self, type, value, traceback, *, chain=True, file=None, limit=None):
         """
@@ -288,7 +295,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The maximum number of frames to extract, format, and print.
         """
 
-        print("".join(self.format_exception(type, value, traceback, chain=chain, limit=limit)), end="", file=file or sys.stderr)
+        file = file or sys.stderr
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        print("".join(self.format_exception(type, value, traceback, chain=chain, limit=limit, tty=tty)), end="", file=file)
 
     def print_exception_only(self, type, value, *, file=None):
         """
@@ -304,7 +318,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The file to print to. Defaults to :data:`sys.stderr`.
         """
 
-        print("".join(self.format_exception_only(type, value)), end="", file=file or sys.stderr)
+        file = file or sys.stderr
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        print("".join(self.format_exception_only(type, value, tty=tty)), end="", file=file)
 
     def print_last_exception(self, *, chain=True, file=None, limit=None):
         """
@@ -322,7 +343,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The maximum number of frames to extract, format, and print.
         """
 
-        print("".join(self.format_last_exception(chain=chain, limit=limit)), end="", file=file or sys.stderr)
+        file = file or sys.stderr
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        print("".join(self.format_last_exception(chain=chain, limit=limit, tty=tty)), end="", file=file)
 
     def print_frames(self, frames, *, file=None):
         """
@@ -342,7 +370,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The file to print to. Defaults to :data:`sys.stderr`.
         """
 
-        print("".join(self.format_frames(frames)), end="", file=file or sys.stderr)
+        file = file or sys.stderr
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        print("".join(self.format_frames(frames, tty=tty)), end="", file=file)
 
     def print_stack(self, frame, *, file=None, limit=None):
         """
@@ -360,7 +395,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The maximum number of frames to extract, format, and print.
         """
 
-        print("".join(self.format_stack(frame, limit=limit)), end="", file=file or sys.stderr)
+        file = file or sys.stderr
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        print("".join(self.format_stack(frame, limit=limit, tty=tty)), end="", file=file)
 
     def print_traceback(self, traceback, *, file=None, limit=None):
         """
@@ -378,7 +420,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The maximum number of frames to extract, format, and print.
         """
 
-        print("".join(self.format_traceback(traceback, limit=limit)), end="", file=file or sys.stderr)
+        file = file or sys.stderr
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        print("".join(self.format_traceback(traceback, limit=limit, tty=tty)), end="", file=file)
 
     def walk_stack(self, frame):
         """
