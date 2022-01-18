@@ -182,34 +182,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    @abc.abstractmethod
-    def format_traceback(self, traceback, *, limit=None, **kwargs):
-        """
-        |iter|
-
-        Formats a traceback to be written to a file.
-
-        This function is synonymous to :func:`traceback.format_tb`.
-
-        Parameters
-        ----------
-        traceback: :class:`~types.TracebackType`
-            A traceback.
-        limit: :class:`int`
-            The maximum number of frames to extract and format.
-        **kwargs
-            Additional keyword arguments are optional.
-
-        Yields
-        ------
-        :class:`str`
-            Lines to be written.
-        """
-
-        raise NotImplementedError
-
-        yield
-
     def print_current_exception(self, *, chain=True, file=None, limit=None):
         """
         Prints the current exception to a file.
@@ -537,7 +509,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.format_tb)
     def _format_traceback(self, tb, limit=None):
-        return list(self.format_traceback(tb, limit=limit))
+        return list(self.format_frames(self.extract_frames(tb, limit=limit)))
 
     @utils.wrap(traceback.print_exc)
     def _print_current_exception(self, limit=None, file=None, chain=True):
