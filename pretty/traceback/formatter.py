@@ -264,7 +264,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_last_exception(self, *, chain=True, file=None, limit=None):
         """
-        Prints the last exception to a file.
+        Prints the last exception to :data:`~sys.stderr`.
 
         This function is synonymous to :func:`traceback.print_last`.
 
@@ -273,9 +273,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         chain: :class:`bool`
             Whether to follow the traceback tree.
         file
-            The file to print to. Defaults to :data:`sys.stderr`.
+            The file to print to. Defaults to :data:`~sys.stderr`.
         limit: :class:`int`
-            The maximum number of frames to extract, format, and print.
+            The maximum number of frames to extract.
         """
 
         file = file or sys.stderr
