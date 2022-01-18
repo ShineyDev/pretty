@@ -350,10 +350,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         traceback: :class:`~types.TracebackType`
             A traceback.
 
-        Yields
-        ------
-        :data:`~types.FrameType`
-            Frames.
+
+        :yields: :data:`~types.FrameType`
         """
 
         while traceback is not None:
