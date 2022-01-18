@@ -168,7 +168,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: Iterable[Union[:class:`~traceback.FrameSummary`, :data:`~types.FrameType`]]
+        frames: Iterable[Union[:class:`~traceback.FrameSummary`, \
+                               :data:`~types.FrameType`]]
             An iterable of frames.
         **kwargs
             Keyword arguments are optional.
