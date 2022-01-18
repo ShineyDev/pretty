@@ -241,7 +241,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_exception_only(self, type, value, *, file=None):
         """
-        Prints an exception to a file.
+        Prints an exception to :data:`~sys.stderr`.
 
         Parameters
         ----------
@@ -250,7 +250,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         value: :class:`BaseException`
             An exception.
         file
-            The file to print to. Defaults to :data:`sys.stderr`.
+            The file to print to. Defaults to :data:`~sys.stderr`.
         """
 
         file = file or sys.stderr
