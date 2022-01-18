@@ -50,7 +50,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_current_exception(self, *, chain=True, limit=None):
+    def format_current_exception(self, *, chain=True, limit=None, **kwargs):
         """
         |iter|
 
@@ -64,6 +64,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             Whether to follow the traceback tree.
         limit: :class:`int`
             The maximum number of frames to extract and format.
+        **kwargs
+            Additional keyword arguments are optional.
 
         Yields
         ------
@@ -76,7 +78,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_exception(self, type, value, traceback, *, chain=True, limit=None):
+    def format_exception(self, type, value, traceback, *, chain=True, limit=None, **kwargs):
         """
         |iter|
 
@@ -97,6 +99,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             Whether to follow the traceback tree.
         limit: :class:`int`
             The maximum number of frames to extract and format.
+        **kwargs
+            Additional keyword arguments are optional.
 
         Yields
         ------
@@ -109,7 +113,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_exception_only(self, type, value):
+    def format_exception_only(self, type, value, **kwargs):
         """
         |iter|
 
@@ -124,6 +128,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             An exception type.
         value: :class:`BaseException`
             An exception.
+        **kwargs
+            Keyword arguments are optional.
 
         Yields
         ------
@@ -136,7 +142,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_last_exception(self, *, chain=True, limit=None):
+    def format_last_exception(self, *, chain=True, limit=None, **kwargs):
         """
         |iter|
 
@@ -148,6 +154,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             Whether to follow the traceback tree.
         limit: :class:`int`
             The maximum number of frames to extract and format.
+        **kwargs
+            Additional keyword arguments are optional.
 
         Yields
         ------
@@ -160,7 +168,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_frames(self, frames):
+    def format_frames(self, frames, **kwargs):
         """
         |iter|
 
@@ -172,6 +180,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ----------
         frames: Iterable[Union[:class:`~traceback.FrameSummary`, :data:`~types.FrameType`]]
             An iterable of frames.
+        **kwargs
+            Keyword arguments are optional.
 
 
         :yields: :class:`str`
@@ -182,7 +192,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_stack(self, frame, *, limit=None):
+    def format_stack(self, frame, *, limit=None, **kwargs):
         """
         |iter|
 
@@ -196,6 +206,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A frame.
         limit: :class:`int`
             The maximum number of frames to extract and format.
+        **kwargs
+            Additional keyword arguments are optional.
 
         Yields
         ------
@@ -208,7 +220,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_traceback(self, traceback, *, limit=None):
+    def format_traceback(self, traceback, *, limit=None, **kwargs):
         """
         |iter|
 
@@ -222,6 +234,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A traceback.
         limit: :class:`int`
             The maximum number of frames to extract and format.
+        **kwargs
+            Additional keyword arguments are optional.
 
         Yields
         ------
@@ -607,10 +621,10 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
             yield frame
 
-    def format_current_exception(self, *, chain=True, limit=None):
+    def format_current_exception(self, *, chain=True, limit=None, **kwargs):
         yield from self.format_exception(*sys.exc_info(), chain=chain, limit=limit)
 
-    def format_exception(self, type, value, traceback, *, chain=True, limit=None, seen=None):
+    def format_exception(self, type, value, traceback, *, chain=True, limit=None, seen=None, **kwargs):
         if chain and value is not None:
             seen = seen or set()
             seen.add(id(value))
@@ -634,7 +648,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield from self.format_exception_only(type, value)
 
-    def format_exception_line(self, type, value):
+    def format_exception_line(self, type, value, **kwargs):
         type_name = self._try_name(type)
         value_str = self._try_str(value)
 
@@ -645,16 +659,16 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield line
 
-    def format_last_exception(self, *, chain=True, limit=None):
+    def format_last_exception(self, *, chain=True, limit=None, **kwargs):
         if not hasattr(sys, "last_type"):
             raise ValueError("no last exception")
 
         yield from self.format_exception(sys.last_type, sys.last_value, sys.last_traceback, chain=chain, limit=limit)
 
-    def format_stack(self, frame, *, limit=None):
+    def format_stack(self, frame, *, limit=None, **kwargs):
         yield from self.format_frames(self.extract_frames(frame, limit=limit))
 
-    def format_traceback(self, traceback, *, limit=None):
+    def format_traceback(self, traceback, *, limit=None, **kwargs):
         yield from self.format_frames(self.extract_frames(traceback, limit=limit))
 
 
