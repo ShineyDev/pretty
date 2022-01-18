@@ -209,7 +209,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_exception(self, type, value, traceback, *, chain=True, file=None, limit=None):
         """
-        Prints an exception to a file.
+        Prints an exception to :data:`~sys.stderr`.
 
         This function is synonymous to
         :func:`traceback.print_exception`.
@@ -225,9 +225,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         chain: :class:`bool`
             Whether to follow the traceback tree.
         file
-            The file to print to. Defaults to :data:`sys.stderr`.
+            The file to print to. Defaults to :data:`~sys.stderr`.
         limit: :class:`int`
-            The maximum number of frames to extract, format, and print.
+            The maximum number of frames to extract.
         """
 
         file = file or sys.stderr
