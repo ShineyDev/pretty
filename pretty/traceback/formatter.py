@@ -224,7 +224,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A traceback.
         chain: :class:`bool`
             Whether to follow the traceback tree.
-        file
+        file: :func:`TextIO <open>`
             The file to print to. Defaults to :data:`~sys.stderr`.
         limit: :class:`int`
             The maximum number of frames to extract.
@@ -249,7 +249,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             An exception type.
         value: :class:`BaseException`
             An exception.
-        file
+        file: :func:`TextIO <open>`
             The file to print to. Defaults to :data:`~sys.stderr`.
         """
 
@@ -272,7 +272,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ----------
         chain: :class:`bool`
             Whether to follow the traceback tree.
-        file
+        file: :func:`TextIO <open>`
             The file to print to. Defaults to :data:`~sys.stderr`.
         limit: :class:`int`
             The maximum number of frames to extract.
