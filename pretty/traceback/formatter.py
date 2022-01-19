@@ -192,7 +192,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ----------
         chain: :class:`bool`
             Whether to follow the traceback tree.
-        file :func:`TextIO <open>`
+        file: :func:`TextIO <open>`
             The file to print to. Defaults to :data:`~sys.stderr`.
         limit: :class:`int`
             The maximum number of frames to extract.
