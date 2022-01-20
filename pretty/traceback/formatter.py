@@ -198,14 +198,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The maximum number of frames to extract.
         """
 
-        file = file or sys.stderr
-
-        try:
-            tty = file.isatty()
-        except AttributeError:
-            tty = False
-
-        print("".join(self.format_current_exception(chain=chain, limit=limit, tty=tty)), end="", file=file)
+        self.write_current_exception(chain=chain, file=file or sys.stderr, limit=limit)
 
     def print_exception(self, type, value, traceback, *, chain=True, file=None, limit=None):
         """
@@ -230,14 +223,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The maximum number of frames to extract.
         """
 
-        file = file or sys.stderr
-
-        try:
-            tty = file.isatty()
-        except AttributeError:
-            tty = False
-
-        print("".join(self.format_exception(type, value, traceback, chain=chain, limit=limit, tty=tty)), end="", file=file)
+        self.write_exception(type, value, traceback, chain=chain, file=file or sys.stderr, limit=limit)
 
     def print_exception_only(self, type, value, *, file=None):
         """
@@ -253,14 +239,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The file to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        file = file or sys.stderr
-
-        try:
-            tty = file.isatty()
-        except AttributeError:
-            tty = False
-
-        print("".join(self.format_exception_only(type, value, tty=tty)), end="", file=file)
+        self.write_exception_only(type, value, file=file or sys.stderr)
 
     def print_last_exception(self, *, chain=True, file=None, limit=None):
         """
@@ -278,14 +257,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The maximum number of frames to extract.
         """
 
-        file = file or sys.stderr
-
-        try:
-            tty = file.isatty()
-        except AttributeError:
-            tty = False
-
-        print("".join(self.format_last_exception(chain=chain, limit=limit, tty=tty)), end="", file=file)
+        self.write_last_exception(chain=chain, file=file or sys.stderr, limit=limit)
 
     def print_frames(self, frames, *, file=None):
         """
@@ -306,14 +278,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The file to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        file = file or sys.stderr
-
-        try:
-            tty = file.isatty()
-        except AttributeError:
-            tty = False
-
-        print("".join(self.format_frames(frames, tty=tty)), end="", file=file)
+        self.write_frames(frames, file=file or sys.stderr)
 
     def walk_stack(self, frame):
         """
@@ -358,6 +323,116 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             yield traceback.tb_frame
 
             traceback = traceback.tb_next
+
+    def write_current_exception(self, *, file, chain=True, limit=None):
+        """
+        Writes the current exception to a file.
+
+        Parameters
+        ----------
+        file: :func:`TextIO <open>`
+            The file to write to.
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        limit: :class:`int`
+            The maximum number of frames to extract.
+        """
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        file.write("".join(self.format_current_exception(chain=chain, limit=limit, tty=tty)))
+
+    def write_exception(self, type, value, traceback, *, file, chain=True, limit=None):
+        """
+        Writes an exception to a file.
+
+        Parameters
+        ----------
+        type: Type[:class:`BaseException`]
+            An exception type.
+        value: :class:`BaseException`
+            An exception.
+        traceback: :class:`~types.TracebackType`
+            A traceback.
+        file: :func:`TextIO <open>`
+            The file to write to.
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        limit: :class:`int`
+            The maximum number of frames to extract.
+        """
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        file.write("".join(self.format_exception(type, value, traceback, chain=chain, limit=limit, tty=tty)))
+
+    def write_exception_only(self, type, value, *, file):
+        """
+        Writes an exception to a file.
+
+        Parameters
+        ----------
+        type: Type[:class:`BaseException`]
+            An exception type.
+        value: :class:`BaseException`
+            An exception.
+        file: :func:`TextIO <open>`
+            The file to write to.
+        """
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        file.write("".join(self.format_exception_only(type, value, tty=tty)))
+
+    def write_last_exception(self, *, file, chain=True, limit=None):
+        """
+        Writes the last exception to a file.
+
+        Parameters
+        ----------
+        file: :func:`TextIO <open>`
+            The file to write to.
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        limit: :class:`int`
+            The maximum number of frames to extract.
+        """
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        file.write("".join(self.format_last_exception(chain=chain, limit=limit, tty=tty)))
+
+    def write_frames(self, frames, *, file):
+        """
+        Writes an iterable of frames to a file.
+
+        Parameters
+        ----------
+        frames: Iterable[Union[:class:`~traceback.FrameSummary`, \
+                               :data:`~types.FrameType`]]
+            An iterable of frames.
+        file: :func:`TextIO <open>`
+            The file to write to.
+        """
+
+        try:
+            tty = file.isatty()
+        except AttributeError:
+            tty = False
+
+        file.write("".join(self.format_frames(frames, tty=tty)))
 
     def _try_name(self, type):
         try:
