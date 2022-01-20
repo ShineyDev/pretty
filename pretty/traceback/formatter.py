@@ -310,6 +310,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_frames(frames, file=file or sys.stderr)
 
+    @abc.abstractmethod
     def walk_stack(self, frame):
         """
         |iter|
@@ -327,11 +328,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         :yields: :data:`~types.FrameType`
         """
 
-        while frame is not None:
-            yield frame
+        raise NotImplementedError
 
-            frame = frame.f_back
+        yield
 
+    @abc.abstractmethod
     def walk_traceback(self, traceback):
         """
         |iter|
@@ -349,10 +350,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         :yields: :data:`~types.FrameType`
         """
 
-        while traceback is not None:
-            yield traceback.tb_frame
+        raise NotImplementedError
 
-            traceback = traceback.tb_next
+        yield
 
     def write_current_exception(self, *, file, chain=True, limit=None):
         """
@@ -706,6 +706,18 @@ class DefaultTracebackFormatter(TracebackFormatter):
             raise ValueError("no last exception")
 
         return (sys.last_type, sys.last_value, sys.last_traceback)
+
+    def walk_stack(self, frame):
+        while frame is not None:
+            yield frame
+
+            frame = frame.f_back
+
+    def walk_traceback(self, traceback):
+        while traceback is not None:
+            yield traceback.tb_frame
+
+            traceback = traceback.tb_next
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
