@@ -191,7 +191,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         -------
         Tuple[Optional[Type[:exc:`BaseException`]], \
               Optional[:exc:`BaseException`], \
-              Optional[:data:`~types.TracebackType`]]
+              Optional[:class:`~types.TracebackType`]]
             A (type, value, traceback) tuple.
         """
 
@@ -206,7 +206,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         -------
         Tuple[Optional[Type[:exc:`BaseException`]], \
               Optional[:exc:`BaseException`], \
-              Optional[:data:`~types.TracebackType`]]
+              Optional[:class:`~types.TracebackType`]]
             A (type, value, traceback) tuple.
         """
 
