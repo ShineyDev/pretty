@@ -534,22 +534,22 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         @utils.wrap(traceback.format_exception)
         def _format_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, chain=True):
             value, tb = self._extract_value_traceback(exc, value, tb)
-            return list(self.format_exception(type(value), value, tb, chain=chain, limit=limit))
+            return list(self.format_exception(value.__class__, value, tb, chain=chain, limit=limit))
 
         @utils.wrap(traceback.format_exception_only)
         def _format_exception_only(self, exc, value=_sentinel):
             value, _ = self._extract_value_traceback(exc, value, None)
-            return list(self.format_exception_only(type(value), value))
+            return list(self.format_exception_only(value.__class__, value))
 
     else:
 
         @utils.wrap(traceback.format_exception)
         def _format_exception(self, etype, value, tb, limit=None, chain=True):
-            return list(self.format_exception(type(value), value, tb, chain=chain, limit=limit))
+            return list(self.format_exception(value.__class__, value, tb, chain=chain, limit=limit))
 
         @utils.wrap(traceback.format_exception_only)
         def _format_exception_only(self, etype, value):
-            return list(self.format_exception_only(type(value), value))
+            return list(self.format_exception_only(value.__class__, value))
 
     @utils.wrap(traceback.format_list)
     def _format_frames(self, extracted_list):
@@ -572,13 +572,13 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         @utils.wrap(traceback.print_exception)
         def _print_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, file=None, chain=True):
             value, tb = self._extract_value_traceback(exc, value, tb)
-            self.print_exception(type(value), value, tb, chain=chain, file=file, limit=limit)
+            self.print_exception(value.__class__, value, tb, chain=chain, file=file, limit=limit)
 
     else:
 
         @utils.wrap(traceback.print_exception)
         def _print_exception(self, etype, value, tb, limit=None, file=None, chain=True):
-            self.print_exception(type(value), value, tb, chain=chain, file=file, limit=limit)
+            self.print_exception(value.__class__, value, tb, chain=chain, file=file, limit=limit)
 
     @utils.wrap(traceback.print_last)
     def _print_last_exception(self, limit=None, file=None, chain=True):
@@ -668,14 +668,14 @@ class DefaultTracebackFormatter(TracebackFormatter):
             cause = value.__cause__
 
             if cause is not None and id(cause) not in seen:
-                yield from self.format_exception(type(cause), cause, cause.__traceback__, chain=chain, limit=limit, seen=seen)
+                yield from self.format_exception(cause.__class__, cause, cause.__traceback__, chain=chain, limit=limit, seen=seen)
                 yield self.cause_header
 
             context = value.__context__
             context_suppressed = value.__suppress_context__
 
             if cause is None and context is not None and not context_suppressed and id(context) not in seen:
-                yield from self.format_exception(type(context), context, context.__traceback__, chain=chain, limit=limit, seen=seen)
+                yield from self.format_exception(context.__class__, context, context.__traceback__, chain=chain, limit=limit, seen=seen)
                 yield self.context_header
 
         if traceback is not None:
