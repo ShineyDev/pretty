@@ -594,7 +594,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_tb)
     def _print_traceback(self, tb, limit=None, file=None):
-        self.print_traceback(tb, file=file, limit=limit)
+        self.print_frames(self.extract_frames(tb, limit=limit), file=file)
 
     @utils.wrap(traceback.walk_stack)
     def _walk_stack(self, f):
@@ -680,7 +680,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         if traceback is not None:
             yield self.traceback_header
-            yield from self.format_traceback(traceback, limit=limit)
+            yield from self.format_frames(self.extract_frames(traceback, limit=limit))
 
         yield from self.format_exception_only(type, value)
 
