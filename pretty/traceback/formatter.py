@@ -637,7 +637,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     cause_header = "\nThe above exception was the direct cause of the following exception:\n\n"
     context_header = "\nDuring handling of the above exception, another exception occurred:\n\n"
-    recursion_cutoff = traceback._RECURSIVE_CUTOFF
+    recursion_cutoff = 3
     traceback_header = "Traceback (most recent call last):\n"
 
     def extract_frames(self, obj, *, limit=None):
