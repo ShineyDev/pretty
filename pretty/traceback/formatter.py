@@ -630,7 +630,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
     __slots__ = ()
 
     cause_header = "\nThe above exception was the direct cause of the following exception:\n\n"
-    context_header = traceback._context_message
+    context_header = "\nDuring handling of the above exception, another exception occurred:\n\n"
     recursion_cutoff = traceback._RECURSIVE_CUTOFF
     traceback_header = "Traceback (most recent call last):\n"
 
