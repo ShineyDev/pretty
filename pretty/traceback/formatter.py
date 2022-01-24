@@ -593,7 +593,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         self.print_frames(self.extract_frames(f or sys._getframe().f_back, limit=limit), file=file)
 
     @utils.wrap(traceback.print_tb)
-    def _print_traceback(self, tb, limit=None, file=None):
+    def _print_tb(self, tb, limit=None, file=None):
         self.print_frames(self.extract_frames(tb, limit=limit), file=file)
 
     @utils.wrap(traceback.walk_stack)
