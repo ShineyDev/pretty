@@ -59,7 +59,6 @@ def hook(cls=None, **kwargs):
     # TODO: traceback.StackSummary
     # TODO: traceback.TracebackException
 
-    # TODO: traceback.clear_frames = ...
     traceback.extract_stack = formatter._extract_stack
     traceback.extract_tb = formatter._extract_traceback
     traceback.format_exc = formatter._format_exc
