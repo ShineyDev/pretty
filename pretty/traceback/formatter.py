@@ -504,19 +504,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         finally:
             return value
 
-    _sentinel = object()
-
-    def _extract_value_traceback(self, type, value, traceback):
-        if (value is self._sentinel) != (traceback is self._sentinel):
-            raise ValueError("Both or neither of value and tb must be given")
-        elif value is self._sentinel:
-            if type is None:
-                return None, None
-            else:
-                return type, type.__traceback__
-        else:
-            return value, traceback
-
     @utils.wrap(traceback.extract_stack)
     def _extract_stack(self, f=None, limit=None):
         return traceback.StackSummary(self.extract_frames(f or sys._getframe().f_back, limit=limit))
@@ -532,13 +519,25 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     if sys.version_info >= (3, 10):
 
         @utils.wrap(traceback.format_exception)
-        def _format_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, chain=True):
-            value, tb = self._extract_value_traceback(exc, value, tb)
+        def _format_exception(self, exc, value=traceback._sentinel, tb=traceback._sentinel, limit=None, chain=True):
+            if (value is traceback._sentinel) != (tb is traceback._sentinel):
+                raise ValueError("Both or neither of value and tb must be given")
+            elif value is traceback._sentinel:
+                if exc is None:
+                    value, tb = None, None
+                else:
+                    value, tb = exc, exc.__traceback__
+
             return list(self.format_exception(value.__class__, value, tb, chain=chain, limit=limit))
 
         @utils.wrap(traceback.format_exception_only)
-        def _format_exception_only(self, exc, value=_sentinel):
-            value, _ = self._extract_value_traceback(exc, value, None)
+        def _format_exception_only(self, exc, value=traceback._sentinel):
+            if value is traceback._sentinel:
+                if exc is None:
+                    value = None
+                else:
+                    value = exc
+
             return list(self.format_exception_only(value.__class__, value))
 
     else:
@@ -570,8 +569,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     if sys.version_info >= (3, 10):
 
         @utils.wrap(traceback.print_exception)
-        def _print_exception(self, exc, value=_sentinel, tb=_sentinel, limit=None, file=None, chain=True):
-            value, tb = self._extract_value_traceback(exc, value, tb)
+        def _print_exception(self, exc, value=traceback._sentinel, tb=traceback._sentinel, limit=None, file=None, chain=True):
+            if (value is traceback._sentinel) != (tb is traceback._sentinel):
+                raise ValueError("Both or neither of value and tb must be given")
+            elif value is traceback._sentinel:
+                if exc is None:
+                    value, tb = None, None
+                else:
+                    value, tb = exc, exc.__traceback__
+
             self.print_exception(value.__class__, value, tb, chain=chain, file=file, limit=limit)
 
     else:
