@@ -560,7 +560,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         return list(self.format_frames(self.extract_frames(f or sys._getframe().f_back, limit=limit)))
 
     @utils.wrap(traceback.format_tb)
-    def _format_traceback(self, tb, limit=None):
+    def _format_tb(self, tb, limit=None):
         return list(self.format_frames(self.extract_frames(tb, limit=limit)))
 
     @utils.wrap(traceback.print_exc)
