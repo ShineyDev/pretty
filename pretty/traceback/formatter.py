@@ -587,7 +587,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             self.print_exception(value.__class__, value, tb, chain=chain, file=file, limit=limit)
 
     @utils.wrap(traceback.print_last)
-    def _print_last_exception(self, limit=None, file=None, chain=True):
+    def _print_last(self, limit=None, file=None, chain=True):
         self.print_last_exception(chain=chain, file=file, limit=limit)
 
     @utils.wrap(traceback.print_list)
