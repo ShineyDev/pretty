@@ -513,7 +513,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         return traceback.StackSummary(self.extract_frames(tb, limit=limit))
 
     @utils.wrap(traceback.format_exc)
-    def _format_current_exception(self, limit=None, chain=True):
+    def _format_exc(self, limit=None, chain=True):
         return "".join(self.format_current_exception(chain=chain, limit=limit))
 
     if sys.version_info >= (3, 10):
