@@ -563,7 +563,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         return list(self.format_frames(self.extract_frames(tb, limit=limit)))
 
     @utils.wrap(traceback.print_exc)
-    def _print_current_exception(self, limit=None, file=None, chain=True):
+    def _print_exc(self, limit=None, file=None, chain=True):
         self.print_current_exception(chain=chain, file=file, limit=limit)
 
     if sys.version_info >= (3, 10):
