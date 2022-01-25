@@ -182,21 +182,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    @abc.abstractmethod
-    def get_last_exception(self):
-        """
-        Gets the last exception.
-
-        Returns
-        -------
-        Tuple[Optional[Type[:exc:`BaseException`]], \
-              Optional[:exc:`BaseException`], \
-              Optional[:class:`~types.TracebackType`]]
-            A (type, value, traceback) tuple.
-        """
-
-        raise NotImplementedError
-
     def print_current_exception(self, *, chain=True, file=None, limit=None):
         """
         Prints the current exception to :data:`~sys.stderr`.
@@ -687,13 +672,10 @@ class DefaultTracebackFormatter(TracebackFormatter):
         yield line
 
     def format_last_exception(self, *, chain=True, limit=None, **kwargs):
-        yield from self.format_exception(*self.get_last_exception(), chain=chain, limit=limit)
-
-    def get_last_exception(self):
         if not hasattr(sys, "last_type"):
             raise ValueError("no last exception")
 
-        return (sys.last_type, sys.last_value, sys.last_traceback)
+        yield from self.format_exception(sys.last_type, sys.last_value, sys.last_traceback, chain=chain, limit=limit)
 
     def walk_stack(self, frame):
         while frame is not None:
