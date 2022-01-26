@@ -107,7 +107,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_exception_only(self, type, value, **kwargs):
+    def format_exception(self, type, value, **kwargs):
         """
         |iter|
 
@@ -391,7 +391,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         except AttributeError:
             tty = False
 
-        file.write("".join(self.format_exception_only(type, value, tty=tty)))
+        file.write("".join(self.format_exception(type, value, tty=tty)))
 
     def write_last_exception(self, *, file, chain=True, limit=None):
         """
@@ -508,7 +508,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 else:
                     value = exc
 
-            return list(self.format_exception_only(value.__class__, value))
+            return list(self.format_exception(value.__class__, value))
 
     else:
 
@@ -518,7 +518,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         @utils.wrap(traceback.format_exception_only)
         def _format_exception_only(self, etype, value):
-            return list(self.format_exception_only(value.__class__, value))
+            return list(self.format_exception(value.__class__, value))
 
     @utils.wrap(traceback.format_list)
     def _format_frames(self, extracted_list):
@@ -658,7 +658,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
             yield self.traceback_header
             yield from self.format_frames(self.extract_stack(traceback, limit=limit))
 
-        yield from self.format_exception_only(type, value)
+        yield from self.format_exception(type, value)
 
     def format_exception_line(self, type, value, **kwargs):
         type_name = self._try_name(type)
