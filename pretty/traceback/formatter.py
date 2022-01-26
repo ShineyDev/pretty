@@ -48,7 +48,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_current_exception(self, *, chain=True, limit=None, **kwargs):
+    def format_current_traceback(self, *, chain=True, limit=None, **kwargs):
         """
         |iter|
 
@@ -343,7 +343,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         except AttributeError:
             tty = False
 
-        file.write("".join(self.format_current_exception(chain=chain, limit=limit, tty=tty)))
+        file.write("".join(self.format_current_traceback(chain=chain, limit=limit, tty=tty)))
 
     def write_exception(self, type, value, traceback, *, file, chain=True, limit=None):
         """
@@ -484,7 +484,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.format_exc)
     def _format_exc(self, limit=None, chain=True):
-        return "".join(self.format_current_exception(chain=chain, limit=limit))
+        return "".join(self.format_current_traceback(chain=chain, limit=limit))
 
     if sys.version_info >= (3, 10):
 
@@ -633,7 +633,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
             yield frame
 
-    def format_current_exception(self, *, chain=True, limit=None, **kwargs):
+    def format_current_traceback(self, *, chain=True, limit=None, **kwargs):
         yield from self.format_exception(*sys.exc_info(), chain=chain, limit=limit)
 
     def format_exception(self, type, value, traceback, *, chain=True, limit=None, seen=None, **kwargs):
