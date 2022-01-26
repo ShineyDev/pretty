@@ -158,7 +158,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_frames(self, frames, **kwargs):
+    def format_stack(self, frames, **kwargs):
         """
         |iter|
 
@@ -432,7 +432,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         except AttributeError:
             tty = False
 
-        file.write("".join(self.format_frames(frames, tty=tty)))
+        file.write("".join(self.format_stack(frames, tty=tty)))
 
     def _try_name(self, type):
         try:
@@ -522,15 +522,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.format_list)
     def _format_frames(self, extracted_list):
-        return list(self.format_frames(extracted_list))
+        return list(self.format_stack(extracted_list))
 
     @utils.wrap(traceback.format_stack)
     def _format_stack(self, f=None, limit=None):
-        return list(self.format_frames(self.extract_stack(f or sys._getframe().f_back, limit=limit)))
+        return list(self.format_stack(self.extract_stack(f or sys._getframe().f_back, limit=limit)))
 
     @utils.wrap(traceback.format_tb)
     def _format_tb(self, tb, limit=None):
-        return list(self.format_frames(self.extract_stack(tb, limit=limit)))
+        return list(self.format_stack(self.extract_stack(tb, limit=limit)))
 
     @utils.wrap(traceback.print_exc)
     def _print_exc(self, limit=None, file=None, chain=True):
@@ -656,7 +656,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         if traceback is not None:
             yield self.traceback_header
-            yield from self.format_frames(self.extract_stack(traceback, limit=limit))
+            yield from self.format_stack(self.extract_stack(traceback, limit=limit))
 
         yield from self.format_exception(type, value)
 
