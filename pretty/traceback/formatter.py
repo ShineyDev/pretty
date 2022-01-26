@@ -200,7 +200,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_current_exception(chain=chain, file=file or sys.stderr, limit=limit)
 
-    def print_exception(self, type, value, traceback, *, chain=True, file=None, limit=None):
+    def print_traceback(self, type, value, traceback, *, chain=True, file=None, limit=None):
         """
         Prints an exception to :data:`~sys.stderr`.
 
@@ -548,13 +548,13 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 else:
                     value, tb = exc, exc.__traceback__
 
-            self.print_exception(value.__class__, value, tb, chain=chain, file=file, limit=limit)
+            self.print_traceback(value.__class__, value, tb, chain=chain, file=file, limit=limit)
 
     else:
 
         @utils.wrap(traceback.print_exception)
         def _print_exception(self, etype, value, tb, limit=None, file=None, chain=True):
-            self.print_exception(value.__class__, value, tb, chain=chain, file=file, limit=limit)
+            self.print_traceback(value.__class__, value, tb, chain=chain, file=file, limit=limit)
 
     @utils.wrap(traceback.print_last)
     def _print_last(self, limit=None, file=None, chain=True):
