@@ -20,7 +20,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def extract_frames(self, obj, *, limit=None):
+    def extract_stack(self, obj, *, limit=None):
         """
         |iter|
 
@@ -476,11 +476,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.extract_stack)
     def _extract_stack(self, f=None, limit=None):
-        return traceback.StackSummary(self.extract_frames(f or sys._getframe().f_back, limit=limit))
+        return traceback.StackSummary(self.extract_stack(f or sys._getframe().f_back, limit=limit))
 
     @utils.wrap(traceback.extract_tb)
     def _extract_traceback(self, tb, limit=None):
-        return traceback.StackSummary(self.extract_frames(tb, limit=limit))
+        return traceback.StackSummary(self.extract_stack(tb, limit=limit))
 
     @utils.wrap(traceback.format_exc)
     def _format_exc(self, limit=None, chain=True):
@@ -526,11 +526,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.format_stack)
     def _format_stack(self, f=None, limit=None):
-        return list(self.format_frames(self.extract_frames(f or sys._getframe().f_back, limit=limit)))
+        return list(self.format_frames(self.extract_stack(f or sys._getframe().f_back, limit=limit)))
 
     @utils.wrap(traceback.format_tb)
     def _format_tb(self, tb, limit=None):
-        return list(self.format_frames(self.extract_frames(tb, limit=limit)))
+        return list(self.format_frames(self.extract_stack(tb, limit=limit)))
 
     @utils.wrap(traceback.print_exc)
     def _print_exc(self, limit=None, file=None, chain=True):
@@ -566,11 +566,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_stack)
     def _print_stack(self, f=None, limit=None, file=None):
-        self.print_frames(self.extract_frames(f or sys._getframe().f_back, limit=limit), file=file)
+        self.print_frames(self.extract_stack(f or sys._getframe().f_back, limit=limit), file=file)
 
     @utils.wrap(traceback.print_tb)
     def _print_tb(self, tb, limit=None, file=None):
-        self.print_frames(self.extract_frames(tb, limit=limit), file=file)
+        self.print_frames(self.extract_stack(tb, limit=limit), file=file)
 
     @utils.wrap(traceback.walk_stack)
     def _walk_stack(self, f):
@@ -610,7 +610,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
     recursion_cutoff = 3
     traceback_header = "Traceback (most recent call last):\n"
 
-    def extract_frames(self, obj, *, limit=None):
+    def extract_stack(self, obj, *, limit=None):
         if isinstance(obj, types.FrameType):
             generator = reversed(list(self.walk_stack(obj)))
         elif isinstance(obj, types.TracebackType):
@@ -656,7 +656,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         if traceback is not None:
             yield self.traceback_header
-            yield from self.format_frames(self.extract_frames(traceback, limit=limit))
+            yield from self.format_frames(self.extract_stack(traceback, limit=limit))
 
         yield from self.format_exception_only(type, value)
 
