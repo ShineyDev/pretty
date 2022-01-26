@@ -134,7 +134,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_last_exception(self, *, chain=True, limit=None, **kwargs):
+    def format_last_traceback(self, *, chain=True, limit=None, **kwargs):
         """
         |iter|
 
@@ -412,7 +412,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         except AttributeError:
             tty = False
 
-        file.write("".join(self.format_last_exception(chain=chain, limit=limit, tty=tty)))
+        file.write("".join(self.format_last_traceback(chain=chain, limit=limit, tty=tty)))
 
     def write_frames(self, frames, *, file):
         """
@@ -671,7 +671,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield line
 
-    def format_last_exception(self, *, chain=True, limit=None, **kwargs):
+    def format_last_traceback(self, *, chain=True, limit=None, **kwargs):
         if not hasattr(sys, "last_type"):
             raise ValueError("no last exception")
 
