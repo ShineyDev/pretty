@@ -259,7 +259,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_last_exception(chain=chain, file=file or sys.stderr, limit=limit)
 
-    def print_frames(self, frames, *, file=None):
+    def print_stack(self, frames, *, file=None):
         """
         Prints an iterable of frames to :data:`~sys.stderr`.
 
@@ -562,15 +562,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_list)
     def _print_frames(self, extracted_list, file=None):
-        self.print_frames(extracted_list, file=file)
+        self.print_stack(extracted_list, file=file)
 
     @utils.wrap(traceback.print_stack)
     def _print_stack(self, f=None, limit=None, file=None):
-        self.print_frames(self.extract_stack(f or sys._getframe().f_back, limit=limit), file=file)
+        self.print_stack(self.extract_stack(f or sys._getframe().f_back, limit=limit), file=file)
 
     @utils.wrap(traceback.print_tb)
     def _print_tb(self, tb, limit=None, file=None):
-        self.print_frames(self.extract_stack(tb, limit=limit), file=file)
+        self.print_stack(self.extract_stack(tb, limit=limit), file=file)
 
     @utils.wrap(traceback.walk_stack)
     def _walk_stack(self, f):
