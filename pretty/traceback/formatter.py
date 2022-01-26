@@ -182,7 +182,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def print_current_exception(self, *, chain=True, file=None, limit=None):
+    def print_current_traceback(self, *, chain=True, file=None, limit=None):
         """
         Prints the current exception to :data:`~sys.stderr`.
 
@@ -534,7 +534,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_exc)
     def _print_exc(self, limit=None, file=None, chain=True):
-        self.print_current_exception(chain=chain, file=file, limit=limit)
+        self.print_current_traceback(chain=chain, file=file, limit=limit)
 
     if sys.version_info >= (3, 10):
 
