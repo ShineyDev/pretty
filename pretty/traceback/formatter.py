@@ -225,7 +225,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_exception(type, value, traceback, chain=chain, file=file or sys.stderr, limit=limit)
 
-    def print_exception_only(self, type, value, *, file=None):
+    def print_exception(self, type, value, *, file=None):
         """
         Prints an exception to :data:`~sys.stderr`.
 
