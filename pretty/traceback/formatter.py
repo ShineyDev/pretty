@@ -74,7 +74,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_exception(self, type, value, traceback, *, chain=True, limit=None, **kwargs):
+    def format_traceback(self, type, value, traceback, *, chain=True, limit=None, **kwargs):
         """
         |iter|
 
@@ -370,7 +370,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         except AttributeError:
             tty = False
 
-        file.write("".join(self.format_exception(type, value, traceback, chain=chain, limit=limit, tty=tty)))
+        file.write("".join(self.format_traceback(type, value, traceback, chain=chain, limit=limit, tty=tty)))
 
     def write_exception_only(self, type, value, *, file):
         """
@@ -498,7 +498,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 else:
                     value, tb = exc, exc.__traceback__
 
-            return list(self.format_exception(value.__class__, value, tb, chain=chain, limit=limit))
+            return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
 
         @utils.wrap(traceback.format_exception_only)
         def _format_exception_only(self, exc, value=traceback._sentinel):
@@ -514,7 +514,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         @utils.wrap(traceback.format_exception)
         def _format_exception(self, etype, value, tb, limit=None, chain=True):
-            return list(self.format_exception(value.__class__, value, tb, chain=chain, limit=limit))
+            return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
 
         @utils.wrap(traceback.format_exception_only)
         def _format_exception_only(self, etype, value):
@@ -634,9 +634,9 @@ class DefaultTracebackFormatter(TracebackFormatter):
             yield frame
 
     def format_current_traceback(self, *, chain=True, limit=None, **kwargs):
-        yield from self.format_exception(*sys.exc_info(), chain=chain, limit=limit)
+        yield from self.format_traceback(*sys.exc_info(), chain=chain, limit=limit)
 
-    def format_exception(self, type, value, traceback, *, chain=True, limit=None, seen=None, **kwargs):
+    def format_traceback(self, type, value, traceback, *, chain=True, limit=None, seen=None, **kwargs):
         if chain and value is not None:
             seen = seen or set()
             seen.add(id(value))
@@ -644,14 +644,14 @@ class DefaultTracebackFormatter(TracebackFormatter):
             cause = value.__cause__
 
             if cause is not None and id(cause) not in seen:
-                yield from self.format_exception(cause.__class__, cause, cause.__traceback__, chain=chain, limit=limit, seen=seen)
+                yield from self.format_traceback(cause.__class__, cause, cause.__traceback__, chain=chain, limit=limit, seen=seen)
                 yield self.cause_header
 
             context = value.__context__
             context_suppressed = value.__suppress_context__
 
             if cause is None and context is not None and not context_suppressed and id(context) not in seen:
-                yield from self.format_exception(context.__class__, context, context.__traceback__, chain=chain, limit=limit, seen=seen)
+                yield from self.format_traceback(context.__class__, context, context.__traceback__, chain=chain, limit=limit, seen=seen)
                 yield self.context_header
 
         if traceback is not None:
@@ -675,7 +675,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
         if not hasattr(sys, "last_type"):
             raise ValueError("no last exception")
 
-        yield from self.format_exception(sys.last_type, sys.last_value, sys.last_traceback, chain=chain, limit=limit)
+        yield from self.format_traceback(sys.last_type, sys.last_value, sys.last_traceback, chain=chain, limit=limit)
 
     def walk_stack(self, frame):
         while frame is not None:
