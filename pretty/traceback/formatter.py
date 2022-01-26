@@ -241,7 +241,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_exception_only(type, value, file=file or sys.stderr)
 
-    def print_last_exception(self, *, chain=True, file=None, limit=None):
+    def print_last_traceback(self, *, chain=True, file=None, limit=None):
         """
         Prints the last exception to :data:`~sys.stderr`.
 
@@ -558,7 +558,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_last)
     def _print_last(self, limit=None, file=None, chain=True):
-        self.print_last_exception(chain=chain, file=file, limit=limit)
+        self.print_last_traceback(chain=chain, file=file, limit=limit)
 
     @utils.wrap(traceback.print_list)
     def _print_frames(self, extracted_list, file=None):
