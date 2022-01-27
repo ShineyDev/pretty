@@ -634,7 +634,11 @@ class DefaultTracebackFormatter(TracebackFormatter):
             yield frame
 
     def format_current_traceback(self, *, chain=True, limit=None, **kwargs):
-        yield from self.format_traceback(*sys.exc_info(), chain=chain, limit=limit)
+        type, value, traceback = sys.exc_info()
+        if type is None:
+            type = type(None)
+
+        yield from self.format_traceback(type, value, traceback, chain=chain, limit=limit)
 
     def format_traceback(self, type, value, traceback, *, chain=True, limit=None, seen=None, **kwargs):
         if chain and value is not None:
