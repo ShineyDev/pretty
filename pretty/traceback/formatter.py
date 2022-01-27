@@ -679,7 +679,11 @@ class DefaultTracebackFormatter(TracebackFormatter):
         if not hasattr(sys, "last_type"):
             raise ValueError("no last exception")
 
-        yield from self.format_traceback(sys.last_type, sys.last_value, sys.last_traceback, chain=chain, limit=limit)
+        type, value, traceback = sys.last_type, sys.last_value, sys.last_traceback
+        if type is None:
+            type = type(None)
+
+        yield from self.format_traceback(type, value, traceback, chain=chain, limit=limit)
 
     def walk_stack(self, frame):
         while frame is not None:
