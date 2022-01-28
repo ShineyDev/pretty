@@ -435,6 +435,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         file.write("".join(self.format_stack(frames, tty=tty)))
 
     def _try_name(self, obj):
+        if isinstance(obj, object) and not isinstance(obj, type):
+            obj = obj.__class__
+
         try:
             try:
                 name = obj.__qualname__
