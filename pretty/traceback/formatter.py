@@ -443,35 +443,38 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         except AttributeError:
             name = self._try_unprintable(obj)
         else:
-            module = obj.__module__
+            try:
+                module = obj.__module__
+            except AttributeError:
+                pass
+            else:
+                if module not in ("__main__", "builtins"):
+                    module_names = module.split(".")
 
-            if module not in ("__main__", "builtins"):
-                module_names = module.split(".")
+                    i = len(module_names)
+                    while i:
+                        module_test = ".".join(module_names[:i])
 
-                i = len(module_names)
-                while i:
-                    module_test = ".".join(module_names[:i])
+                        try:
+                            module_type = sys.modules[module_test]
+                        except KeyError:
+                            break
 
-                    try:
-                        module_type = sys.modules[module_test]
-                    except KeyError:
-                        break
+                        obj_test = module_type
+                        try:
+                            for part in name.split("."):
+                                obj_test = getattr(obj_test, part)
+                        except AttributeError:
+                            break
 
-                    obj_test = module_type
-                    try:
-                        for part in name.split("."):
-                            obj_test = getattr(obj_test, part)
-                    except AttributeError:
-                        break
+                        if obj_test is not obj:
+                            break
 
-                    if obj_test is not obj:
-                        break
+                        module = module_test
 
-                    module = module_test
+                        i -= 1
 
-                    i -= 1
-
-                name = f"{module}.{name}"
+                    name = f"{module}.{name}"
         finally:
             return name
 
