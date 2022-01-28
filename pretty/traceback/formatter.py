@@ -704,12 +704,12 @@ class DefaultTracebackFormatter(TracebackFormatter):
     def walk_stack(self, obj):
         if isinstance(obj, types.FrameType):
             while obj is not None:
-                yield obj, (obj.f_lineno,)
+                yield obj, (obj.f_lineno, None, None, None)
 
                 obj = obj.f_back
         elif isinstance(obj, types.TracebackType):
             while obj is not None:
-                yield obj.tb_frame, (obj.tb_lineno,)
+                yield obj.tb_frame, (obj.tb_lineno, None, None, None)
 
                 obj = obj.tb_next
 
