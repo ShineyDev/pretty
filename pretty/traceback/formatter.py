@@ -434,13 +434,13 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         file.write("".join(self.format_stack(frames, tty=tty)))
 
-    def _try_name(self, type):
+    def _try_name(self, obj):
         try:
-            name = type.__name__
+            name = obj.__name__
         except AttributeError:
-            name = self._try_unprintable(type)
+            name = self._try_unprintable(obj)
         else:
-            module = type.__module__
+            module = obj.__module__
 
             if module not in ("__main__", "builtins"):
                 module_names = module.split(".")
@@ -461,7 +461,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                     except AttributeError:
                         break
 
-                    if obj_test is not type:
+                    if obj_test is not obj:
                         break
 
                     module = module_test
@@ -472,28 +472,28 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         finally:
             return name
 
-    def _try_repr(self, value):
+    def _try_repr(self, obj):
         try:
-            value = repr(value)
+            value = repr(obj)
         except:
-            value = self._try_unprintable(value)
+            value = self._try_unprintable(obj)
         finally:
             return value
 
-    def _try_str(self, value):
+    def _try_str(self, obj):
         try:
-            value = str(value)
+            value = str(obj)
         except:
-            value = self._try_unprintable(value)
+            value = self._try_unprintable(obj)
         finally:
             return value
 
     _unprintable = "<unprintable object>"
     _unprintable_fmt = "<unprintable {0.__class__.__qualname__} object>"
 
-    def _try_unprintable(self, value):
+    def _try_unprintable(self, obj):
         try:
-            value = self._unprintable_fmt.format(value)
+            value = self._unprintable_fmt.format(obj)
         except:
             value = self._unprintable
         finally:
