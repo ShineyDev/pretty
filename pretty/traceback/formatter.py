@@ -443,6 +443,31 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             module = type.__module__
 
             if module not in ("__main__", "builtins"):
+                module_names = module.split(".")
+
+                i = len(module_names)
+                while i:
+                    module_test = ".".join(module_names[:i])
+
+                    try:
+                        module_type = sys.modules[module_test]
+                    except KeyError:
+                        break
+
+                    obj_test = module_type
+                    try:
+                        for part in name.split("."):
+                            obj_test = getattr(obj_test, part)
+                    except AttributeError:
+                        break
+
+                    if obj_test is not type:
+                        break
+
+                    module = module_test
+
+                    i -= 1
+
                 name = f"{module}.{name}"
         finally:
             return name
