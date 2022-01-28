@@ -630,7 +630,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
         if isinstance(obj, types.FrameType):
             generator = reversed(list(self.walk_stack(obj)))
         elif isinstance(obj, types.TracebackType):
-            generator = self.walk_traceback(obj)
+            generator = self.walk_stack(obj)
         else:
             generator = obj
 
