@@ -78,7 +78,6 @@ pretty_theme = {
     "traceback_exception_sgr": ("38;2;255;179;179", "39"),
     "traceback_location_sgr": ("1", "22"),
     "traceback_introspection_sgr": ("38;2;255;179;255", "39"),
-    "traceback_source_sgr": None,
 }
 
 
