@@ -296,7 +296,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A frame or traceback.
 
 
-        :yields: :data:`~types.FrameType`
+        :yields: Tuple[:data:`~types.FrameType`, \
+                       Tuple[:class:`int`, Optional[:class:`int`], \
+                             Optional[:class:`int`], \
+                             Optional[:class:`int`]]]
         """
 
         raise NotImplementedError
@@ -589,13 +592,13 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def _walk_stack(self, f):
         f = f or sys._getframe().f_back.f_back
 
-        for frame in self.walk_stack(f):
-            yield frame, frame.f_lineno
+        for frame, position in self.walk_stack(f):
+            yield frame, position[0]
 
     @utils.wrap(traceback.walk_tb)
     def _walk_traceback(self, tb):
-        for frame in self.walk_stack(tb):
-            yield frame, frame.f_lineno
+        for frame, position in self.walk_stack(tb):
+            yield frame, position[0]
 
 
 class DefaultTracebackFormatter(TracebackFormatter):
@@ -701,12 +704,12 @@ class DefaultTracebackFormatter(TracebackFormatter):
     def walk_stack(self, obj):
         if isinstance(obj, types.FrameType):
             while obj is not None:
-                yield obj
+                yield obj, (obj.f_lineno,)
 
                 obj = obj.f_back
         elif isinstance(obj, types.TracebackType):
             while obj is not None:
-                yield obj.tb_frame
+                yield obj.tb_frame, (obj.tb_lineno,)
 
                 obj = obj.tb_next
 
