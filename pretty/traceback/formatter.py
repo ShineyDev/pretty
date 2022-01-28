@@ -281,40 +281,19 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         self.write_frames(frames, file=file or sys.stderr)
 
     @abc.abstractmethod
-    def walk_stack(self, frame):
+    def walk_stack(self, obj):
         """
         |iter|
 
         Walks a stack.
 
-        This function is synonymous to :func:`traceback.walk_stack`.
+        This function is synonymous to both
+        :func:`traceback.walk_stack` and :func:`traceback.walk_tb`.
 
         Parameters
         ----------
-        frame: :data:`~types.FrameType`
-            A frame.
-
-
-        :yields: :data:`~types.FrameType`
-        """
-
-        raise NotImplementedError
-
-        yield
-
-    @abc.abstractmethod
-    def walk_traceback(self, traceback):
-        """
-        |iter|
-
-        Walks a traceback.
-
-        This function is synonymous to :func:`traceback.walk_tb`.
-
-        Parameters
-        ----------
-        traceback: :class:`~types.TracebackType`
-            A traceback.
+        frame: Union[:data:`~types.FrameType`, :data:`~types.TracebackType`]
+            A frame or traceback.
 
 
         :yields: :data:`~types.FrameType`
@@ -615,7 +594,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.walk_tb)
     def _walk_traceback(self, tb):
-        for frame in self.walk_traceback(tb):
+        for frame in self.walk_stack(tb):
             yield frame, frame.f_lineno
 
 
@@ -719,17 +698,17 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield from self.format_traceback(type, value, traceback, chain=chain, limit=limit)
 
-    def walk_stack(self, frame):
-        while frame is not None:
-            yield frame
+    def walk_stack(self, obj):
+        if isinstance(obj, types.FrameType):
+            while obj is not None:
+                yield obj
 
-            frame = frame.f_back
+                obj = obj.f_back
+        elif isinstance(obj, types.TracebackType):
+            while obj is not None:
+                yield obj.tb_frame
 
-    def walk_traceback(self, traceback):
-        while traceback is not None:
-            yield traceback.tb_frame
-
-            traceback = traceback.tb_next
+                obj = obj.tb_next
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
