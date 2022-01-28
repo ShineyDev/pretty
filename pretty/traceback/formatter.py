@@ -436,7 +436,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def _try_name(self, obj):
         try:
-            name = obj.__name__
+            try:
+                name = obj.__qualname__
+            except AttributeError:
+                name = obj.__name__
         except AttributeError:
             name = self._try_unprintable(obj)
         else:
