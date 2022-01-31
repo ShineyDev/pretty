@@ -1,4 +1,6 @@
 import collections
+import json
+import os
 import sys
 
 from pretty import utils
@@ -25,7 +27,20 @@ def main():
     if all is False:
         return
 
-    theme = utils.environment_to_theme("PYTHONPRETTYTHEME", None)
+    theme = utils.pretty_theme.copy()
+
+    env_theme = os.environ.get("PYTHONPRETTYTHEME", None)
+    if env_theme is not None:
+        try:
+            user_theme = json.loads(env_theme)
+        except json.JSONDecodeError as e:
+            if hasattr(sys, "last_value"):
+                print("ERROR:pretty:failed to load PYTHONPRETTYTHEME, falling back to default.")
+            else:
+                print("ERROR:pretty:failed to load PYTHONPRETTYTHEME, falling back to default. see traceback.print_last()")
+                sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
+        else:
+            theme.update(user_theme)
 
     if all or utils.environment_to_boolean("PYTHONPRETTYTRACEBACK", False):
         try:

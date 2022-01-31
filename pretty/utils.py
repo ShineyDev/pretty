@@ -1,5 +1,4 @@
 import os
-import re
 
 
 boolean_map = {
@@ -81,45 +80,6 @@ pretty_theme = {
 }
 
 
-def environment_to_theme(name, default):
-    try:
-        environment = os.environ[name]
-    except KeyError:
-        return default
-    else:
-        items = environment.split("|")
-
-        theme = pretty_theme.copy()
-
-        for item in items:
-            try:
-                name, value = item.split("=")
-            except ValueError:
-                pass
-            else:
-                try:
-                    value = boolean_map[value.lower()]
-                except KeyError:
-                    pass
-                else:
-                    theme[name] = value
-                    continue
-
-                value = value.split(",")
-
-                def _repl(match):
-                    return chr(int(match.group(0)[2:], 16))
-
-                value = tuple(re.sub(r"u\+[0-9]{4}|U\+[0-9]{8}", _repl, v) for v in value)
-
-                if len(value) == 1:
-                    theme[name] = value[0]
-                else:
-                    theme[name] = value
-
-        return theme
-
-
 def wrap(wrapped):
     def decorator(wrapper):
         wrapper.__doc__ = wrapped.__doc__
@@ -133,6 +93,5 @@ def wrap(wrapped):
 
 __all__ = [
     "environment_to_boolean",
-    "environment_to_theme",
     "wrap",
 ]
