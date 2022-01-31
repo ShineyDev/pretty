@@ -1,34 +1,3 @@
-import os
-
-
-boolean_map = {
-    "1": True,
-    "true": True,
-    "on": True,
-    "enable": True,
-    "yes": True,
-    "y": True,
-    "0": False,
-    "false": False,
-    "off": False,
-    "disable": False,
-    "no": False,
-    "n": False,
-}
-
-
-def environment_to_boolean(name, default):
-    try:
-        value = os.environ[name]
-    except KeyError:
-        return default
-    else:
-        try:
-            return boolean_map[value.lower()]
-        except KeyError:
-            return default
-
-
 # NOTE: SGR color values are HSV(x°, 30%, 100%) where;
 #
 #       x     SGR           name
@@ -80,6 +49,29 @@ pretty_theme = {
 }
 
 
+_bool_map = {
+    "1": True,
+    "true": True,
+    "on": True,
+    "enable": True,
+    "yes": True,
+    "y": True,
+    "0": False,
+    "false": False,
+    "off": False,
+    "disable": False,
+    "no": False,
+    "n": False,
+}
+
+
+def try_bool(value, *, default):
+    try:
+        return _bool_map[value]
+    except KeyError:
+        return default
+
+
 def wrap(wrapped):
     def decorator(wrapper):
         wrapper.__doc__ = wrapped.__doc__
@@ -92,6 +84,6 @@ def wrap(wrapped):
 
 
 __all__ = [
-    "environment_to_boolean",
+    "try_bool",
     "wrap",
 ]

@@ -22,9 +22,9 @@ def main():
     #
     #       See https://docs.python.org/3/library/site.html.
 
-    all = utils.environment_to_boolean("PYTHONPRETTY", None)
+    enable_all = utils.try_bool(os.environ.get("PYTHONPRETTY"), default=None)
 
-    if all is False:
+    if enable_all is False:
         return
 
     def _fail(e, m):
@@ -45,7 +45,9 @@ def main():
         else:
             theme.update(user_theme)
 
-    if all or utils.environment_to_boolean("PYTHONPRETTYTRACEBACK", False):
+    enable_traceback = utils.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK"), default=False)
+
+    if enable_all or enable_traceback:
         try:
             traceback.hook(theme=theme)
         except BaseException as e:
