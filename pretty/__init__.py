@@ -27,6 +27,13 @@ def main():
     if all is False:
         return
 
+    def _fail(e, m):
+        if hasattr(sys, "last_value"):
+            print(f"ERROR:pretty:{m}")
+        else:
+            print(f"ERROR:pretty:{m} see traceback.print_last().")
+            sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
+
     theme = utils.pretty_theme.copy()
 
     env_theme = os.environ.get("PYTHONPRETTYTHEME", None)
@@ -34,11 +41,7 @@ def main():
         try:
             user_theme = json.loads(env_theme)
         except json.JSONDecodeError as e:
-            if hasattr(sys, "last_value"):
-                print("ERROR:pretty:failed to load PYTHONPRETTYTHEME, falling back to default.")
-            else:
-                print("ERROR:pretty:failed to load PYTHONPRETTYTHEME, falling back to default. see traceback.print_last()")
-                sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
+            _fail(e, "failed to load PYTHONPRETTYTHEME, falling back to default.")
         else:
             theme.update(user_theme)
 
@@ -46,8 +49,4 @@ def main():
         try:
             traceback.hook(theme=theme)
         except BaseException as e:
-            if hasattr(sys, "last_value"):
-                print("ERROR:pretty:failed to hook pretty.traceback")
-            else:
-                print("ERROR:pretty:failed to hook pretty.traceback, see traceback.print_last()")
-                sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
+            _fail(e, "failed to hook pretty.traceback.")
