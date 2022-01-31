@@ -50,19 +50,10 @@ pretty_theme = {
 
 
 _bool_map = {
-    "1": True,
-    "true": True,
-    "on": True,
-    "enable": True,
-    "yes": True,
-    "y": True,
-    "0": False,
-    "false": False,
-    "off": False,
-    "disable": False,
-    "no": False,
-    "n": False,
+    False: ["0", "false", "off", "disable", "no", "n"],
+    True: ["1", "true", "on", "enable", "yes", "y"],
 }
+_bool_map = {v: k for k in _bool_map.keys() for v in _bool_map[k]}
 
 
 def try_bool(obj, *, default):
