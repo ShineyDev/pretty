@@ -292,7 +292,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frame: Union[:data:`~types.FrameType`, :data:`~types.TracebackType`]
+        frame: Union[:data:`~types.FrameType`, :class:`~types.TracebackType`]
             A frame or traceback.
 
 
