@@ -65,9 +65,9 @@ _bool_map = {
 }
 
 
-def try_bool(value, *, default):
+def try_bool(obj, *, default):
     try:
-        return _bool_map[value]
+        return _bool_map[obj]
     except KeyError:
         return default
 
