@@ -70,6 +70,13 @@ def try_repr(obj, *, default):
         return default
 
 
+def try_str(obj, *, default):
+    try:
+        return str(obj)
+    except Exception:
+        return default
+
+
 def wrap(wrapped):
     def decorator(wrapper):
         wrapper.__doc__ = wrapped.__doc__
@@ -84,5 +91,6 @@ def wrap(wrapped):
 __all__ = [
     "try_bool",
     "try_repr",
+    "try_str",
     "wrap",
 ]
