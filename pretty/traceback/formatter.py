@@ -463,14 +463,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         finally:
             return name
 
-    def _try_repr(self, obj):
-        try:
-            value = repr(obj)
-        except:
-            value = self._try_unprintable(obj)
-        finally:
-            return value
-
     def _try_str(self, obj):
         try:
             value = str(obj)
