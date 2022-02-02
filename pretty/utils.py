@@ -91,11 +91,17 @@ def try_str(obj, *, default):
 
 def wrap(wrapped):
     def decorator(wrapper):
-        wrapper.__doc__ = wrapped.__doc__
-        wrapper.__name__ = wrapped.__name__
-        wrapper.__qualname__ = wrapped.__qualname__
+        def function(*args, **kwargs):
+            try:
+                return wrapper(*args, **kwargs)
+            except Exception:
+                return wrapped(*args, **kwargs)
 
-        return wrapper
+        function.__doc__ = wrapped.__doc__
+        function.__name__ = wrapped.__name__
+        function.__qualname__ = wrapped.__qualname__
+
+        return function
 
     return decorator
 
