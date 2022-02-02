@@ -44,8 +44,14 @@ pretty_theme = {
     "literal_str_sgr": ("38;2;255;217;179", "39"),
     # pretty.traceback
     "traceback_exception_sgr": ("38;2;255;179;179", "39"),
-    "traceback_location_sgr": ("1", "22"),
+    "traceback_frame_filename_sgr": ("38;2;230;230;230", "39"),
+    "traceback_frame_lineno_sgr": ("38;2;255;179;255", "39"),
+    "traceback_frame_name_sgr": ("38;2;230;230;230", "39"),
+    "traceback_frame_scope": False,
+    "traceback_frame_scope_key_sgr": None,
+    "traceback_frame_source_sgr": None,
     "traceback_introspection_sgr": ("38;2;255;179;255", "39"),
+    "traceback_message_sgr": ("38;2;128;128;128", "39"),
 }
 
 
