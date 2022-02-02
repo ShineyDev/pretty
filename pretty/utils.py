@@ -100,6 +100,8 @@ def wrap(wrapped):
         function.__doc__ = wrapped.__doc__
         function.__name__ = wrapped.__name__
         function.__qualname__ = wrapped.__qualname__
+        function.__module__ = wrapped.__module__
+        function.__wrapped__ = wrapped
 
         return function
 
