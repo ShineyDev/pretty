@@ -97,6 +97,8 @@ def wrap(wrapped):
             except Exception:
                 return wrapped(*args, **kwargs)
 
+        function.__dict__.update(wrapped.__dict__)
+
         function.__doc__ = wrapped.__doc__
         function.__name__ = wrapped.__name__
         function.__qualname__ = wrapped.__qualname__
