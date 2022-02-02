@@ -65,7 +65,7 @@ _bool_map = {v: k for k in _bool_map.keys() for v in _bool_map[k]}
 def try_bool(obj, *, default):
     if isinstance(obj, str):
         try:
-            return _bool_map[obj]
+            return _bool_map[obj.lower()]
         except KeyError:
             return default
     else:

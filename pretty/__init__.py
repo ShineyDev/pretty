@@ -22,7 +22,7 @@ def main():
     #
     #       See https://docs.python.org/3/library/site.html.
 
-    enable_all = utils.try_bool(os.environ.get("PYTHONPRETTY", "").lower(), default=None)
+    enable_all = utils.try_bool(os.environ.get("PYTHONPRETTY"), default=None)
 
     if enable_all is False:
         return
@@ -36,7 +36,7 @@ def main():
 
     theme = utils.pretty_theme.copy()
 
-    env_theme = os.environ.get("PYTHONPRETTYTHEME", None)
+    env_theme = os.environ.get("PYTHONPRETTYTHEME")
     if env_theme is not None:
         try:
             user_theme = json.loads(env_theme)
@@ -45,7 +45,7 @@ def main():
         else:
             theme.update(user_theme)
 
-    enable_traceback = utils.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK", "").lower(), default=False)
+    enable_traceback = utils.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK"), default=False)
 
     if enable_all or enable_traceback:
         try:
