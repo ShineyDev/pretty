@@ -57,10 +57,16 @@ _bool_map = {v: k for k in _bool_map.keys() for v in _bool_map[k]}
 
 
 def try_bool(obj, *, default):
-    try:
-        return _bool_map[obj]
-    except KeyError:
-        return default
+    if isinstance(obj, str):
+        try:
+            return _bool_map[obj]
+        except KeyError:
+            return default
+    else:
+        try:
+            return bool(obj)
+        except Exception:
+            return default
 
 
 def try_repr(obj, *, default):
