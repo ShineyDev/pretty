@@ -20,7 +20,9 @@
 #       y     SGR           name
 #       --    -----------   -----
 #       10    26;26;26      black
-#       50    128;128;128   gray
+#       25    64;64;64      dark gray
+#       50    128;128;128   middle gray
+#       75    191;191;191   light gray
 #       90    230;230;230   white
 #
 pretty_theme = {
@@ -28,6 +30,7 @@ pretty_theme = {
     "ast_comment_sgr": ("38;2;179;255;179", "39"),
     "ast_delimiter_sgr": ("38;2;128;128;128", "39"),
     "ast_keyword_sgr": ("38;2;179;179;255", "39"),
+    "ast_name_sgr": ("38;2;191;191;191", "39"),
     "ast_operator_sgr": ("38;2;128;128;128", "39"),
     # customizing character display
     "char_cap": "\u2514",
