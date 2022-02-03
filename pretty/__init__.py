@@ -50,5 +50,5 @@ def main():
     if enable_all or enable_traceback:
         try:
             traceback.hook(theme=theme)
-        except BaseException as e:
+        except Exception as e:
             _fail(e, "failed to hook pretty.traceback.")
