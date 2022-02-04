@@ -24,7 +24,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Extracts frames from a :data:`frame <types.FrameType>` or
+        Extracts a stack from a :data:`frame <types.FrameType>` or
         :class:`traceback <types.TracebackType>`.
 
         This function is synonymous to both
@@ -52,7 +52,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Formats the current exception.
+        Formats the current traceback.
 
         This function is synonymous to :func:`traceback.format_exc`.
 
@@ -78,7 +78,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Formats an exception.
+        Formats a traceback.
 
         This function is synonymous to
         :func:`traceback.format_exception`.
@@ -111,7 +111,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Formats an exception line.
+        Formats an exception.
 
         This function is synonymous to
         :func:`traceback.format_exception_only`.
@@ -138,7 +138,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Formats the last exception.
+        Formats the last traceback.
 
         Parameters
         ----------
@@ -162,7 +162,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
         |iter|
 
-        Formats an iterable of frames.
+        Formats a stack.
 
         This function is synonymous to :func:`traceback.format_list`.
 
@@ -184,7 +184,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_current_traceback(self, *, chain=True, limit=None, stream=None):
         """
-        Prints the current exception to :data:`~sys.stderr`.
+        Prints the current traceback to :data:`~sys.stderr`.
 
         This function is synonymous to :func:`traceback.print_exc`.
 
@@ -202,7 +202,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_traceback(self, type, value, traceback, *, chain=True, limit=None, stream=None):
         """
-        Prints an exception to :data:`~sys.stderr`.
+        Prints a traceback to :data:`~sys.stderr`.
 
         This function is synonymous to
         :func:`traceback.print_exception`.
@@ -243,7 +243,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_last_traceback(self, *, chain=True, limit=None, stream=None):
         """
-        Prints the last exception to :data:`~sys.stderr`.
+        Prints the last traceback to :data:`~sys.stderr`.
 
         This function is synonymous to :func:`traceback.print_last`.
 
@@ -261,7 +261,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_stack(self, frames, *, stream=None):
         """
-        Prints an iterable of frames to :data:`~sys.stderr`.
+        Prints a stack to :data:`~sys.stderr`.
 
         This function is synonymous to ``traceback.print_list()``.
 
