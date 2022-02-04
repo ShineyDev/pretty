@@ -182,7 +182,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def print_current_traceback(self, *, chain=True, file=None, limit=None):
+    def print_current_traceback(self, *, chain=True, limit=None, stream=None):
         """
         Prints the current exception to :data:`~sys.stderr`.
 
@@ -192,15 +192,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ----------
         chain: :class:`bool`
             Whether to follow the traceback tree.
-        file: :func:`TextIO <open>`
-            The file to print to. Defaults to :data:`~sys.stderr`.
         limit: :class:`int`
             The maximum number of frames to extract.
+        stream: :func:`TextIO <open>`
+            The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_current_exception(chain=chain, file=file or sys.stderr, limit=limit)
+        self.write_current_exception(chain=chain, limit=limit, stream=stream or sys.stderr)
 
-    def print_traceback(self, type, value, traceback, *, chain=True, file=None, limit=None):
+    def print_traceback(self, type, value, traceback, *, chain=True, limit=None, stream=None):
         """
         Prints an exception to :data:`~sys.stderr`.
 
@@ -217,15 +217,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A traceback.
         chain: :class:`bool`
             Whether to follow the traceback tree.
-        file: :func:`TextIO <open>`
-            The file to print to. Defaults to :data:`~sys.stderr`.
         limit: :class:`int`
             The maximum number of frames to extract.
+        stream: :func:`TextIO <open>`
+            The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_exception(type, value, traceback, chain=chain, file=file or sys.stderr, limit=limit)
+        self.write_exception(type, value, traceback, chain=chain, limit=limit, stream=stream or sys.stderr)
 
-    def print_exception(self, type, value, *, file=None):
+    def print_exception(self, type, value, *, stream=None):
         """
         Prints an exception to :data:`~sys.stderr`.
 
@@ -235,13 +235,13 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             An exception type.
         value: :class:`BaseException`
             An exception.
-        file: :func:`TextIO <open>`
-            The file to print to. Defaults to :data:`~sys.stderr`.
+        stream: :func:`TextIO <open>`
+            The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_exception_only(type, value, file=file or sys.stderr)
+        self.write_exception_only(type, value, stream=stream or sys.stderr)
 
-    def print_last_traceback(self, *, chain=True, file=None, limit=None):
+    def print_last_traceback(self, *, chain=True, limit=None, stream=None):
         """
         Prints the last exception to :data:`~sys.stderr`.
 
@@ -251,15 +251,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ----------
         chain: :class:`bool`
             Whether to follow the traceback tree.
-        file: :func:`TextIO <open>`
-            The file to print to. Defaults to :data:`~sys.stderr`.
         limit: :class:`int`
             The maximum number of frames to extract.
+        stream: :func:`TextIO <open>`
+            The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_last_exception(chain=chain, file=file or sys.stderr, limit=limit)
+        self.write_last_exception(chain=chain, limit=limit, stream=stream or sys.stderr)
 
-    def print_stack(self, frames, *, file=None):
+    def print_stack(self, frames, *, stream=None):
         """
         Prints an iterable of frames to :data:`~sys.stderr`.
 
@@ -274,11 +274,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         frames: Iterable[Union[:class:`~traceback.FrameSummary`, \
                                :data:`~types.FrameType`]]
             An iterable of frames.
-        file: :func:`TextIO <open>`
-            The file to print to. Defaults to :data:`~sys.stderr`.
+        stream: :func:`TextIO <open>`
+            The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_frames(frames, file=file or sys.stderr)
+        self.write_frames(frames, stream=stream or sys.stderr)
 
     @abc.abstractmethod
     def walk_stack(self, obj):
@@ -306,14 +306,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def write_current_exception(self, *, file, chain=True, limit=None):
+    def write_current_exception(self, *, stream, chain=True, limit=None):
         """
-        Writes the current exception to a file.
+        Writes the current exception to a stream.
 
         Parameters
         ----------
-        file: :func:`TextIO <open>`
-            The file to write to.
+        stream: :func:`TextIO <open>`
+            The stream to write to.
         chain: :class:`bool`
             Whether to follow the traceback tree.
         limit: :class:`int`
@@ -321,15 +321,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
 
         try:
-            tty = file.isatty()
+            tty = stream.isatty()
         except AttributeError:
             tty = False
 
-        file.write("".join(self.format_current_traceback(chain=chain, limit=limit, tty=tty)))
+        stream.write("".join(self.format_current_traceback(chain=chain, limit=limit, tty=tty)))
 
-    def write_exception(self, type, value, traceback, *, file, chain=True, limit=None):
+    def write_exception(self, type, value, traceback, *, stream, chain=True, limit=None):
         """
-        Writes an exception to a file.
+        Writes an exception to a stream.
 
         Parameters
         ----------
@@ -339,8 +339,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             An exception.
         traceback: :class:`~types.TracebackType`
             A traceback.
-        file: :func:`TextIO <open>`
-            The file to write to.
+        stream: :func:`TextIO <open>`
+            The stream to write to.
         chain: :class:`bool`
             Whether to follow the traceback tree.
         limit: :class:`int`
@@ -348,15 +348,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
 
         try:
-            tty = file.isatty()
+            tty = stream.isatty()
         except AttributeError:
             tty = False
 
-        file.write("".join(self.format_traceback(type, value, traceback, chain=chain, limit=limit, tty=tty)))
+        stream.write("".join(self.format_traceback(type, value, traceback, chain=chain, limit=limit, tty=tty)))
 
-    def write_exception_only(self, type, value, *, file):
+    def write_exception_only(self, type, value, *, stream):
         """
-        Writes an exception to a file.
+        Writes an exception to a stream.
 
         Parameters
         ----------
@@ -364,25 +364,25 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             An exception type.
         value: :class:`BaseException`
             An exception.
-        file: :func:`TextIO <open>`
-            The file to write to.
+        stream: :func:`TextIO <open>`
+            The stream to write to.
         """
 
         try:
-            tty = file.isatty()
+            tty = stream.isatty()
         except AttributeError:
             tty = False
 
-        file.write("".join(self.format_exception(type, value, tty=tty)))
+        stream.write("".join(self.format_exception(type, value, tty=tty)))
 
-    def write_last_exception(self, *, file, chain=True, limit=None):
+    def write_last_exception(self, *, stream, chain=True, limit=None):
         """
-        Writes the last exception to a file.
+        Writes the last exception to a stream.
 
         Parameters
         ----------
-        file: :func:`TextIO <open>`
-            The file to write to.
+        stream: :func:`TextIO <open>`
+            The stream to write to.
         chain: :class:`bool`
             Whether to follow the traceback tree.
         limit: :class:`int`
@@ -390,31 +390,31 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
 
         try:
-            tty = file.isatty()
+            tty = stream.isatty()
         except AttributeError:
             tty = False
 
-        file.write("".join(self.format_last_traceback(chain=chain, limit=limit, tty=tty)))
+        stream.write("".join(self.format_last_traceback(chain=chain, limit=limit, tty=tty)))
 
-    def write_frames(self, frames, *, file):
+    def write_frames(self, frames, *, stream):
         """
-        Writes an iterable of frames to a file.
+        Writes an iterable of frames to a stream.
 
         Parameters
         ----------
         frames: Iterable[Union[:class:`~traceback.FrameSummary`, \
                                :data:`~types.FrameType`]]
             An iterable of frames.
-        file: :func:`TextIO <open>`
-            The file to write to.
+        stream: :func:`TextIO <open>`
+            The stream to write to.
         """
 
         try:
-            tty = file.isatty()
+            tty = stream.isatty()
         except AttributeError:
             tty = False
 
-        file.write("".join(self.format_stack(frames, tty=tty)))
+        stream.write("".join(self.format_stack(frames, tty=tty)))
 
     def _try_name(self, obj):
         if isinstance(obj, object) and not isinstance(obj, type):
@@ -534,7 +534,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_exc)
     def _print_exc(self, limit=None, file=None, chain=True):
-        self.print_current_traceback(chain=chain, file=file, limit=limit)
+        self.print_current_traceback(chain=chain, limit=limit, stream=file)
 
     if sys.version_info >= (3, 10):
 
@@ -548,29 +548,29 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 else:
                     value, tb = exc, exc.__traceback__
 
-            self.print_traceback(value.__class__, value, tb, chain=chain, file=file, limit=limit)
+            self.print_traceback(value.__class__, value, tb, chain=chain, limit=limit, stream=file)
 
     else:
 
         @utils.wrap(traceback.print_exception)
         def _print_exception(self, etype, value, tb, limit=None, file=None, chain=True):
-            self.print_traceback(value.__class__, value, tb, chain=chain, file=file, limit=limit)
+            self.print_traceback(value.__class__, value, tb, chain=chain, limit=limit, stream=file)
 
     @utils.wrap(traceback.print_last)
     def _print_last(self, limit=None, file=None, chain=True):
-        self.print_last_traceback(chain=chain, file=file, limit=limit)
+        self.print_last_traceback(chain=chain, limit=limit, stream=file)
 
     @utils.wrap(traceback.print_list)
     def _print_frames(self, extracted_list, file=None):
-        self.print_stack(extracted_list, file=file)
+        self.print_stack(extracted_list, stream=file)
 
     @utils.wrap(traceback.print_stack)
     def _print_stack(self, f=None, limit=None, file=None):
-        self.print_stack(self.extract_stack(f or sys._getframe().f_back, limit=limit), file=file)
+        self.print_stack(self.extract_stack(f or sys._getframe().f_back, limit=limit), stream=file)
 
     @utils.wrap(traceback.print_tb)
     def _print_tb(self, tb, limit=None, file=None):
-        self.print_stack(self.extract_stack(tb, limit=limit), file=file)
+        self.print_stack(self.extract_stack(tb, limit=limit), stream=file)
 
     @utils.wrap(traceback.walk_stack)
     def _walk_stack(self, f):
