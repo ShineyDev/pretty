@@ -198,7 +198,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_current_exception(chain=chain, limit=limit, stream=stream or sys.stderr)
+        self.write_current_traceback(chain=chain, limit=limit, stream=stream or sys.stderr)
 
     def print_traceback(self, type, value, traceback, *, chain=True, limit=None, stream=None):
         """
@@ -223,7 +223,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_exception(type, value, traceback, chain=chain, limit=limit, stream=stream or sys.stderr)
+        self.write_traceback(type, value, traceback, chain=chain, limit=limit, stream=stream or sys.stderr)
 
     def print_exception(self, type, value, *, stream=None):
         """
@@ -239,7 +239,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_exception_only(type, value, stream=stream or sys.stderr)
+        self.write_exception(type, value, stream=stream or sys.stderr)
 
     def print_last_traceback(self, *, chain=True, limit=None, stream=None):
         """
@@ -257,7 +257,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_last_exception(chain=chain, limit=limit, stream=stream or sys.stderr)
+        self.write_last_traceback(chain=chain, limit=limit, stream=stream or sys.stderr)
 
     def print_stack(self, frames, *, stream=None):
         """
@@ -278,7 +278,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_frames(frames, stream=stream or sys.stderr)
+        self.write_stack(frames, stream=stream or sys.stderr)
 
     @abc.abstractmethod
     def walk_stack(self, obj):
@@ -306,9 +306,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def write_current_exception(self, *, stream, chain=True, limit=None):
+    def write_current_traceback(self, *, stream, chain=True, limit=None):
         """
-        Writes the current exception to a stream.
+        Writes the current traceback to a stream.
 
         Parameters
         ----------
@@ -327,9 +327,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_current_traceback(chain=chain, limit=limit, tty=tty)))
 
-    def write_exception(self, type, value, traceback, *, stream, chain=True, limit=None):
+    def write_traceback(self, type, value, traceback, *, stream, chain=True, limit=None):
         """
-        Writes an exception to a stream.
+        Writes a traceback to a stream.
 
         Parameters
         ----------
@@ -354,7 +354,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_traceback(type, value, traceback, chain=chain, limit=limit, tty=tty)))
 
-    def write_exception_only(self, type, value, *, stream):
+    def write_exception(self, type, value, *, stream):
         """
         Writes an exception to a stream.
 
@@ -375,9 +375,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_exception(type, value, tty=tty)))
 
-    def write_last_exception(self, *, stream, chain=True, limit=None):
+    def write_last_traceback(self, *, stream, chain=True, limit=None):
         """
-        Writes the last exception to a stream.
+        Writes the last traceback to a stream.
 
         Parameters
         ----------
@@ -396,9 +396,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_last_traceback(chain=chain, limit=limit, tty=tty)))
 
-    def write_frames(self, frames, *, stream):
+    def write_stack(self, frames, *, stream):
         """
-        Writes an iterable of frames to a stream.
+        Writes a stack to a stream.
 
         Parameters
         ----------
