@@ -83,9 +83,6 @@ def try_bool(obj, *, default):
 
 
 def try_name(obj, *, default):
-    if isinstance(obj, object) and not isinstance(obj, type):
-        obj = obj.__class__
-
     try:
         try:
             name = obj.__qualname__
