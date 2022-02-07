@@ -416,53 +416,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_stack(frames, tty=tty)))
 
-    def _try_name(self, obj):
-        if isinstance(obj, object) and not isinstance(obj, type):
-            obj = obj.__class__
-
-        try:
-            try:
-                name = obj.__qualname__
-            except AttributeError:
-                name = obj.__name__
-        except AttributeError:
-            name = self._try_unprintable(obj)
-        else:
-            try:
-                module = obj.__module__
-            except AttributeError:
-                pass
-            else:
-                if module not in ("__main__", "builtins"):
-                    module_names = module.split(".")
-
-                    i = len(module_names)
-                    while i:
-                        module_test = ".".join(module_names[:i])
-
-                        try:
-                            module_type = sys.modules[module_test]
-                        except KeyError:
-                            break
-
-                        obj_test = module_type
-                        try:
-                            for part in name.split("."):
-                                obj_test = getattr(obj_test, part)
-                        except AttributeError:
-                            break
-
-                        if obj_test is not obj:
-                            break
-
-                        module = module_test
-
-                        i -= 1
-
-                    name = f"{module}.{name}"
-        finally:
-            return name
-
     _unprintable = "<unprintable object>"
     _unprintable_fmt = "<unprintable {0.__class__.__qualname__} object>"
 

@@ -1,3 +1,6 @@
+import sys
+
+
 # NOTE: SGR color values are HSV(x°, 30%, 100%) where;
 #
 #       x     SGR           name
@@ -77,6 +80,54 @@ def try_bool(obj, *, default):
             return bool(obj)
         except Exception:
             return default
+
+
+def try_name(obj, *, default):
+    if isinstance(obj, object) and not isinstance(obj, type):
+        obj = obj.__class__
+
+    try:
+        try:
+            name = obj.__qualname__
+        except AttributeError:
+            name = obj.__name__
+    except AttributeError:
+        return default
+
+    try:
+        module = obj.__module__
+    except AttributeError:
+        return name
+
+    if module not in ("__main__", "builtins"):
+        module_names = module.split(".")
+
+        i = len(module_names)
+        while i:
+            module_test = ".".join(module_names[:i])
+
+            try:
+                module_type = sys.modules[module_test]
+            except KeyError:
+                break
+
+            obj_test = module_type
+            try:
+                for part in name.split("."):
+                    obj_test = getattr(obj_test, part)
+            except AttributeError:
+                break
+
+            if obj_test is not obj:
+                break
+
+            module = module_test
+
+            i -= 1
+
+        name = f"{module}.{name}"
+
+    return name
 
 
 def try_repr(obj, *, default):
