@@ -416,17 +416,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_stack(frames, tty=tty)))
 
-    _unprintable = "<unprintable object>"
-    _unprintable_fmt = "<unprintable {0.__class__.__qualname__} object>"
-
-    def _try_unprintable(self, obj):
-        try:
-            value = self._unprintable_fmt.format(obj)
-        except:
-            value = self._unprintable
-        finally:
-            return value
-
     @utils.wrap(traceback.extract_stack)
     def _extract_stack(self, f=None, limit=None):
         return traceback.StackSummary(self.extract_stack(f or sys._getframe().f_back, limit=limit))
