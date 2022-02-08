@@ -164,6 +164,7 @@ def wrap(wrapped):
 
 __all__ = [
     "try_bool",
+    "try_name",
     "try_repr",
     "try_str",
     "wrap",
