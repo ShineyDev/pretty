@@ -13,7 +13,7 @@ env:
 
 jobs:
   stale:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.repository_owner == 'shineydev' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
 
     name: Mark as stale
     runs-on: ubuntu-latest

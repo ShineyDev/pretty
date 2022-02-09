@@ -15,6 +15,8 @@ env:
 
 jobs:
   labels:
+    if: github.repository_owner == 'ShineyDev'
+
     name: Sync Labels
     runs-on: ubuntu-latest
 
