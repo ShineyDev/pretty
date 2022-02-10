@@ -568,7 +568,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield from self.format_exception(type, value)
 
-    def format_exception_line(self, type, value):
+    def format_exception(self, type, value):
         type_name = self._try_name(type)
         value_str = self._try_str(value)
 
