@@ -45,7 +45,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_current_traceback(self, *, chain=True, limit=None):
+    def format_current_traceback(self, *, chain=None, limit=None):
         """
         |iter|
 
@@ -69,7 +69,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_traceback(self, type, value, traceback, *, chain=True, limit=None):
+    def format_traceback(self, type, value, traceback, *, chain=None, limit=None):
         """
         |iter|
 
@@ -125,7 +125,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_last_traceback(self, *, chain=True, limit=None):
+    def format_last_traceback(self, *, chain=None, limit=None):
         """
         |iter|
 
@@ -169,7 +169,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def print_current_traceback(self, *, chain=True, limit=None, stream=None):
+    def print_current_traceback(self, *, chain=None, limit=None, stream=None):
         """
         Prints the current traceback to :data:`~sys.stderr`.
 
@@ -187,7 +187,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_current_traceback(chain=chain, limit=limit, stream=stream or sys.stderr)
 
-    def print_traceback(self, type, value, traceback, *, chain=True, limit=None, stream=None):
+    def print_traceback(self, type, value, traceback, *, chain=None, limit=None, stream=None):
         """
         Prints a traceback to :data:`~sys.stderr`.
 
@@ -228,7 +228,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_exception(type, value, stream=stream or sys.stderr)
 
-    def print_last_traceback(self, *, chain=True, limit=None, stream=None):
+    def print_last_traceback(self, *, chain=None, limit=None, stream=None):
         """
         Prints the last traceback to :data:`~sys.stderr`.
 
@@ -293,7 +293,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def write_current_traceback(self, *, stream, chain=True, limit=None):
+    def write_current_traceback(self, *, stream, chain=None, limit=None):
         """
         Writes the current traceback to a stream.
 
@@ -309,7 +309,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_current_traceback(chain=chain, limit=limit)))
 
-    def write_traceback(self, type, value, traceback, *, stream, chain=True, limit=None):
+    def write_traceback(self, type, value, traceback, *, stream, chain=None, limit=None):
         """
         Writes a traceback to a stream.
 
@@ -347,7 +347,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_exception(type, value)))
 
-    def write_last_traceback(self, *, stream, chain=True, limit=None):
+    def write_last_traceback(self, *, stream, chain=None, limit=None):
         """
         Writes the last traceback to a stream.
 
@@ -537,14 +537,17 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
             yield frame
 
-    def format_current_traceback(self, *, chain=True, limit=None):
+    def format_current_traceback(self, *, chain=None, limit=None):
         type, value, traceback = sys.exc_info()
         if type is None:
             type = type(None)
 
         yield from self.format_traceback(type, value, traceback, chain=chain, limit=limit)
 
-    def format_traceback(self, type, value, traceback, *, chain=True, limit=None, seen=None):
+    def format_traceback(self, type, value, traceback, *, chain=None, limit=None, seen=None):
+        if chain is None:
+            chain = True
+
         if chain and value is not None:
             seen = seen or set()
             seen.add(id(value))
@@ -579,7 +582,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield line
 
-    def format_last_traceback(self, *, chain=True, limit=None):
+    def format_last_traceback(self, *, chain=None, limit=None):
         if not hasattr(sys, "last_type"):
             raise ValueError("no last exception")
 
