@@ -5,7 +5,7 @@ from pretty.traceback.formatter import *
 from pretty.traceback.formatter import __all__ as _formatter__all__
 
 
-def hook(cls=None, **kwargs):
+def hook(cls=None, *args, **kwargs):
     """
     Hooks pretty.traceback into the current Python session.
 
@@ -52,7 +52,7 @@ def hook(cls=None, **kwargs):
     :rtype: :class:`~pretty.traceback.TracebackFormatter`
     """
 
-    formatter = cls and cls(**kwargs) or PrettyTracebackFormatter(**kwargs)
+    formatter = cls and cls(*args, **kwargs) or PrettyTracebackFormatter(*args, **kwargs)
 
     # TODO: traceback.FrameSummary
     # TODO: traceback.StackSummary
