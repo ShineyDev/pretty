@@ -17,24 +17,26 @@ def hook(cls=None, **kwargs):
 
     .. warning::
 
-        This will replace attributes and functions in the
-        :mod:`traceback` module with attributes and methods from the
-        formatter.
+        This will replace classes and functions in the :mod:`traceback`
+        module with attributes and methods from the formatter. All
+        callables will fall back to their original implementation on
+        exception.
 
-        The following **cannot** change when a
+        In order to maintain backward-compatibility with original
+        implementations, the following **cannot** change when a
         :class:`~pretty.traceback.TracebackFormatter` subclass
         overrides built-in :mod:`traceback` methods:
 
-        - Any parameter kind, name, order, or type of any function.
-        - The return or yield type of any function.
+        - Any parameter kind, name, order, or type of any callable.
+        - The return or yield type of any callable.
 
-        The following **can** change when a
+        However, the following **can** change when a
         :class:`~pretty.traceback.TracebackFormatter` subclass
         overrides built-in :mod:`traceback` methods:
 
         - The number and content of lines yielded by any ``format_*``
-          function.
-        - The content printed by any ``print_*`` function.
+          callable.
+        - The content printed by any ``print_*`` callable.
 
     Parameters
     ----------
@@ -46,10 +48,8 @@ def hook(cls=None, **kwargs):
         :meth:`TracebackFormatter.__init__ \
         <pretty.traceback.TracebackFormatter>`.
 
-    Returns
-    -------
-    :class:`~pretty.traceback.TracebackFormatter`
-        The formatter.
+
+    :rtype: :class:`~pretty.traceback.TracebackFormatter`
     """
 
     formatter = cls and cls(**kwargs) or PrettyTracebackFormatter(**kwargs)
