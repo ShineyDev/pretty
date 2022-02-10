@@ -1,7 +1,6 @@
 import sys
 import traceback
 
-from pretty import utils
 from pretty.traceback.formatter import *
 from pretty.traceback.formatter import __all__ as _formatter__all__
 
