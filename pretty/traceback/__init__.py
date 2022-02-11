@@ -25,18 +25,18 @@ def hook(cls=None, *args, **kwargs):
         In order to maintain backward-compatibility with original
         implementations, the following **cannot** change when a
         :class:`~pretty.traceback.TracebackFormatter` subclass
-        overrides built-in :mod:`traceback` methods:
+        overrides built-in :mod:`traceback` callables:
 
-        - Any parameter kind, name, order, or type of any callable.
-        - The return or yield type of any callable.
+        - Any parameter kind, name, order, or type of a callable.
+        - The return or yield type of a callable.
 
         However, the following **can** change when a
         :class:`~pretty.traceback.TracebackFormatter` subclass
-        overrides built-in :mod:`traceback` methods:
+        overrides built-in :mod:`traceback` callables:
 
-        - The number and content of lines yielded by any ``format_*``
+        - The number and content of lines yielded by a ``format_*``
           callable.
-        - The content printed by any ``print_*`` callable.
+        - The content printed by a ``print_*`` callable.
 
     Parameters
     ----------
