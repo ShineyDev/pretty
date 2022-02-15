@@ -520,10 +520,10 @@ class DefaultTracebackFormatter(TracebackFormatter):
         yield from self.format_exception(type, value)
 
     def format_exception(self, type, value):
-        type_name = self._try_name(type)
-        value_str = self._try_str(value)
+        type_name = utils.try_name(type)
+        value_str = utils.try_str(value)
 
-        if value is None or not value_str:
+        if not value_str:
             line = f"{type_name}\n"
         else:
             line = f"{type_name}: {value_str}\n"
