@@ -17,34 +17,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     __slots__ = ()
 
     @abc.abstractmethod
-    def extract_stack(self, obj, *, limit=None):
-        """
-        |iter|
-
-        Extracts a stack from a :data:`frame <types.FrameType>` or
-        :class:`traceback <types.TracebackType>`.
-
-        This function is synonymous to both
-        :func:`traceback.extract_stack` and
-        :func:`traceback.extract_tb`.
-
-        Parameters
-        ----------
-        obj: Union[:data:`~types.FrameType`, \
-                   :class:`~types.TracebackType`]
-            A frame or traceback.
-        limit: :class:`int`
-            The maximum number of frames to extract.
-
-
-        :yields: :data:`~types.FrameType`
-        """
-
-        raise NotImplementedError
-
-        yield
-
-    @abc.abstractmethod
     def format_current_traceback(self, *, chain=None, limit=None):
         """
         |iter|
@@ -157,8 +129,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: Iterable[Union[:class:`~traceback.FrameSummary`, \
-                               :data:`~types.FrameType`]]
+        frames
             An iterable of frames.
 
 
@@ -258,8 +229,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: Iterable[Union[:class:`~traceback.FrameSummary`, \
-                               :data:`~types.FrameType`]]
+        frames
             An iterable of frames.
         stream: :func:`TextIO <open>`
             The stream to print to. Defaults to :data:`~sys.stderr`.
@@ -268,7 +238,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         self.write_stack(frames, stream=stream or sys.stderr)
 
     @abc.abstractmethod
-    def walk_stack(self, obj):
+    def walk_stack(self, obj, *, limit):
         """
         |iter|
 
@@ -281,6 +251,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ----------
         frame: Union[:data:`~types.FrameType`, :class:`~types.TracebackType`]
             A frame or traceback.
+        limit: :class:`int`
+            The maximum number of frames to extract.
 
 
         :yields: Tuple[:data:`~types.FrameType`, \
@@ -369,8 +341,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames: Iterable[Union[:class:`~traceback.FrameSummary`, \
-                               :data:`~types.FrameType`]]
+        frames
             An iterable of frames.
         stream: :func:`TextIO <open>`
             The stream to write to.
@@ -380,11 +351,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.extract_stack)
     def _extract_stack(self, f=None, limit=None):
-        return traceback.StackSummary(self.extract_stack(f or sys._getframe().f_back, limit=limit))
+        return traceback.StackSummary(f for (f, _) in self.walk_stack(f or sys._getframe().f_back, limit=limit))
 
     @utils.wrap(traceback.extract_tb)
     def _extract_traceback(self, tb, limit=None):
-        return traceback.StackSummary(self.extract_stack(tb, limit=limit))
+        return traceback.StackSummary(f for (f, _) in self.walk_stack(tb, limit=limit))
 
     @utils.wrap(traceback.format_exc)
     def _format_exc(self, limit=None, chain=True):
@@ -430,11 +401,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.format_stack)
     def _format_stack(self, f=None, limit=None):
-        return list(self.format_stack(self.extract_stack(f or sys._getframe().f_back, limit=limit)))
+        return list(self.format_stack(self.walk_stack(f or sys._getframe().f_back, limit=limit)))
 
     @utils.wrap(traceback.format_tb)
     def _format_tb(self, tb, limit=None):
-        return list(self.format_stack(self.extract_stack(tb, limit=limit)))
+        return list(self.format_stack(self.walk_stack(tb, limit=limit)))
 
     @utils.wrap(traceback.print_exc)
     def _print_exc(self, limit=None, file=None, chain=True):
@@ -470,11 +441,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_stack)
     def _print_stack(self, f=None, limit=None, file=None):
-        self.print_stack(self.extract_stack(f or sys._getframe().f_back, limit=limit), stream=file)
+        self.print_stack(self.walk_stack(f or sys._getframe().f_back, limit=limit), stream=file)
 
     @utils.wrap(traceback.print_tb)
     def _print_tb(self, tb, limit=None, file=None):
-        self.print_stack(self.extract_stack(tb, limit=limit), stream=file)
+        self.print_stack(self.walk_stack(tb, limit=limit), stream=file)
 
     @utils.wrap(traceback.walk_stack)
     def _walk_stack(self, f):
@@ -514,29 +485,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
     recursion_cutoff = 3
     traceback_header = "Traceback (most recent call last):\n"
 
-    def extract_stack(self, obj, *, limit=None):
-        if isinstance(obj, types.FrameType):
-            generator = reversed(list(self.walk_stack(obj)))
-        elif isinstance(obj, types.TracebackType):
-            generator = self.walk_stack(obj)
-        else:
-            generator = obj
-
-        limit = limit or getattr(sys, "tracebacklimit", None)
-        if limit is not None:
-            if limit >= 0:
-                generator = itertools.islice(generator, limit)
-            else:
-                generator = collections.deque(generator, -limit)
-
-        for frame in generator:
-            if isinstance(frame, tuple):
-                frame, _ = frame
-
-            linecache.lazycache(frame.f_code.co_filename, frame.f_globals)
-
-            yield frame
-
     def format_current_traceback(self, *, chain=None, limit=None):
         type, value, traceback = sys.exc_info()
         if type is None:
@@ -567,7 +515,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         if traceback is not None:
             yield self.traceback_header
-            yield from self.format_stack(self.extract_stack(traceback, limit=limit))
+            yield from self.format_stack(self.walk_stack(traceback, limit=limit))
 
         yield from self.format_exception(type, value)
 
@@ -592,17 +540,25 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield from self.format_traceback(type, value, traceback, chain=chain, limit=limit)
 
-    def walk_stack(self, obj):
+    def walk_stack(self, obj, *, limit):
+        limit = limit or getattr(sys, "tracebacklimit", None)
+        if limit:
+            limit = abs(limit)
+
         if isinstance(obj, types.FrameType):
-            while obj is not None:
+            while obj is not None and limit != 0:
                 yield obj, (obj.f_lineno, None, None, None)
-
                 obj = obj.f_back
-        elif isinstance(obj, types.TracebackType):
-            while obj is not None:
-                yield obj.tb_frame, (obj.tb_lineno, None, None, None)
 
+                if limit:
+                    limit -= 1
+        elif isinstance(obj, types.TracebackType):
+            while obj is not None and limit != 0:
+                yield obj.tb_frame, (obj.tb_lineno, None, None, None)
                 obj = obj.tb_next
+
+                if limit:
+                    limit -= 1
 
 
 class PrettyTracebackFormatter(DefaultTracebackFormatter):
