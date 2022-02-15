@@ -540,7 +540,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield from self.format_traceback(type, value, traceback, chain=chain, limit=limit)
 
-    def walk_stack(self, obj, *, limit):
+    def walk_stack(self, obj, *, limit=None):
         if isinstance(obj, types.TracebackType):
             limit = limit or getattr(sys, "tracebacklimit", None)
 
