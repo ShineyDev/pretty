@@ -543,8 +543,9 @@ class DefaultTracebackFormatter(TracebackFormatter):
     def walk_stack(self, obj, *, limit=None):
         if isinstance(obj, types.TracebackType):
             limit = limit or getattr(sys, "tracebacklimit", None)
-
-        if limit:
+            if limit < 0:
+                limit = 0
+        elif limit:
             limit = abs(limit)
 
         if isinstance(obj, types.FrameType):
