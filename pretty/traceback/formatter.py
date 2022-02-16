@@ -557,7 +557,11 @@ class DefaultTracebackFormatter(TracebackFormatter):
                     limit -= 1
         elif isinstance(obj, types.TracebackType):
             while obj is not None and limit != 0:
-                yield obj.tb_frame, (obj.tb_lineno, None, None, None)
+                if sys.version_info >= (3, 11) and obj.tb_lasti >= 0:
+                    yield obj.tb_frame, next(itertools.islice(obj.tb_frame.f_code.co_positions(), obj.tb_lasti // 2, None))
+                else:
+                    yield obj.tb_frame, (obj.tb_lineno, None, None, None)
+
                 obj = obj.tb_next
 
                 if limit:
