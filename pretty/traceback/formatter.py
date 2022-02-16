@@ -449,7 +449,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.walk_stack)
     def _walk_stack(self, f):
-        f = f or sys._getframe().f_back.f_back
+        if sys.version_info >= (3, 11):
+            f = f or sys._getframe().f_back.f_back.f_back.f_back
+        else:
+            f = f or sys._getframe().f_back.f_back
 
         for frame, position in self.walk_stack(f):
             yield frame, position[0]
