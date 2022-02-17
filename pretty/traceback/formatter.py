@@ -369,6 +369,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 if exc is None:
                     value, tb = None, None
                 else:
+                    if sys.version_info >= (3, 11) and not isinstance(exc, BaseException):
+                        raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
+
                     value, tb = exc, exc.__traceback__
 
             return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
@@ -379,6 +382,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 if exc is None:
                     value = None
                 else:
+                    if sys.version_info >= (3, 11) and not isinstance(exc, BaseException):
+                        raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
+
                     value = exc
 
             return list(self.format_exception(value.__class__, value))
@@ -419,6 +425,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 if exc is None:
                     value, tb = None, None
                 else:
+                    if sys.version_info >= (3, 11) and not isinstance(exc, BaseException):
+                        raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
+
                     value, tb = exc, exc.__traceback__
 
             self.print_traceback(value.__class__, value, tb, chain=chain, limit=limit, stream=file)
