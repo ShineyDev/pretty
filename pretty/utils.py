@@ -41,10 +41,7 @@ pretty_theme = {
     "char_quote": "\u0022",
     # colorizing literal types
     "literal_bool_sgr": ("38;2;179;179;255", "39"),
-    "literal_bytes_sgr": ("38;2;255;217;179", "39"),
-    "literal_complex_sgr": ("38;2;179;255;255", "39"),
     "literal_ellipsis_sgr": ("38;2;128;128;128", "39"),
-    "literal_float_sgr": ("38;2;179;255;255", "39"),
     "literal_int_sgr": ("38;2;179;255;255", "39"),
     "literal_none_sgr": ("38;2;179;179;255", "39"),
     "literal_str_sgr": ("38;2;255;217;179", "39"),
