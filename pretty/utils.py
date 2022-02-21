@@ -87,20 +87,15 @@ def try_bool(obj, *, default):
 
 
 def try_name(obj, *, default):
-    try:
-        try:
-            name = obj.__qualname__
-        except AttributeError:
-            name = obj.__name__
-    except AttributeError:
+    name = try_attr(obj, "__qualname__", default=None) or try_attr(obj, "__name__", default=None)
+    if not isinstance(name, str):
         return default
 
-    try:
-        module = obj.__module__
-    except AttributeError:
+    module = try_attr(obj, "__module__", default=None)
+    if module is None:
         return name
 
-    if module not in ("__main__", "builtins"):
+    if isinstance(module, str) and module not in ("__main__", "builtins"):
         module_names = module.split(".")
 
         i = len(module_names)
@@ -113,11 +108,10 @@ def try_name(obj, *, default):
                 break
 
             obj_test = module_type
-            try:
-                for part in name.split("."):
-                    obj_test = getattr(obj_test, part)
-            except AttributeError:
-                break
+            for part in name.split("."):
+                obj_test = try_attr(obj_test, part, default=None)
+                if obj_test is None:
+                    break
 
             if obj_test is not obj:
                 break
