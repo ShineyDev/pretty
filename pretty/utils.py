@@ -66,6 +66,13 @@ _bool_map = {
 _bool_map = {v: k for k in _bool_map.keys() for v in _bool_map[k]}
 
 
+def try_attr(obj, name, *, default):
+    try:
+        return getattr(obj, name)
+    except Exception:
+        return default
+
+
 def try_bool(obj, *, default):
     if isinstance(obj, str):
         try:
@@ -160,6 +167,7 @@ def wrap(wrapped):
 
 
 __all__ = [
+    "try_attr",
     "try_bool",
     "try_name",
     "try_repr",
