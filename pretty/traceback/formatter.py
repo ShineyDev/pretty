@@ -533,10 +533,10 @@ class DefaultTracebackFormatter(TracebackFormatter):
         type_name = utils.try_name(type)
         value_str = utils.try_str(value)
 
-        if not value_str:
-            line = f"{type_name}\n"
-        else:
+        if value_str:
             line = f"{type_name}: {value_str}\n"
+        else:
+            line = f"{type_name}\n"
 
         yield line
 
