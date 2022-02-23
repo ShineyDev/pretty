@@ -191,16 +191,21 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frame: Union[:data:`~types.FrameType`, :class:`~types.TracebackType`]
+        obj: Union[:data:`~types.FrameType`, :class:`~types.TracebackType`]
             A frame or traceback.
         limit: :class:`int`
             The maximum number of frames to extract.
 
 
-        :yields: Tuple[:data:`~types.FrameType`, \
-                       Tuple[:class:`int`, Optional[:class:`int`], \
-                             Optional[:class:`int`], \
-                             Optional[:class:`int`]]]
+        :yields: Tuple[ \
+                     :data:`~types.FrameType`, \
+                     Tuple[ \
+                         :class:`int`,
+                         Optional[:class:`int`], \
+                         Optional[:class:`int`], \
+                         Optional[:class:`int`] \
+                     ] \
+                 ]
         """
 
         raise NotImplementedError
