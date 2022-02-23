@@ -59,21 +59,21 @@ def hook(cls=None, *args, **kwargs):
     # TODO: traceback.TracebackException
 
     traceback.extract_stack = formatter._extract_stack
-    traceback.extract_tb = formatter._extract_traceback
+    traceback.extract_tb = formatter._extract_tb
     traceback.format_exc = formatter._format_exc
     traceback.format_exception = formatter._format_exception
     traceback.format_exception_only = formatter._format_exception_only
-    traceback.format_list = formatter._format_frames
+    traceback.format_list = formatter._format_list
     traceback.format_stack = formatter._format_stack
     traceback.format_tb = formatter._format_tb
     traceback.print_exc = formatter._print_exc
     traceback.print_exception = formatter._print_exception
     traceback.print_last = formatter._print_last
-    traceback.print_list = formatter._print_frames
+    traceback.print_list = formatter._print_list
     traceback.print_stack = formatter._print_stack
     traceback.print_tb = formatter._print_tb
     traceback.walk_stack = formatter._walk_stack
-    traceback.walk_tb = formatter._walk_traceback
+    traceback.walk_tb = formatter._walk_tb
 
     def excepthook(*args):
         formatter.print_exception(*args)
