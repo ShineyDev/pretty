@@ -121,7 +121,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_exception(type, value, stream=stream or sys.stderr)
 
-    def print_stack(self, frames, *, stream=None):
+    def print_stack(self, stack, *, stream=None):
         """
         Prints a stack to :data:`~sys.stderr`.
 
@@ -133,13 +133,26 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames
-            An iterable of frames.
+        stack: Iterable[ \
+                   Tuple[ \
+                       Union[ \
+                           :data:`~types.FrameType`, \
+                           :class:`~traceback.FrameSummary` \
+                       ], \
+                       Tuple[ \
+                           :class:`int`, \
+                           Optional[:class:`int`], \
+                           Optional[:class:`int`], \
+                           Optional[:class:`int`] \
+                       ] \
+                   ] \
+               ]
+            A stack of frames.
         stream: :func:`TextIO <open>`
             The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_stack(frames, stream=stream or sys.stderr)
+        self.write_stack(stack, stream=stream or sys.stderr)
 
     def print_traceback(self, type, value, traceback, *, chain=None, limit=None, stream=None):
         """
