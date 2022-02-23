@@ -15,30 +15,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     __slots__ = ()
 
     @abc.abstractmethod
-    def format_current_traceback(self, *, chain=None, limit=None):
-        """
-        |iter|
-
-        Formats the current traceback.
-
-        This function is synonymous to :func:`traceback.format_exc`.
-
-        Parameters
-        ----------
-        chain: :class:`bool`
-            Whether to follow the traceback tree.
-        limit: :class:`int`
-            The maximum number of frames to extract.
-
-
-        :yields: :class:`str`
-        """
-
-        raise NotImplementedError
-
-        yield
-
-    @abc.abstractmethod
     def format_traceback(self, type, value, traceback, *, chain=None, limit=None):
         """
         |iter|
@@ -95,28 +71,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_last_traceback(self, *, chain=None, limit=None):
-        """
-        |iter|
-
-        Formats the last traceback.
-
-        Parameters
-        ----------
-        chain: :class:`bool`
-            Whether to follow the traceback tree.
-        limit: :class:`int`
-            The maximum number of frames to extract.
-
-
-        :yields: :class:`str`
-        """
-
-        raise NotImplementedError
-
-        yield
-
-    @abc.abstractmethod
     def format_stack(self, frames):
         """
         |iter|
@@ -137,24 +91,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
         yield
-
-    def print_current_traceback(self, *, chain=None, limit=None, stream=None):
-        """
-        Prints the current traceback to :data:`~sys.stderr`.
-
-        This function is synonymous to :func:`traceback.print_exc`.
-
-        Parameters
-        ----------
-        chain: :class:`bool`
-            Whether to follow the traceback tree.
-        limit: :class:`int`
-            The maximum number of frames to extract.
-        stream: :func:`TextIO <open>`
-            The stream to print to. Defaults to :data:`~sys.stderr`.
-        """
-
-        self.write_current_traceback(chain=chain, limit=limit, stream=stream or sys.stderr)
 
     def print_traceback(self, type, value, traceback, *, chain=None, limit=None, stream=None):
         """
@@ -196,24 +132,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
 
         self.write_exception(type, value, stream=stream or sys.stderr)
-
-    def print_last_traceback(self, *, chain=None, limit=None, stream=None):
-        """
-        Prints the last traceback to :data:`~sys.stderr`.
-
-        This function is synonymous to :func:`traceback.print_last`.
-
-        Parameters
-        ----------
-        chain: :class:`bool`
-            Whether to follow the traceback tree.
-        limit: :class:`int`
-            The maximum number of frames to extract.
-        stream: :func:`TextIO <open>`
-            The stream to print to. Defaults to :data:`~sys.stderr`.
-        """
-
-        self.write_last_traceback(chain=chain, limit=limit, stream=stream or sys.stderr)
 
     def print_stack(self, frames, *, stream=None):
         """
@@ -263,22 +181,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def write_current_traceback(self, *, stream, chain=None, limit=None):
-        """
-        Writes the current traceback to a stream.
-
-        Parameters
-        ----------
-        stream: :func:`TextIO <open>`
-            The stream to write to.
-        chain: :class:`bool`
-            Whether to follow the traceback tree.
-        limit: :class:`int`
-            The maximum number of frames to extract.
-        """
-
-        stream.write("".join(self.format_current_traceback(chain=chain, limit=limit)))
-
     def write_traceback(self, type, value, traceback, *, stream, chain=None, limit=None):
         """
         Writes a traceback to a stream.
@@ -317,22 +219,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_exception(type, value)))
 
-    def write_last_traceback(self, *, stream, chain=None, limit=None):
-        """
-        Writes the last traceback to a stream.
-
-        Parameters
-        ----------
-        stream: :func:`TextIO <open>`
-            The stream to write to.
-        chain: :class:`bool`
-            Whether to follow the traceback tree.
-        limit: :class:`int`
-            The maximum number of frames to extract.
-        """
-
-        stream.write("".join(self.format_last_traceback(chain=chain, limit=limit)))
-
     def write_stack(self, frames, *, stream):
         """
         Writes a stack to a stream.
@@ -357,7 +243,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.format_exc)
     def _format_exc(self, limit=None, chain=True):
-        return "".join(self.format_current_traceback(chain=chain, limit=limit))
+        type, value, traceback = sys.exc_info()
+        if type is None:
+            type = type(None)
+
+        return "".join(self.format_traceback(type, value, traceback, chain=chain, limit=limit))
 
     if sys.version_info >= (3, 10):
 
@@ -413,7 +303,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_exc)
     def _print_exc(self, limit=None, file=None, chain=True):
-        self.print_current_traceback(chain=chain, limit=limit, stream=file)
+        type, value, traceback = sys.exc_info()
+        if type is None:
+            type = type(None)
+
+        self.print_traceback(type, value, traceback, chain=chain, limit=limit, stream=file)
 
     if sys.version_info >= (3, 10):
 
@@ -440,7 +334,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_last)
     def _print_last(self, limit=None, file=None, chain=True):
-        self.print_last_traceback(chain=chain, limit=limit, stream=file)
+        if not hasattr(sys, "last_type"):
+            raise ValueError("no last exception")
+
+        type, value, traceback = sys.last_type, sys.last_value, sys.last_traceback
+        if type is None:
+            type = type(None)
+
+        self.print_traceback(type, value, traceback, chain=chain, limit=limit, stream=file)
 
     @utils.wrap(traceback.print_list)
     def _print_frames(self, extracted_list, file=None):
@@ -495,13 +396,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
     recursion_cutoff = 3
     traceback_header = "Traceback (most recent call last):\n"
 
-    def format_current_traceback(self, *, chain=None, limit=None):
-        type, value, traceback = sys.exc_info()
-        if type is None:
-            type = type(None)
-
-        yield from self.format_traceback(type, value, traceback, chain=chain, limit=limit)
-
     def format_traceback(self, type, value, traceback, *, chain=None, limit=None, seen=None):
         if chain is None:
             chain = True
@@ -539,16 +433,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
             line = f"{type_name}\n"
 
         yield line
-
-    def format_last_traceback(self, *, chain=None, limit=None):
-        if not hasattr(sys, "last_type"):
-            raise ValueError("no last exception")
-
-        type, value, traceback = sys.last_type, sys.last_value, sys.last_traceback
-        if type is None:
-            type = type(None)
-
-        yield from self.format_traceback(type, value, traceback, chain=chain, limit=limit)
 
     def walk_stack(self, obj, *, limit=None):
         if isinstance(obj, types.TracebackType):
