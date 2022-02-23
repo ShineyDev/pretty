@@ -40,7 +40,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_stack(self, frames):
+    def format_stack(self, stack):
         """
         |iter|
 
@@ -50,8 +50,21 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         Parameters
         ----------
-        frames
-            An iterable of frames.
+        stack: Iterable[ \
+                   Tuple[ \
+                       Union[ \
+                           :data:`~types.FrameType`, \
+                           :class:`~traceback.FrameSummary` \
+                       ], \
+                       Tuple[ \
+                           :class:`int`, \
+                           Optional[:class:`int`], \
+                           Optional[:class:`int`], \
+                           Optional[:class:`int`] \
+                       ] \
+                   ] \
+               ]
+            A stack of frames.
 
 
         :yields: :class:`str`
