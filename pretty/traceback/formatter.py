@@ -228,19 +228,32 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_exception(type, value)))
 
-    def write_stack(self, frames, *, stream):
+    def write_stack(self, stack, *, stream):
         """
         Writes a stack to a stream.
 
         Parameters
         ----------
-        frames
-            An iterable of frames.
+        stack: Iterable[ \
+                   Tuple[ \
+                       Union[ \
+                           :data:`~types.FrameType`, \
+                           :class:`~traceback.FrameSummary` \
+                       ], \
+                       Tuple[ \
+                           :class:`int`, \
+                           Optional[:class:`int`], \
+                           Optional[:class:`int`], \
+                           Optional[:class:`int`] \
+                       ] \
+                   ] \
+               ]
+            A stack of frames.
         stream: :func:`TextIO <open>`
             The stream to write to.
         """
 
-        stream.write("".join(self.format_stack(frames)))
+        stream.write("".join(self.format_stack(stack)))
 
     def write_traceback(self, type, value, traceback, *, stream, chain=None, limit=None):
         """
