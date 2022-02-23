@@ -15,37 +15,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     __slots__ = ()
 
     @abc.abstractmethod
-    def format_traceback(self, type, value, traceback, *, chain=None, limit=None):
-        """
-        |iter|
-
-        Formats a traceback.
-
-        This function is synonymous to
-        :func:`traceback.format_exception`.
-
-        Parameters
-        ----------
-        type: Type[:class:`BaseException`]
-            An exception type.
-        value: :class:`BaseException`
-            An exception.
-        traceback: :class:`~types.TracebackType`
-            A traceback.
-        chain: :class:`bool`
-            Whether to follow the traceback tree.
-        limit: :class:`int`
-            The maximum number of frames to extract.
-
-
-        :yields: :class:`str`
-        """
-
-        raise NotImplementedError
-
-        yield
-
-    @abc.abstractmethod
     def format_exception(self, type, value):
         """
         |iter|
@@ -92,12 +61,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def print_traceback(self, type, value, traceback, *, chain=None, limit=None, stream=None):
+    @abc.abstractmethod
+    def format_traceback(self, type, value, traceback, *, chain=None, limit=None):
         """
-        Prints a traceback to :data:`~sys.stderr`.
+        |iter|
+
+        Formats a traceback.
 
         This function is synonymous to
-        :func:`traceback.print_exception`.
+        :func:`traceback.format_exception`.
 
         Parameters
         ----------
@@ -111,11 +83,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             Whether to follow the traceback tree.
         limit: :class:`int`
             The maximum number of frames to extract.
-        stream: :func:`TextIO <open>`
-            The stream to print to. Defaults to :data:`~sys.stderr`.
+
+
+        :yields: :class:`str`
         """
 
-        self.write_traceback(type, value, traceback, chain=chain, limit=limit, stream=stream or sys.stderr)
+        raise NotImplementedError
+
+        yield
 
     def print_exception(self, type, value, *, stream=None):
         """
@@ -153,6 +128,31 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_stack(frames, stream=stream or sys.stderr)
 
+    def print_traceback(self, type, value, traceback, *, chain=None, limit=None, stream=None):
+        """
+        Prints a traceback to :data:`~sys.stderr`.
+
+        This function is synonymous to
+        :func:`traceback.print_exception`.
+
+        Parameters
+        ----------
+        type: Type[:class:`BaseException`]
+            An exception type.
+        value: :class:`BaseException`
+            An exception.
+        traceback: :class:`~types.TracebackType`
+            A traceback.
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        limit: :class:`int`
+            The maximum number of frames to extract.
+        stream: :func:`TextIO <open>`
+            The stream to print to. Defaults to :data:`~sys.stderr`.
+        """
+
+        self.write_traceback(type, value, traceback, chain=chain, limit=limit, stream=stream or sys.stderr)
+
     @abc.abstractmethod
     def walk_stack(self, obj, *, limit):
         """
@@ -180,28 +180,6 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
         yield
-
-    def write_traceback(self, type, value, traceback, *, stream, chain=None, limit=None):
-        """
-        Writes a traceback to a stream.
-
-        Parameters
-        ----------
-        type: Type[:class:`BaseException`]
-            An exception type.
-        value: :class:`BaseException`
-            An exception.
-        traceback: :class:`~types.TracebackType`
-            A traceback.
-        stream: :func:`TextIO <open>`
-            The stream to write to.
-        chain: :class:`bool`
-            Whether to follow the traceback tree.
-        limit: :class:`int`
-            The maximum number of frames to extract.
-        """
-
-        stream.write("".join(self.format_traceback(type, value, traceback, chain=chain, limit=limit)))
 
     def write_exception(self, type, value, *, stream):
         """
@@ -232,6 +210,28 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
 
         stream.write("".join(self.format_stack(frames)))
+
+    def write_traceback(self, type, value, traceback, *, stream, chain=None, limit=None):
+        """
+        Writes a traceback to a stream.
+
+        Parameters
+        ----------
+        type: Type[:class:`BaseException`]
+            An exception type.
+        value: :class:`BaseException`
+            An exception.
+        traceback: :class:`~types.TracebackType`
+            A traceback.
+        stream: :func:`TextIO <open>`
+            The stream to write to.
+        chain: :class:`bool`
+            Whether to follow the traceback tree.
+        limit: :class:`int`
+            The maximum number of frames to extract.
+        """
+
+        stream.write("".join(self.format_traceback(type, value, traceback, chain=chain, limit=limit)))
 
     @utils.wrap(traceback.extract_stack)
     def _extract_stack(self, f=None, limit=None):
@@ -396,6 +396,17 @@ class DefaultTracebackFormatter(TracebackFormatter):
     recursion_cutoff = 3
     traceback_header = "Traceback (most recent call last):\n"
 
+    def format_exception(self, type, value):
+        type_name = utils.try_name(type)
+        value_str = utils.try_str(value)
+
+        if value_str:
+            line = f"{type_name}: {value_str}\n"
+        else:
+            line = f"{type_name}\n"
+
+        yield line
+
     def format_traceback(self, type, value, traceback, *, chain=None, limit=None, seen=None):
         if chain is None:
             chain = True
@@ -422,17 +433,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
             yield from self.format_stack(self.walk_stack(traceback, limit=limit))
 
         yield from self.format_exception(type, value)
-
-    def format_exception(self, type, value):
-        type_name = utils.try_name(type)
-        value_str = utils.try_str(value)
-
-        if value_str:
-            line = f"{type_name}: {value_str}\n"
-        else:
-            line = f"{type_name}\n"
-
-        yield line
 
     def walk_stack(self, obj, *, limit=None):
         if isinstance(obj, types.TracebackType):
