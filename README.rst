@@ -35,7 +35,7 @@ Install
 
 .. code:: shell
 
-    $ pip install --upgrade git+https://github.com/ShineyDev/pretty.git@main
+    $ python -m pip install --upgrade git+https://github.com/ShineyDev/pretty.git@main
 
 
 Use
