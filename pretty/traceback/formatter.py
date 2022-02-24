@@ -279,11 +279,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.extract_stack)
     def _extract_stack(self, f=None, limit=None):
-        return traceback.StackSummary(f for (f, _) in self.walk_stack(f or sys._getframe().f_back, limit=limit))
+        return self.StackSummary.from_stack(self.FrameSummary.from_frame(f, p) for (f, p) in self.walk_stack(f or sys._getframe().f_back, limit=limit))
 
     @utils.wrap(traceback.extract_tb)
     def _extract_tb(self, tb, limit=None):
-        return traceback.StackSummary(f for (f, _) in self.walk_stack(tb, limit=limit))
+        return self.StackSummary.from_stack(self.FrameSummary.from_frame(f, p) for (f, p) in self.walk_stack(tb, limit=limit))
 
     @utils.wrap(traceback.format_exc)
     def _format_exc(self, limit=None, chain=True):
@@ -335,7 +335,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.format_list)
     def _format_list(self, extracted_list):
-        return list(self.format_stack(extracted_list))
+        return list(self.format_stack((self.FrameSummary.from_tuple(t), (t[1], None, None, None)) for t in extracted_list))
 
     @utils.wrap(traceback.format_stack)
     def _format_stack(self, f=None, limit=None):
@@ -389,7 +389,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_list)
     def _print_list(self, extracted_list, file=None):
-        self.print_stack(extracted_list, stream=file)
+        self.print_stack((self.FrameSummary.from_tuple(t), (t[1], None, None, None)) for t in extracted_list, stream=file)
 
     @utils.wrap(traceback.print_stack)
     def _print_stack(self, f=None, limit=None, file=None):
