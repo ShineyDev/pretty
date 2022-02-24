@@ -47,12 +47,18 @@ If you wish to hook pretty.traceback into **all Python sessions**, set the `PYTH
 
     $ export PYTHONPRETTYTRACEBACK=1
 
+.. code:: python
+
+    >>> 1 / 0
+
 If you wish to hook pretty.traceback into **a single Python session**, call `pretty.traceback.hook() <https://docs.shiney.dev/pretty/latest/traceback/hook>`_.
 
 .. code:: python
 
     >>> import pretty
     >>> pretty.traceback.hook()
+    >>>
+    >>> 1 / 0
 
 If you wish to use a formatter directly, initialize a new `PrettyTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/pretty>`_ or `DefaultTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/default>`_, or build your own implementation on `TracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/abstract>`_.
 
@@ -65,7 +71,7 @@ If you wish to use a formatter directly, initialize a new `PrettyTracebackFormat
     >>> try:
     >>>     1 / 0
     >>> except Exception as e:
-    >>>     formatter.print_current_exception()
+    >>>     formatter.print_traceback(type(e), e, e.__traceback__)
 
 
 .. raw:: html
