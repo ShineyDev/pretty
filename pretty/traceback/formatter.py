@@ -40,6 +40,37 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
+    def format_frame(self, frame):
+        """
+        |iter|
+
+        Formats a frame.
+
+        This function is synonymous to
+        :meth:`traceback.StackSummary.format_frame_summary`.
+
+        Parameters
+        ----------
+        frame: Tuple[ \
+                   Union[ \
+                       :data:`~types.FrameType`, \
+                       :class:`~traceback.FrameSummary` \
+                   ], \
+                   Tuple[ \
+                       :class:`int`, \
+                       Optional[:class:`int`], \
+                       Optional[:class:`int`], \
+                       Optional[:class:`int`] \
+                   ] \
+               ]
+            A frame.
+        """
+
+        raise NotImplementedError
+
+        yield
+
+    @abc.abstractmethod
     def format_stack(self, stack):
         """
         |iter|
@@ -120,6 +151,31 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
 
         self.write_exception(type, value, stream=stream or sys.stderr)
+
+    def print_frame(self, frame, *, stream=None):
+        """
+        Prints a frame to :data:`~sys.stderr`.
+
+        Parameters
+        ----------
+        frame: Tuple[ \
+                   Union[ \
+                       :data:`~types.FrameType`, \
+                       :class:`~traceback.FrameSummary` \
+                   ], \
+                   Tuple[ \
+                       :class:`int`, \
+                       Optional[:class:`int`], \
+                       Optional[:class:`int`], \
+                       Optional[:class:`int`] \
+                   ] \
+               ]
+            A frame.
+        stream: :func:`TextIO <open>`
+            The stream to print to. Defaults to :data:`~sys.stderr`.
+        """
+
+        self.write_frame(frame, stream=stream or sys.stderr)
 
     def print_stack(self, stack, *, stream=None):
         """
@@ -227,6 +283,31 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         """
 
         stream.write("".join(self.format_exception(type, value)))
+
+    def write_frame(self, frame, *, stream=None):
+        """
+        Writes a frame to a stream.
+
+        Parameters
+        ----------
+        frame: Tuple[ \
+                   Union[ \
+                       :data:`~types.FrameType`, \
+                       :class:`~traceback.FrameSummary` \
+                   ], \
+                   Tuple[ \
+                       :class:`int`, \
+                       Optional[:class:`int`], \
+                       Optional[:class:`int`], \
+                       Optional[:class:`int`] \
+                   ] \
+               ]
+            A frame.
+        stream: :func:`TextIO <open>`
+            The stream to write to.
+        """
+
+        stream.write("".join(self.format_frame(frame)))
 
     def write_stack(self, stack, *, stream):
         """
