@@ -80,7 +80,7 @@ def format(string, **kwargs):
 
     result.append(string[index:])
 
-    return "".join(result)
+    return "".join(result).replace("{{", "{").replace("}}", "}")
 
 
 _bool_map = {
