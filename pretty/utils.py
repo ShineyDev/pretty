@@ -1,3 +1,4 @@
+import re
 import sys
 
 
@@ -57,6 +58,29 @@ pretty_theme = {
     "traceback_header_sgr": ("38;2;230;230;230", "39"),
     "traceback_message_sgr": ("38;2;128;128;128", "39"),
 }
+
+
+_format_pattern = re.compile("(?:{{2}|[^{}])*({((?:\"(?:[^\\\"]|(\\\\)*\\\")*\"|\'(?:[^\\\']|(\\\\)*\\\')*\'|[^{}])+)})?(?:}{2}|[^{}])*")
+
+
+def format(string, **kwargs):
+    if (string.count("{") - string.count("}")) % 2 != 0:
+        raise ValueError("mismatched format string specifiers")
+
+    result = list()
+
+    index = 0
+    for match in re.finditer(_format_pattern, string):
+        if match.group(2) is None:
+            continue
+
+        result.append(string[index:match.start(1)])
+        result.append(str(eval(match.group(2), None, kwargs)))
+        index = match.end(1)
+
+    result.append(string[index:])
+
+    return "".join(result)
 
 
 _bool_map = {
@@ -161,6 +185,7 @@ def wrap(wrapped):
 
 
 __all__ = [
+    "format",
     "try_attr",
     "try_bool",
     "try_name",
