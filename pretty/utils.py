@@ -64,9 +64,6 @@ _format_pattern = re.compile("(?:{{2}|[^{}])*({((?:\"(?:[^\\\"]|(\\\\)*\\\")*\"|
 
 
 def format(string, **kwargs):
-    if (string.count("{") - string.count("}")) % 2 != 0:
-        raise ValueError("mismatched format string specifiers")
-
     result = list()
 
     index = 0
