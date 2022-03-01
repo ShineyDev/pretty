@@ -60,24 +60,23 @@ pretty_theme = {
 }
 
 
-_format_pattern = re.compile("(?:{{2}|[^{}])*({((?:\"(?:[^\\\"]|(\\\\)*\\\")*\"|\'(?:[^\\\']|(\\\\)*\\\')*\'|[^{}])+)})?(?:}{2}|[^{}])*")
+_format_pattern = re.compile("{((?:\"(?:[^\\\"]|(\\\\)*\\\")*\"|\'(?:[^\\\']|(\\\\)*\\\')*\'|[^{}])+)}")
 
 
 def format(string, **kwargs):
+    string = "\x0E".join(string.replace("{{", "\x0F").rsplit("}}"))
+
     result = list()
 
     index = 0
     for match in re.finditer(_format_pattern, string):
-        if match.group(2) is None:
-            continue
-
-        result.append(string[index:match.start(1)])
-        result.append(str(eval(match.group(2), None, kwargs)))
-        index = match.end(1)
+        result.append(string[index:match.start(0)])
+        result.append(str(eval(match.group(1), None, kwargs)))
+        index = match.end(0)
 
     result.append(string[index:])
 
-    return "".join(result).replace("{{", "{").replace("}}", "}")
+    return "".join(result).replace("\x0F", "{").replace("\x0E", "}")
 
 
 def try_attr(obj, name, *, default):
