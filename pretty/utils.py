@@ -80,18 +80,18 @@ def format(string, **kwargs):
     return "".join(result).replace("{{", "{").replace("}}", "}")
 
 
-_bool_map = {
-    False: ["0", "false", "off", "disable", "no", "n"],
-    True: ["1", "true", "on", "enable", "yes", "y"],
-}
-_bool_map = {v: k for k in _bool_map.keys() for v in _bool_map[k]}
-
-
 def try_attr(obj, name, *, default):
     try:
         return getattr(obj, name)
     except Exception:
         return default
+
+
+_bool_map = {
+    False: ["0", "false", "off", "disable", "no", "n"],
+    True: ["1", "true", "on", "enable", "yes", "y"],
+}
+_bool_map = {v: k for k in _bool_map.keys() for v in _bool_map[k]}
 
 
 def try_bool(obj, *, default):
