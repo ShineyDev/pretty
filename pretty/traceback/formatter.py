@@ -516,10 +516,10 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     __slots__ = ()
 
-    cause_header = "\nThe above exception was the direct cause of the following exception:\n\n"
-    context_header = "\nDuring handling of the above exception, another exception occurred:\n\n"
+    cause_header = "The above exception was the direct cause of the following exception:"
+    context_header = "During handling of the above exception, another exception occurred:"
     recursion_cutoff = 3
-    traceback_header = "Traceback (most recent call last):\n"
+    traceback_header = "Traceback (most recent call last):"
 
     def format_exception(self, type, value):
         type_name = utils.try_name(type)
