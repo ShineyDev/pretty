@@ -519,6 +519,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
     cause_header = "The above exception was the direct cause of the following exception:"
     context_header = "During handling of the above exception, another exception occurred:"
     recursion_cutoff = 3
+    recursion_message_format = "[Previous line repeated {times} more time{'' if times == 1 else 's'}]"
     traceback_header = "Traceback (most recent call last):"
 
     def format_exception(self, type, value):
@@ -531,6 +532,41 @@ class DefaultTracebackFormatter(TracebackFormatter):
             line = f"{type_name}\n"
 
         yield line
+
+    def format_stack(self, stack):
+        last_filename = None
+        last_lineno = None
+        last_name = None
+        recursion_times = 0
+
+        for (frame, position) in stack:
+            if isinstance(frame, types.FrameType):
+                current_filename = frame.f_code.co_filename
+                current_name = frame.f_code.co_name
+            else:
+                current_filename = frame.filename
+                current_name = frame.name
+
+            current_lineno = position[0]
+
+            if current_filename != last_filename or current_lineno != last_lineno or current_name != last_name:
+                if recursion_times > self.recursion_cutoff:
+                    yield utils.format(self.recursion_message_format, times=recursion_times - self.recursion_cutoff)
+
+                last_filename = current_filename
+                last_lineno = current_lineno
+                last_name = current_name
+                recursion_times = 0
+
+            recursion_times += 1
+
+            if recursion_times > self.recursion_cutoff:
+                continue
+
+            yield from self.format_frame((frame, position))
+
+        if recursion_times > self.recursion_cutoff:
+            yield utils.format(self.recursion_message_format, times=recursion_times - self.recursion_cutoff)
 
     def format_traceback(self, type, value, traceback, *, chain=None, limit=None, seen=None):
         if chain is None:
