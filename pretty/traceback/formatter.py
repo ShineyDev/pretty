@@ -510,6 +510,9 @@ class DefaultTracebackFormatter(TracebackFormatter):
     recursion_cutoff: :class:`int`
         The number of the same frame to display before instead
         displaying a recursion message.
+    recursion_message_format: :class:`str`
+        The format for the message yielded in place of recursive
+        frames.
     traceback_header: :class:`str`
         The message yielded before an exception's traceback.
     """
@@ -641,6 +644,9 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
     recursion_cutoff: :class:`int`
         The number of the same frame to display before instead
         displaying a recursion message.
+    recursion_message_format: :class:`str`
+        The format for the message yielded in place of recursive
+        frames.
     theme: :class:`dict`
         A theme.
     traceback_header: :class:`str`
