@@ -447,7 +447,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.format_list)
     def _format_list(self, extracted_list):
-        return list(self.format_stack((self.FrameSummary.from_tuple(t), (t[1], None, None, None)) for t in extracted_list))
+        return list(self.format_stack((traceback.FrameSummary(filename, lineno, name, line=line), (lineno, None, None, None)) for (filename, lineno, name, line) in extracted_list))
 
     @utils.wrap(traceback.format_stack)
     def _format_stack(self, f=None, limit=None):
