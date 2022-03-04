@@ -501,7 +501,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_list)
     def _print_list(self, extracted_list, file=None):
-        self.print_stack(((self.FrameSummary.from_tuple(t), (t[1], None, None, None)) for t in extracted_list), stream=file)
+        self.print_stack(((traceback.FrameSummary(filename, lineno, name, line=line), (lineno, None, None, None)) for (filename, lineno, name, line) in extracted_list), stream=file)
 
     @utils.wrap(traceback.print_stack)
     def _print_stack(self, f=None, limit=None, file=None):
