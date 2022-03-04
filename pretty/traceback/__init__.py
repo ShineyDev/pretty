@@ -54,10 +54,6 @@ def hook(cls=None, *args, **kwargs):
 
     formatter = cls and cls(*args, **kwargs) or PrettyTracebackFormatter(*args, **kwargs)
 
-    # TODO: traceback.FrameSummary
-    # TODO: traceback.StackSummary
-    # TODO: traceback.TracebackException
-
     traceback.extract_stack = formatter._extract_stack
     traceback.extract_tb = formatter._extract_tb
     traceback.format_exc = formatter._format_exc
