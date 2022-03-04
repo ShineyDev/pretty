@@ -108,14 +108,12 @@ def try_bool(obj, *, default):
 
 def try_name(obj, *, default):
     name = try_attr(obj, "__qualname__", default=None) or try_attr(obj, "__name__", default=None)
-    if not isinstance(name, str):
+    if not name:
         return default
 
     module = try_attr(obj, "__module__", default=None)
-    if module is None:
-        return name
 
-    if isinstance(module, str) and module not in ("__main__", "builtins"):
+    if module and isinstance(module, str) and module not in ("__main__", "builtins"):
         module_names = module.split(".")
 
         i = len(module_names)
