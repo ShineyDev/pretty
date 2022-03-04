@@ -1,6 +1,7 @@
 import abc
 import itertools
 import sys
+import textwrap
 import traceback
 import types
 
@@ -625,7 +626,9 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         if traceback is not None:
             yield self.traceback_header
-            yield from self.format_stack(self.walk_stack(traceback, limit=limit))
+
+            for line in self.format_stack(self.walk_stack(traceback, limit=limit)):
+                yield textwrap.indent(line, "  ")
 
         yield from self.format_exception(type, value)
 
