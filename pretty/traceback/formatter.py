@@ -380,7 +380,22 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.extract_tb)
     def _extract_tb(self, tb, limit=None):
-        return self.StackSummary.from_stack(self.FrameSummary.from_frame(f, p) for (f, p) in self.walk_stack(tb, limit=limit))
+        generator = self.walk_stack(tb, limit=limit)
+
+        if sys.version_info >= (3, 11):
+            extract = traceback.StackSummary._extract_from_extended_frame_gen
+        else:
+            extract = traceback.StackSummary.extract
+
+            def generator_function():
+                for (frame, position) in generator:
+                    yield frame, position[0]
+
+            generator = generator_function()
+
+        stack = extract(generator)
+
+        return stack
 
     @utils.wrap(traceback.format_exc)
     def _format_exc(self, limit=None, chain=True):
