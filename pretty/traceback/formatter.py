@@ -419,8 +419,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 if exc is None:
                     value, tb = None, None
                 else:
-                    if sys.version_info >= (3, 11) and not isinstance(exc, BaseException):
-                        raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
+                    if sys.version_info >= (3, 11):
+                        if not isinstance(exc, BaseException):
+                            raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
 
                     value, tb = exc, exc.__traceback__
 
@@ -432,8 +433,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 if exc is None:
                     value = None
                 else:
-                    if sys.version_info >= (3, 11) and not isinstance(exc, BaseException):
-                        raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
+                    if sys.version_info >= (3, 11):
+                        if not isinstance(exc, BaseException):
+                            raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
 
                     value = exc
 
@@ -477,8 +479,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 if exc is None:
                     value, tb = None, None
                 else:
-                    if sys.version_info >= (3, 11) and not isinstance(exc, BaseException):
-                        raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
+                    if sys.version_info >= (3, 11):
+                        if not isinstance(exc, BaseException):
+                            raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
 
                     value, tb = exc, exc.__traceback__
 
