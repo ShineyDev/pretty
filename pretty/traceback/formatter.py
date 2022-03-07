@@ -48,7 +48,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         Formats a frame.
 
         This function is synonymous to
-        :meth:`traceback.StackSummary.format_frame_summary`.
+        ``traceback.StackSummary.format_frame_summary``.
+
+        .. NOTE: traceback.StackSummary.format_frame_summary, while
+                 documented in the source, is not documented on
+                 docs.python.org and thus cannot be linked to by
+                 intersphinx.
 
         Parameters
         ----------
