@@ -463,11 +463,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     @utils.wrap(traceback.print_exc)
     def _print_exc(self, limit=None, file=None, chain=True):
-        type, value, traceback = sys.exc_info()
-        if type is None:
-            type = type(None)
+        _, value, traceback = sys.exc_info()
 
-        self.print_traceback(type, value, traceback, chain=chain, limit=limit, stream=file)
+        self.print_traceback(value.__class__, value, traceback, chain=chain, limit=limit, stream=file)
 
     if sys.version_info >= (3, 10):
 
