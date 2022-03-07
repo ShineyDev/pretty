@@ -495,11 +495,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         if not hasattr(sys, "last_type"):
             raise ValueError("no last exception")
 
-        type, value, traceback = sys.last_type, sys.last_value, sys.last_traceback
-        if type is None:
-            type = type(None)
+        value, traceback = sys.last_value, sys.last_traceback
 
-        self.print_traceback(type, value, traceback, chain=chain, limit=limit, stream=file)
+        self.print_traceback(value.__class__, value, traceback, chain=chain, limit=limit, stream=file)
 
     @utils.wrap(traceback.print_list)
     def _print_list(self, extracted_list, file=None):
