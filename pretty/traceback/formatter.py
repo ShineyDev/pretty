@@ -619,17 +619,22 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
             if cause is not None and id(cause) not in seen:
                 yield from self.format_traceback(cause.__class__, cause, cause.__traceback__, chain=chain, limit=limit, seen=seen)
-                yield self.cause_header
+
+                header = self.cause_header
+                yield f"\n{header}\n\n"
 
             context = value.__context__
             context_suppressed = value.__suppress_context__
 
             if cause is None and context is not None and not context_suppressed and id(context) not in seen:
                 yield from self.format_traceback(context.__class__, context, context.__traceback__, chain=chain, limit=limit, seen=seen)
-                yield self.context_header
+
+                header = self.context_header
+                yield f"\n{header}\n\n"
 
         if traceback is not None:
-            yield self.traceback_header
+            header = self.traceback_header
+            yield f"{header}\n\n"
 
             for line in self.format_stack(self.walk_stack(traceback, limit=limit)):
                 yield textwrap.indent(line, "  ")
