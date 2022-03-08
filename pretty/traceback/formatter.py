@@ -588,7 +588,8 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
             if current_filename != last_filename or current_lineno != last_lineno or current_name != last_name:
                 if recursion_times > self.recursion_cutoff:
-                    yield utils.format(self.recursion_message_format, times=recursion_times - self.recursion_cutoff)
+                    message = utils.format(self.recursion_message_format, times=recursion_times - self.recursion_cutoff)
+                    yield f"{message}\n"
 
                 last_filename = current_filename
                 last_lineno = current_lineno
@@ -603,7 +604,8 @@ class DefaultTracebackFormatter(TracebackFormatter):
             yield from self.format_frame((frame, position))
 
         if recursion_times > self.recursion_cutoff:
-            yield utils.format(self.recursion_message_format, times=recursion_times - self.recursion_cutoff)
+            message = utils.format(self.recursion_message_format, times=recursion_times - self.recursion_cutoff)
+            yield f"{message}\n"
 
     def format_traceback(self, type, value, traceback, *, chain=None, limit=None, seen=None):
         if chain is None:
