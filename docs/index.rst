@@ -5,14 +5,10 @@ A Python module for prettier (and far more useful) stack traces.
 
 
 .. toctree::
-    :caption: Traceback
-    :maxdepth: 1
+    :caption: API Reference
+    :maxdepth: 2
 
-    traceback/hook
-
-    traceback/formatter/abstract
-    traceback/formatter/default
-    traceback/formatter/pretty
+    reference/pretty/traceback/index
 
 .. toctree::
     :caption: Meta
