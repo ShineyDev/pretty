@@ -570,6 +570,11 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield line
 
+        if sys.version_info >= (3, 11):
+            if value.__note__:
+                for line in value.__note__.splitlines():
+                    yield f"{line}\n"
+
     def format_stack(self, stack):
         last_filename = None
         last_lineno = None
