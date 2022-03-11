@@ -1,5 +1,18 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import Any, TypeVar
+    from typing_extensions import ParamSpec
+
 import re
 import sys
+
+
+if TYPE_CHECKING:
+    _P = ParamSpec("_P")
+    _T = TypeVar("_T")
 
 
 # NOTE: SGR color values are HSV(x°, 30%, 100%) where;
@@ -29,7 +42,7 @@ import sys
 #       75    191;191;191   light gray
 #       90    230;230;230   white
 #
-pretty_theme = {
+pretty_theme: dict[str, Any] = {
     # colorizing abstract syntax trees
     "ast_comment_sgr": ("38;2;179;255;179", "39"),
     "ast_delimiter_sgr": ("38;2;128;128;128", "39"),
@@ -63,7 +76,7 @@ pretty_theme = {
 _format_pattern = re.compile("{((?:\"(?:[^\\\"]|(\\\\)*\\\")*\"|\'(?:[^\\\']|(\\\\)*\\\')*\'|[^{}])+)}")
 
 
-def format(string, **kwargs):
+def format(string: str, **kwargs: Any):
     string = "\x0E".join(string.replace("{{", "\x0F").rsplit("}}"))
 
     result = list()
@@ -79,7 +92,7 @@ def format(string, **kwargs):
     return "".join(result).replace("\x0F", "{").replace("\x0E", "}")
 
 
-def try_attr(obj, name, *, default):
+def try_attr(obj: Any, name: str, *, default: Any) -> Any:
     try:
         return getattr(obj, name)
     except Exception:
@@ -93,7 +106,7 @@ _bool_map = {
 _bool_map = {v: k for k in _bool_map.keys() for v in _bool_map[k]}
 
 
-def try_bool(obj, *, default):
+def try_bool(obj: Any, *, default: _T) -> bool | _T:
     if isinstance(obj, str):
         try:
             return _bool_map[obj.lower()]
@@ -106,7 +119,7 @@ def try_bool(obj, *, default):
             return default
 
 
-def try_name(obj, *, default):
+def try_name(obj: Any, *, default: _T) -> str | _T:
     name = try_attr(obj, "__qualname__", default=None) or try_attr(obj, "__name__", default=None)
     if not name:
         return default
@@ -143,22 +156,22 @@ def try_name(obj, *, default):
     return name
 
 
-def try_repr(obj, *, default):
+def try_repr(obj: Any, *, default: _T) -> str | _T:
     try:
         return repr(obj)
     except Exception:
         return default
 
 
-def try_str(obj, *, default):
+def try_str(obj: Any, *, default: _T) -> str | _T:
     try:
         return str(obj)
     except Exception:
         return default
 
 
-def wrap(wrapped):
-    def decorator(wrapper):
+def wrap(wrapped: Callable[_P, _T]) -> Callable[[Callable[_P, _T]], Callable[_P, _T]]:
+    def decorator(wrapper: Callable[_P, _T]) -> Callable[_P, _T]:
         def function(*args, **kwargs):
             try:
                 return wrapper(*args, **kwargs)
