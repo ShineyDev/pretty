@@ -76,7 +76,7 @@ pretty_theme: dict[str, Any] = {
 _format_pattern = re.compile("{((?:\"(?:[^\\\"]|(\\\\)*\\\")*\"|\'(?:[^\\\']|(\\\\)*\\\')*\'|[^{}])+)}")
 
 
-def format(string: str, **kwargs: Any):
+def format(string: str, **kwargs: Any) -> str:
     string = "\x0E".join(string.replace("{{", "\x0F").rsplit("}}"))
 
     result = list()
