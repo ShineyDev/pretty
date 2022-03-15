@@ -70,6 +70,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                    ] \
                ]
             A frame.
+
+
+        :yields: :class:`str`
         """
 
         raise NotImplementedError
