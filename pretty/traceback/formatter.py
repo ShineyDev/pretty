@@ -293,7 +293,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_exception(type, value)))
 
-    def write_frame(self, frame, *, stream=None):
+    def write_frame(self, frame, *, stream):
         """
         Writes a frame to a stream.
 
