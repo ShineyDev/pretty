@@ -245,7 +245,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         self.write_traceback(type, value, traceback, chain=chain, limit=limit, stream=stream or sys.stderr)
 
     @abc.abstractmethod
-    def walk_stack(self, obj, *, limit):
+    def walk_stack(self, obj, *, limit=None):
         """
         |iter|
 
