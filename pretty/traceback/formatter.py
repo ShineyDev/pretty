@@ -1,3 +1,13 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Iterator
+    from traceback import FrameSummary
+    from types import FrameType, TracebackType
+    from typing import Any, TextIO, Type
+    from typing_extensions import Self
+
 import abc
 import itertools
 import sys
@@ -16,7 +26,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     __slots__ = ()
 
     @abc.abstractmethod
-    def format_exception(self, type, value):
+    def format_exception(
+        self: Self,
+        type: Type[BaseException],
+        value: BaseException,
+    ) -> Iterator[str]:
         """
         |iter|
 
@@ -41,7 +55,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_frame(self, frame):
+    def format_frame(
+        self: Self,
+        frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
+    ) -> Iterator[str]:
         """
         |iter|
 
@@ -80,7 +97,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_stack(self, stack):
+    def format_stack(
+        self: Self,
+        stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
+    ) -> Iterator[str]:
         """
         |iter|
 
@@ -115,7 +135,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         yield
 
     @abc.abstractmethod
-    def format_traceback(self, type, value, traceback, *, chain=None, limit=None):
+    def format_traceback(
+        self: Self,
+        type: Type[BaseException],
+        value: BaseException,
+        traceback: TracebackType,
+        *,
+        chain: bool | None = None,
+        limit: int | None = None,
+    ) -> Iterator[str]:
         """
         |iter|
 
@@ -145,7 +173,13 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def print_exception(self, type, value, *, stream=None):
+    def print_exception(
+        self: Self,
+        type: Type[BaseException],
+        value: BaseException,
+        *,
+        stream: TextIO | None = None,
+    ) -> None:
         """
         Prints an exception to :data:`~sys.stderr`.
 
@@ -161,7 +195,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_exception(type, value, stream=stream or sys.stderr)
 
-    def print_frame(self, frame, *, stream=None):
+    def print_frame(
+        self: Self,
+        frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
+        *,
+        stream: TextIO | None = None,
+    ) -> None:
         """
         Prints a frame to :data:`~sys.stderr`.
 
@@ -186,7 +225,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_frame(frame, stream=stream or sys.stderr)
 
-    def print_stack(self, stack, *, stream=None):
+    def print_stack(
+        self: Self,
+        stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
+        *,
+        stream: TextIO | None = None,
+    ) -> None:
         """
         Prints a stack to :data:`~sys.stderr`.
 
@@ -219,7 +263,16 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.write_stack(stack, stream=stream or sys.stderr)
 
-    def print_traceback(self, type, value, traceback, *, chain=None, limit=None, stream=None):
+    def print_traceback(
+        self: Self,
+        type: Type[BaseException],
+        value: BaseException,
+        traceback: TracebackType,
+        *,
+        chain: bool | None = None,
+        limit: int | None = None,
+        stream: TextIO | None = None,
+    ) -> None:
         """
         Prints a traceback to :data:`~sys.stderr`.
 
@@ -245,7 +298,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         self.write_traceback(type, value, traceback, chain=chain, limit=limit, stream=stream or sys.stderr)
 
     @abc.abstractmethod
-    def walk_stack(self, obj, *, limit=None):
+    def walk_stack(
+        self: Self,
+        obj: FrameType | TracebackType,
+        *,
+        limit: int | None = None,
+    ) -> Iterator[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]]:
         """
         |iter|
 
@@ -277,7 +335,13 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         yield
 
-    def write_exception(self, type, value, *, stream):
+    def write_exception(
+        self: Self,
+        type: Type[BaseException],
+        value: BaseException,
+        *,
+        stream: TextIO,
+    ) -> None:
         """
         Writes an exception to a stream.
 
@@ -293,7 +357,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_exception(type, value)))
 
-    def write_frame(self, frame, *, stream):
+    def write_frame(
+        self: Self,
+        frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
+        *,
+        stream: TextIO,
+    ) -> None:
         """
         Writes a frame to a stream.
 
@@ -318,7 +387,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_frame(frame)))
 
-    def write_stack(self, stack, *, stream):
+    def write_stack(
+        self: Self,
+        stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
+        *,
+        stream: TextIO,
+    ) -> None:
         """
         Writes a stack to a stream.
 
@@ -345,7 +419,16 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_stack(stack)))
 
-    def write_traceback(self, type, value, traceback, *, stream, chain=None, limit=None):
+    def write_traceback(
+        self: Self,
+        type: Type[BaseException],
+        value: BaseException,
+        traceback: TracebackType,
+        *,
+        stream: TextIO,
+        chain: bool = None,
+        limit: int = None,
+    ) -> None:
         """
         Writes a traceback to a stream.
 
@@ -562,7 +645,11 @@ class DefaultTracebackFormatter(TracebackFormatter):
     recursion_message_format = "[Previous line repeated {times} more time{'' if times == 1 else 's'}]"
     traceback_header = "Traceback (most recent call last):"
 
-    def format_exception(self, type, value):
+    def format_exception(
+        self: Self,
+        type: Type[BaseException],
+        value: BaseException,
+    ) -> Iterator[str]:
         type_name = utils.try_name(type)
         value_str = utils.try_str(value)
 
@@ -578,7 +665,10 @@ class DefaultTracebackFormatter(TracebackFormatter):
                 for line in value.__note__.splitlines():
                     yield f"{line}\n"
 
-    def format_stack(self, stack):
+    def format_stack(
+        self: Self,
+        stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
+    ) -> Iterator[str]:
         last_filename = None
         last_lineno = None
         last_name = None
@@ -615,7 +705,16 @@ class DefaultTracebackFormatter(TracebackFormatter):
             message = utils.format(self.recursion_message_format, times=recursion_times - self.recursion_cutoff)
             yield f"{message}\n"
 
-    def format_traceback(self, type, value, traceback, *, chain=None, limit=None, seen=None):
+    def format_traceback(
+        self: Self,
+        type: Type[BaseException],
+        value: BaseException,
+        traceback: TracebackType,
+        *,
+        chain: bool | None = None,
+        limit: int | None = None,
+        seen: set | None = None,
+    ) -> Iterator[str]:
         if chain is None:
             chain = True
 
@@ -649,7 +748,12 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         yield from self.format_exception(type, value)
 
-    def walk_stack(self, obj, *, limit=None):
+    def walk_stack(
+        self: Self,
+        obj: FrameType | TracebackType,
+        *,
+        limit: int | None = None,
+    ) -> Iterator[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]]:
         if isinstance(obj, types.TracebackType):
             limit = limit or getattr(sys, "tracebacklimit", None)
             if limit < 0:
@@ -706,7 +810,11 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
 
     __slots__ = ("theme",)
 
-    def __init__(self, *, theme=None):
+    def __init__(
+        self: Self,
+        *,
+        theme: dict[str, Any] | None = None,
+    ) -> None:
         self.theme = theme or utils.pretty_theme
 
 
