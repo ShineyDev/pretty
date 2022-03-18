@@ -102,7 +102,7 @@ setuptools.setup(
     license="Apache Software License",
     name="pretty",
     packages=packages,
-    python_requires=">=3.6.0",
+    python_requires=">=3.8.0",
     url="https://github.com/ShineyDev/pretty",
     version=version,
 )
