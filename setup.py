@@ -69,7 +69,7 @@ packages = [
     "pretty.traceback",
 ]
 
-_version_regex = r"^version = ('|\")((?:[0-9]+\.)*[0-9]+(?:\.?([a-z]+)(?:\.?[0-9])?)?)\1$"
+_version_regex = r"^version(?:\s*:\s*str)?\s*=\s*('|\")((?:[0-9]+\.)*[0-9]+(?:\.?([a-z]+)(?:\.?[0-9])?)?)\1$"
 
 with open("pretty/__init__.py") as stream:
     match = re.search(_version_regex, stream.read(), re.MULTILINE)
