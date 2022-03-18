@@ -73,7 +73,7 @@ pretty_theme: dict[str, Any] = {
 }
 
 
-_format_pattern = re.compile("{((?:\"(?:[^\\\"]|(\\\\)*\\\")*\"|\'(?:[^\\\']|(\\\\)*\\\')*\'|[^{}])+)}")
+_format_pattern = re.compile("{((?:\"(?:[^\\\"]|(\\\\)*\\\")*\"|'(?:[^\\']|(\\\\)*\\')*'|[^{}])+)}")
 
 
 def format(string: str, **kwargs: Any) -> str:
