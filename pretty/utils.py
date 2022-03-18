@@ -83,7 +83,7 @@ def format(string: str, **kwargs: Any) -> str:
 
     index = 0
     for match in re.finditer(_format_pattern, string):
-        result.append(string[index:match.start(0)])
+        result.append(string[index : match.start(0)])
         result.append(str(eval(match.group(1), None, kwargs)))
         index = match.end(0)
 

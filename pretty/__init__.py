@@ -19,6 +19,7 @@ class _VersionInfo(NamedTuple):
     release: str
     serial: int
 
+
 version: str = "2.0.0a"
 version_info: _VersionInfo = _VersionInfo(2, 0, 0, "alpha", 0)
 
