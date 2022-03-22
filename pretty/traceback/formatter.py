@@ -28,8 +28,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def format_exception(
         self: Self,
-        type: Type[BaseException],
-        value: BaseException,
+        type: Type[BaseException] | Type[None],
+        value: BaseException | None,
     ) -> Iterator[str]:
         """
         |iter|
@@ -137,9 +137,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def format_traceback(
         self: Self,
-        type: Type[BaseException],
-        value: BaseException,
-        traceback: TracebackType,
+        type: Type[BaseException] | Type[None],
+        value: BaseException | None,
+        traceback: TracebackType | None,
         *,
         chain: bool | None = None,
         limit: int | None = None,
@@ -175,8 +175,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_exception(
         self: Self,
-        type: Type[BaseException],
-        value: BaseException,
+        type: Type[BaseException] | Type[None],
+        value: BaseException | None,
         *,
         stream: TextIO | None = None,
     ) -> None:
@@ -265,9 +265,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_traceback(
         self: Self,
-        type: Type[BaseException],
-        value: BaseException,
-        traceback: TracebackType,
+        type: Type[BaseException] | Type[None],
+        value: BaseException | None,
+        traceback: TracebackType | None,
         *,
         chain: bool | None = None,
         limit: int | None = None,
@@ -303,7 +303,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         obj: FrameType | TracebackType,
         *,
         limit: int | None = None,
-    ) -> Iterator[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]]:
+    ) -> Iterator[tuple[FrameType, tuple[int, int | None, int | None, int | None]]]:
         """
         |iter|
 
@@ -337,8 +337,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def write_exception(
         self: Self,
-        type: Type[BaseException],
-        value: BaseException,
+        type: Type[BaseException] | Type[None],
+        value: BaseException | None,
         *,
         stream: TextIO,
     ) -> None:
@@ -421,13 +421,13 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def write_traceback(
         self: Self,
-        type: Type[BaseException],
-        value: BaseException,
-        traceback: TracebackType,
+        type: Type[BaseException] | Type[None],
+        value: BaseException | None,
+        traceback: TracebackType | None,
         *,
         stream: TextIO,
-        chain: bool = None,
-        limit: int = None,
+        chain: bool | None = None,
+        limit: int | None = None,
     ) -> None:
         """
         Writes a traceback to a stream.
@@ -498,7 +498,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     if sys.version_info >= (3, 10):
 
         @utils.wrap(traceback.format_exception)
-        def _format_exception(self, exc, value=traceback._sentinel, tb=traceback._sentinel, limit=None, chain=True):
+        def _format_exception(
+            self,
+            exc,
+            value=traceback._sentinel,  # type: ignore
+            tb=traceback._sentinel,  # type: ignore
+            limit=None,
+            chain=True,
+        ):
             if (value is traceback._sentinel) != (tb is traceback._sentinel):
                 raise ValueError("Both or neither of value and tb must be given")
             elif value is traceback._sentinel:
@@ -514,7 +521,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
 
         @utils.wrap(traceback.format_exception_only)
-        def _format_exception_only(self, exc, value=traceback._sentinel):
+        def _format_exception_only(
+            self,
+            exc,
+            value=traceback._sentinel,  # type: ignore
+        ):
             if value is traceback._sentinel:
                 if exc is None:
                     value = None
@@ -558,7 +569,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     if sys.version_info >= (3, 10):
 
         @utils.wrap(traceback.print_exception)
-        def _print_exception(self, exc, value=traceback._sentinel, tb=traceback._sentinel, limit=None, file=None, chain=True):
+        def _print_exception(
+            self,
+            exc,
+            value=traceback._sentinel,  # type: ignore
+            tb=traceback._sentinel,  # type: ignore
+            limit=None,
+            file=None,
+            chain=True,
+        ):
             if (value is traceback._sentinel) != (tb is traceback._sentinel):
                 raise ValueError("Both or neither of value and tb must be given")
             elif value is traceback._sentinel:
@@ -603,9 +622,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @utils.wrap(traceback.walk_stack)
     def _walk_stack(self, f):
         if sys.version_info >= (3, 11):
-            f = f or sys._getframe().f_back.f_back.f_back.f_back
+            f = f or sys._getframe().f_back.f_back.f_back.f_back  # type: ignore[reportOptionalMemberAccess]
         else:
-            f = f or sys._getframe().f_back.f_back
+            f = f or sys._getframe().f_back.f_back  # type: ignore[reportOptionalMemberAccess]
 
         for frame, position in self.walk_stack(f):
             yield frame, position[0]
@@ -647,11 +666,11 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     def format_exception(
         self: Self,
-        type: Type[BaseException],
-        value: BaseException,
+        type: Type[BaseException] | Type[None],
+        value: BaseException | None,
     ) -> Iterator[str]:
-        type_name = utils.try_name(type)
-        value_str = utils.try_str(value)
+        type_name = utils.try_name(type, default="<type.__name__ failed>")
+        value_str = utils.try_str(value, default="<value.__str__ failed>")
 
         if value_str:
             line = f"{type_name}: {value_str}\n"
@@ -707,9 +726,9 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     def format_traceback(
         self: Self,
-        type: Type[BaseException],
-        value: BaseException,
-        traceback: TracebackType,
+        type: Type[BaseException] | Type[None],
+        value: BaseException | None,
+        traceback: TracebackType | None,
         *,
         chain: bool | None = None,
         limit: int | None = None,
@@ -753,16 +772,18 @@ class DefaultTracebackFormatter(TracebackFormatter):
         obj: FrameType | TracebackType,
         *,
         limit: int | None = None,
-    ) -> Iterator[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]]:
+    ) -> Iterator[tuple[FrameType, tuple[int, int | None, int | None, int | None]]]:
         if isinstance(obj, types.TracebackType):
             limit = limit or getattr(sys, "tracebacklimit", None)
-            if limit < 0:
+            if limit and limit < 0:
                 limit = 0
         elif limit:
             limit = abs(limit)
 
         if isinstance(obj, types.FrameType):
             while obj is not None and limit != 0:
+                obj: types.FrameType
+
                 yield obj, (obj.f_lineno, None, None, None)
                 obj = obj.f_back
 
@@ -770,6 +791,8 @@ class DefaultTracebackFormatter(TracebackFormatter):
                     limit -= 1
         elif isinstance(obj, types.TracebackType):
             while obj is not None and limit != 0:
+                obj: types.TracebackType
+
                 if sys.version_info >= (3, 11) and obj.tb_lasti >= 0:
                     yield obj.tb_frame, next(itertools.islice(obj.tb_frame.f_code.co_positions(), obj.tb_lasti // 2, None))
                 else:

@@ -27,7 +27,7 @@ def hook(cls: Callable[_P, _TTF] = ..., *args: _P.args, **kwargs: _P.kwargs) -> 
     ...
 
 
-def hook(cls: Callable[_P, _TTF] = None, *args: _P.args, **kwargs: _P.kwargs) -> _TTF | PrettyTracebackFormatter:
+def hook(cls: Callable[_P, _TTF] | None = None, *args: _P.args, **kwargs: _P.kwargs) -> _TTF | PrettyTracebackFormatter:
     """
     Hooks pretty.traceback into the current Python session.
 
@@ -76,22 +76,22 @@ def hook(cls: Callable[_P, _TTF] = None, *args: _P.args, **kwargs: _P.kwargs) ->
 
     formatter = cls and cls(*args, **kwargs) or PrettyTracebackFormatter(*args, **kwargs)
 
-    traceback.extract_stack = formatter._extract_stack
-    traceback.extract_tb = formatter._extract_tb
-    traceback.format_exc = formatter._format_exc
-    traceback.format_exception = formatter._format_exception
-    traceback.format_exception_only = formatter._format_exception_only
-    traceback.format_list = formatter._format_list
-    traceback.format_stack = formatter._format_stack
-    traceback.format_tb = formatter._format_tb
-    traceback.print_exc = formatter._print_exc
-    traceback.print_exception = formatter._print_exception
-    traceback.print_last = formatter._print_last
-    traceback.print_list = formatter._print_list
-    traceback.print_stack = formatter._print_stack
-    traceback.print_tb = formatter._print_tb
-    traceback.walk_stack = formatter._walk_stack
-    traceback.walk_tb = formatter._walk_tb
+    traceback.extract_stack = formatter._extract_stack  # type: ignore
+    traceback.extract_tb = formatter._extract_tb  # type: ignore
+    traceback.format_exc = formatter._format_exc  # type: ignore
+    traceback.format_exception = formatter._format_exception  # type: ignore
+    traceback.format_exception_only = formatter._format_exception_only  # type: ignore
+    traceback.format_list = formatter._format_list  # type: ignore
+    traceback.format_stack = formatter._format_stack  # type: ignore
+    traceback.format_tb = formatter._format_tb  # type: ignore
+    traceback.print_exc = formatter._print_exc  # type: ignore
+    traceback.print_exception = formatter._print_exception  # type: ignore
+    traceback.print_last = formatter._print_last  # type: ignore
+    traceback.print_list = formatter._print_list  # type: ignore
+    traceback.print_stack = formatter._print_stack  # type: ignore
+    traceback.print_tb = formatter._print_tb  # type: ignore
+    traceback.walk_stack = formatter._walk_stack  # type: ignore
+    traceback.walk_tb = formatter._walk_tb  # type: ignore
 
     def excepthook(*args):
         formatter.print_exception(*args)
