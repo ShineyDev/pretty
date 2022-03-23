@@ -782,8 +782,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         if isinstance(obj, types.FrameType):
             while obj is not None and limit != 0:
-                obj: types.FrameType
-
                 yield obj, (obj.f_lineno, None, None, None)
                 obj = obj.f_back
 
@@ -791,8 +789,6 @@ class DefaultTracebackFormatter(TracebackFormatter):
                     limit -= 1
         elif isinstance(obj, types.TracebackType):
             while obj is not None and limit != 0:
-                obj: types.TracebackType
-
                 if sys.version_info >= (3, 11) and obj.tb_lasti >= 0:
                     yield obj.tb_frame, next(itertools.islice(obj.tb_frame.f_code.co_positions(), obj.tb_lasti // 2, None))
                 else:
