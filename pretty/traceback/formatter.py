@@ -450,7 +450,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_traceback(type, value, traceback, chain=chain, limit=limit)))
 
-    @utils.wrap(traceback.extract_stack)
+    @utils.wrap(traceback.extract_stack)  # type: ignore
     def _extract_stack(self, f=None, limit=None):
         generator = self.walk_stack(f or sys._getframe().f_back, limit=limit)
 
@@ -470,7 +470,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         return stack
 
-    @utils.wrap(traceback.extract_tb)
+    @utils.wrap(traceback.extract_tb)  # type: ignore
     def _extract_tb(self, tb, limit=None):
         generator = self.walk_stack(tb, limit=limit)
 
@@ -489,7 +489,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         return stack
 
-    @utils.wrap(traceback.format_exc)
+    @utils.wrap(traceback.format_exc)  # type: ignore
     def _format_exc(self, limit=None, chain=True):
         _, value, traceback = sys.exc_info()
 
@@ -497,7 +497,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     if sys.version_info >= (3, 10):
 
-        @utils.wrap(traceback.format_exception)
+        @utils.wrap(traceback.format_exception)  # type: ignore
         def _format_exception(
             self,
             exc,
@@ -506,9 +506,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             limit=None,
             chain=True,
         ):
-            if (value is traceback._sentinel) != (tb is traceback._sentinel):
+            if (value is traceback._sentinel) != (tb is traceback._sentinel):  # type: ignore
                 raise ValueError("Both or neither of value and tb must be given")
-            elif value is traceback._sentinel:
+            elif value is traceback._sentinel:  # type: ignore
                 if exc is None:
                     value, tb = None, None
                 else:
@@ -520,13 +520,13 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
             return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
 
-        @utils.wrap(traceback.format_exception_only)
+        @utils.wrap(traceback.format_exception_only)  # type: ignore
         def _format_exception_only(
             self,
             exc,
             value=traceback._sentinel,  # type: ignore
         ):
-            if value is traceback._sentinel:
+            if value is traceback._sentinel:  # type: ignore
                 if exc is None:
                     value = None
                 else:
@@ -540,27 +540,27 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     else:
 
-        @utils.wrap(traceback.format_exception)
+        @utils.wrap(traceback.format_exception)  # type: ignore
         def _format_exception(self, etype, value, tb, limit=None, chain=True):
             return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
 
-        @utils.wrap(traceback.format_exception_only)
+        @utils.wrap(traceback.format_exception_only)  # type: ignore
         def _format_exception_only(self, etype, value):
             return list(self.format_exception(value.__class__, value))
 
-    @utils.wrap(traceback.format_list)
+    @utils.wrap(traceback.format_list)  # type: ignore
     def _format_list(self, extracted_list):
         return list(self.format_stack((traceback.FrameSummary(filename, lineno, name, line=line), (lineno, None, None, None)) for (filename, lineno, name, line) in extracted_list))
 
-    @utils.wrap(traceback.format_stack)
+    @utils.wrap(traceback.format_stack)  # type: ignore
     def _format_stack(self, f=None, limit=None):
         return list(self.format_stack(self.walk_stack(f or sys._getframe().f_back, limit=limit)))
 
-    @utils.wrap(traceback.format_tb)
+    @utils.wrap(traceback.format_tb)  # type: ignore
     def _format_tb(self, tb, limit=None):
         return list(self.format_stack(self.walk_stack(tb, limit=limit)))
 
-    @utils.wrap(traceback.print_exc)
+    @utils.wrap(traceback.print_exc)  # type: ignore
     def _print_exc(self, limit=None, file=None, chain=True):
         _, value, traceback = sys.exc_info()
 
@@ -568,7 +568,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     if sys.version_info >= (3, 10):
 
-        @utils.wrap(traceback.print_exception)
+        @utils.wrap(traceback.print_exception)  # type: ignore
         def _print_exception(
             self,
             exc,
@@ -578,9 +578,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             file=None,
             chain=True,
         ):
-            if (value is traceback._sentinel) != (tb is traceback._sentinel):
+            if (value is traceback._sentinel) != (tb is traceback._sentinel):  # type: ignore
                 raise ValueError("Both or neither of value and tb must be given")
-            elif value is traceback._sentinel:
+            elif value is traceback._sentinel:  # type: ignore
                 if exc is None:
                     value, tb = None, None
                 else:
@@ -594,11 +594,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     else:
 
-        @utils.wrap(traceback.print_exception)
+        @utils.wrap(traceback.print_exception)  # type: ignore
         def _print_exception(self, etype, value, tb, limit=None, file=None, chain=True):
             self.print_traceback(value.__class__, value, tb, chain=chain, limit=limit, stream=file)
 
-    @utils.wrap(traceback.print_last)
+    @utils.wrap(traceback.print_last)  # type: ignore
     def _print_last(self, limit=None, file=None, chain=True):
         if not hasattr(sys, "last_type"):
             raise ValueError("no last exception")
@@ -607,19 +607,19 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.print_traceback(value.__class__, value, traceback, chain=chain, limit=limit, stream=file)
 
-    @utils.wrap(traceback.print_list)
+    @utils.wrap(traceback.print_list)  # type: ignore
     def _print_list(self, extracted_list, file=None):
         self.print_stack(((traceback.FrameSummary(filename, lineno, name, line=line), (lineno, None, None, None)) for (filename, lineno, name, line) in extracted_list), stream=file)
 
-    @utils.wrap(traceback.print_stack)
+    @utils.wrap(traceback.print_stack)  # type: ignore
     def _print_stack(self, f=None, limit=None, file=None):
         self.print_stack(self.walk_stack(f or sys._getframe().f_back, limit=limit), stream=file)
 
-    @utils.wrap(traceback.print_tb)
+    @utils.wrap(traceback.print_tb)  # type: ignore
     def _print_tb(self, tb, limit=None, file=None):
         self.print_stack(self.walk_stack(tb, limit=limit), stream=file)
 
-    @utils.wrap(traceback.walk_stack)
+    @utils.wrap(traceback.walk_stack)  # type: ignore
     def _walk_stack(self, f):
         if sys.version_info >= (3, 11):
             f = f or sys._getframe().f_back.f_back.f_back.f_back  # type: ignore[reportOptionalMemberAccess]
@@ -629,7 +629,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         for frame, position in self.walk_stack(f):
             yield frame, position[0]
 
-    @utils.wrap(traceback.walk_tb)
+    @utils.wrap(traceback.walk_tb)  # type: ignore
     def _walk_tb(self, tb):
         for frame, position in self.walk_stack(tb):
             yield frame, position[0]
