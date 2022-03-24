@@ -14,6 +14,8 @@ if TYPE_CHECKING:
     _P = ParamSpec("_P")
     _T = TypeVar("_T")
 
+    _FT = TypeVar("_FT", bound=Callable[..., Any])
+
 
 # NOTE: SGR color values are HSV(x°, 30%, 100%) where;
 #
@@ -170,8 +172,8 @@ def try_str(obj: Any, *, default: _T) -> str | _T:
         return default
 
 
-def wrap(wrapped: Callable[_P, _T]) -> Callable[[Callable[_P, _T]], Callable[_P, _T]]:
-    def decorator(wrapper: Callable[_P, _T]) -> Callable[_P, _T]:
+def wrap(wrapped: _FT) -> Callable[[_FT], _FT]:
+    def decorator(wrapper: _FT) -> _FT:
         def function(*args, **kwargs):
             try:
                 return wrapper(*args, **kwargs)
@@ -186,7 +188,7 @@ def wrap(wrapped: Callable[_P, _T]) -> Callable[[Callable[_P, _T]], Callable[_P,
         function.__module__ = wrapped.__module__
         function.__wrapped__ = wrapped
 
-        return function
+        return function  # type: ignore
 
     return decorator
 
