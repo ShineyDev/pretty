@@ -11,7 +11,6 @@ import sys
 
 
 if TYPE_CHECKING:
-    _P = ParamSpec("_P")
     _T = TypeVar("_T")
 
     _FT = TypeVar("_FT", bound=Callable[..., Any])
