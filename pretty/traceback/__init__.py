@@ -101,7 +101,7 @@ def hook(cls: Callable[_P, _TTF] | None = None, *args: _P.args, **kwargs: _P.kwa
     return formatter
 
 
-__all__ = [
+__all__ = [  # pyright: ignore[reportUnsupportedDunderAll]
     *_formatter__all__,
     "hook",
 ]
