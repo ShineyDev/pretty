@@ -680,7 +680,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
         yield line
 
         if sys.version_info >= (3, 11):
-            if value.__note__:
+            if value and value.__note__:
                 for line in value.__note__.splitlines():
                     yield f"{line}\n"
 
