@@ -673,9 +673,9 @@ class DefaultTracebackFormatter(TracebackFormatter):
         value_str = utils.try_str(value, default="<value.__str__ failed>")
 
         if value_str:
-            line = f"{type_name}: {value_str}\n"
+            yield f"{type_name}: {value_str}\n"
         else:
-            line = f"{type_name}\n"
+            yield f"{type_name}\n"
 
         yield line
 
@@ -705,8 +705,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
             if current_filename != last_filename or current_lineno != last_lineno or current_name != last_name:
                 if recursion_times > self.recursion_cutoff:
-                    message = utils.format(self.recursion_message_format, times=recursion_times - self.recursion_cutoff)
-                    yield f"{message}\n"
+                    yield utils.format(f"{self.recursion_message_format}\n", times=recursion_times - self.recursion_cutoff)
 
                 last_filename = current_filename
                 last_lineno = current_lineno
@@ -721,8 +720,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
             yield from self.format_frame((frame, position))
 
         if recursion_times > self.recursion_cutoff:
-            message = utils.format(self.recursion_message_format, times=recursion_times - self.recursion_cutoff)
-            yield f"{message}\n"
+            yield utils.format(f"{self.recursion_message_format}\n", times=recursion_times - self.recursion_cutoff)
 
     def format_traceback(
         self: Self,
@@ -745,22 +743,17 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
             if cause is not None and id(cause) not in seen:
                 yield from self.format_traceback(cause.__class__, cause, cause.__traceback__, chain=chain, limit=limit, seen=seen)
-
-                header = self.cause_header
-                yield f"\n{header}\n\n"
+                yield f"\n{self.cause_header}\n\n"
 
             context = value.__context__
             context_suppressed = value.__suppress_context__
 
             if cause is None and context is not None and not context_suppressed and id(context) not in seen:
                 yield from self.format_traceback(context.__class__, context, context.__traceback__, chain=chain, limit=limit, seen=seen)
-
-                header = self.context_header
-                yield f"\n{header}\n\n"
+                yield f"\n{self.context_header}\n\n"
 
         if traceback is not None:
-            header = self.traceback_header
-            yield f"{header}\n\n"
+            yield f"{self.traceback_header}\n\n"
 
             for line in self.format_stack(self.walk_stack(traceback, limit=limit)):
                 yield textwrap.indent(line, "  ")
