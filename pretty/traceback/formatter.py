@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 
 import abc
 import itertools
+import linecache
 import sys
 import textwrap
 import traceback
@@ -660,6 +661,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     cause_header = "The above exception was the direct cause of the following exception:"
     context_header = "During handling of the above exception, another exception occurred:"
+    location_message_format = "File \"{filename}\", line {lineno}, in {name}"  # fmt: skip
     recursion_cutoff = 3
     recursion_message_format = "[Previous line repeated {times} more time{'' if times == 1 else 's'}]"
     traceback_header = "Traceback (most recent call last):"
@@ -681,6 +683,42 @@ class DefaultTracebackFormatter(TracebackFormatter):
             if value and value.__note__:
                 for line in value.__note__.splitlines():
                     yield f"{line}\n"
+
+    def format_frame(
+        self: Self,
+        frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]
+    ) -> Iterator[str]:
+        frame, position = frame
+
+        if isinstance(frame, types.FrameType):
+            filename = frame.f_code.co_filename
+            name = frame.f_code.co_lineno
+        else:
+            filename = frame.filename
+            name = frame.name
+
+        lineno = position[0]
+
+        yield utils.format(f"{self.location_format}\n", filename=filename, lineno=lineno, name=name)
+
+        if isinstance(frame, types.FrameType):
+            line = linecache.getline(filename, lineno)
+        else:
+            line = frame.line
+
+        yield line
+
+        if isinstance(frame, types.FrameType):
+            locals = frame.f_locals
+        else:
+            locals = frame.locals
+
+        if locals:
+            for (key, value) in sorted(locals.items()):
+                if isinstance(frame, types.FrameType):
+                    value = utils.try_repr(value, default="<value.__repr__ failed>")
+
+                yield f"  {key} = {value}\n"
 
     def format_stack(
         self: Self,
