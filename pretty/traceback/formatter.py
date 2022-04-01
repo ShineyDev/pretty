@@ -661,7 +661,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     cause_header = "The above exception was the direct cause of the following exception:"
     context_header = "During handling of the above exception, another exception occurred:"
-    location_message_format = "File \"{filename}\", line {lineno}, in {name}"  # fmt: skip
+    location_format = "File \"{filename}\", line {lineno}, in {name}"  # fmt: skip
     recursion_cutoff = 3
     recursion_message_format = "[Previous line repeated {times} more time{'' if times == 1 else 's'}]"
     traceback_header = "Traceback (most recent call last):"
