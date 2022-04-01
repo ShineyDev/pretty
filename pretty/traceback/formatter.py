@@ -789,7 +789,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
                 yield f"\n{self.context_header}\n\n"
 
         if traceback is not None:
-            yield f"{self.traceback_header}\n\n"
+            yield f"{self.traceback_header}\n"
 
             for line in self.format_stack(self.walk_stack(traceback, limit=limit)):
                 yield textwrap.indent(line, "  ")
