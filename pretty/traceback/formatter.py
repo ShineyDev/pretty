@@ -692,7 +692,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         if isinstance(frame, types.FrameType):
             filename = frame.f_code.co_filename
-            name = frame.f_code.co_lineno
+            name = frame.f_code.co_name
         else:
             filename = frame.filename
             name = frame.name
