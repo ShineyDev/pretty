@@ -1,7 +1,7 @@
 pretty
 ======
 
-A Python module for prettier (and far more useful) stack traces.
+A Python library for prettier output and practical APIs.
 
 
 .. toctree::

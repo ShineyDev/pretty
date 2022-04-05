@@ -96,7 +96,7 @@ if match.group(3) is not None:
 setuptools.setup(
     author="ShineyDev",
     cmdclass=cmdclass,
-    description="A Python module for prettier (and far more useful) stack traces.",
+    description="A Python library for prettier output and practical APIs.",
     extras_require=extras_require,
     include_package_data=True,
     license="Apache Software License",

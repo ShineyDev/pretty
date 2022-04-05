@@ -1,7 +1,7 @@
 pretty.traceback
 ================
 
-A Python submodule for prettier (and far more useful) stack traces.
+A Python module for prettier (and far more useful) stack traces.
 
 
 .. toctree::
