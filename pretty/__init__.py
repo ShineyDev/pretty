@@ -9,9 +9,6 @@ from pretty import utils
 from pretty import traceback
 
 
-__all__ = []
-
-
 class _VersionInfo(NamedTuple):
     major: int
     minor: int
@@ -60,3 +57,6 @@ def main() -> None:
             traceback.hook(theme=theme)
         except Exception as e:
             _fail(e, "failed to hook pretty.traceback.")
+
+
+__all__ = []
