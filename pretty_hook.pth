@@ -1,1 +1,1 @@
-import pretty; pretty.main()
+import pretty; pretty._main_catchall()

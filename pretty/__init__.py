@@ -21,7 +21,20 @@ version: str = "2.0.0a"
 version_info: _VersionInfo = _VersionInfo(2, 0, 0, "alpha", 0)
 
 
-def main() -> None:
+def _fail(e, m):
+    if not hasattr(sys, "last_value"):
+        try:
+            sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
+        except Exception:
+            pass
+        else:
+            print(f"ERROR:pretty:{m}. see traceback.print_last().")
+            return
+
+    print(f"ERROR:pretty:{m}.")
+
+
+def _main() -> None:
     # NOTE: This function is called at every Python startup. Its impact
     #       should thus be kept to a minimum.
     #
@@ -32,13 +45,6 @@ def main() -> None:
     if enable_all is False:
         return
 
-    def _fail(e, m):
-        if hasattr(sys, "last_value"):
-            print(f"ERROR:pretty:{m}")
-        else:
-            print(f"ERROR:pretty:{m} see traceback.print_last().")
-            sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
-
     theme = utils.pretty_theme.copy()
 
     env_theme = os.environ.get("PYTHONPRETTYTHEME")
@@ -46,7 +52,7 @@ def main() -> None:
         try:
             user_theme = json.loads(env_theme)
         except json.JSONDecodeError as e:
-            _fail(e, "failed to load PYTHONPRETTYTHEME, falling back to default.")
+            _fail(e, "failed to load PYTHONPRETTYTHEME, falling back to default")
         else:
             theme.update(user_theme)
 
@@ -56,7 +62,14 @@ def main() -> None:
         try:
             traceback.hook(theme=theme)
         except Exception as e:
-            _fail(e, "failed to hook pretty.traceback.")
+            _fail(e, "failed to hook pretty.traceback")
+
+
+def _main_catchall() -> None:
+    try:
+        _main()
+    except Exception as e:
+        _fail(e, "failed to initialize pretty")
 
 
 __all__ = []
