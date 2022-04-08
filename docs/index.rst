@@ -1,5 +1,5 @@
-pretty
-======
+`ShineyDev/pretty <https://github.com/ShineyDev/pretty>`_
+=========================================================
 
 A Python library for prettier output and practical APIs.
 
