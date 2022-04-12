@@ -8,7 +8,6 @@ A Python module for prettier (and far more useful) stack traces.
     :maxdepth: 1
 
     hook
-
     formatter/abstract
     formatter/default
     formatter/pretty
@@ -16,6 +15,7 @@ A Python module for prettier (and far more useful) stack traces.
 
 Still can't find what you're looking for?
 
-* :doc:`Go Back </index>`
-* :ref:`genindex`
-* :ref:`search`
+- :doc:`Home </index>`
+- :ref:`Index <genindex>`
+- :ref:`Search <search>`
+- `Source <https://github.com/ShineyDev/pretty>`_
