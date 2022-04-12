@@ -14,6 +14,7 @@ A Python library for prettier output and practical APIs.
     :caption: Project
     :maxdepth: 1
 
+    meta/implementation
     meta/versioning
 
 
