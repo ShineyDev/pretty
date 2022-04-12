@@ -38,7 +38,7 @@ jobs:
         path: ${{ github.event.repository.name }}
 
     - name: Checkout ${{ env.PUSH_REPOSITORY }}
-      if: ${{ github.event_name != 'pull_request' }}
+      if: github.repository_owner == 'ShineyDev' && github.event_name != 'pull_request'
       uses: actions/checkout@v2
       with:
         path: docs
@@ -52,18 +52,18 @@ jobs:
 
     - name: Install
       working-directory: ./${{ github.event.repository.name }}
-      run: |
+      run: |-
         python -m pip install --upgrade pip
         python -m pip install --upgrade ${{ env.PULL_INSTALL }}
 
     - name: Build
-      if: ${{ github.event_name == 'pull_request' }}
-      run: |
+      if: github.event_name == 'pull_request' || ( github.repository_owner != 'ShineyDev' && github.event_name == 'push' )
+      run: |-
         python -m sphinx ${{ env.SPHINX_OPTIONS }} ./${{ github.event.repository.name }}/${{ env.PULL_PATH }} ./${{ github.event.repository.name }}/${{ env.PULL_PATH }}/build
 
     - name: Build
-      if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-      run: |
+      if: github.repository_owner == 'ShineyDev' && ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' )
+      run: |-
         if [ -d ./docs/${{ env.PUSH_ROOT_PATH }}/${{ env.PUSH_LATEST_PATH }} ]; then rm -r ./docs/${{ env.PUSH_ROOT_PATH }}/${{ env.PUSH_LATEST_PATH }}; fi
         python -m sphinx ${{ env.SPHINX_OPTIONS }} ./${{ github.event.repository.name }}/${{ env.PULL_PATH }} ./docs/${{ env.PUSH_ROOT_PATH }}/${{ env.PUSH_LATEST_PATH }}
         x=${{ env.PUSH_ROOT_PATH }}/${{ env.PUSH_LATEST_PATH }}; y=$x; while [ $y != ${y%/*} ]; do y=${y%/*}; echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url='"${x#$y/}"'" /></head><body></body></html>' > ./docs/$y/index.html; done
@@ -72,8 +72,8 @@ jobs:
         mv ./docs/temp.json ./docs/index.json
 
     - name: Build
-      if: ${{ github.event_name == 'release' }}
-      run: |
+      if: github.repository_owner == 'ShineyDev' && github.event_name == 'release'
+      run: |-
         if [ -d ./docs/${{ env.PUSH_ROOT_PATH }}/${{ github.event.release.tag_name }} ]; then rm -r ./docs/${{ env.PUSH_ROOT_PATH }}/${{ github.event.release.tag_name }}; fi
         python -m sphinx ${{ env.SPHINX_OPTIONS }} ./${{ github.event.repository.name }}/${{ env.PULL_PATH }} ./docs/${{ env.PUSH_ROOT_PATH }}/${{ github.event.release.tag_name }}
         if [ -h ./docs/${{ env.PUSH_ROOT_PATH }}/${{ env.PUSH_STABLE_PATH }} ]; then rm ./docs/${{ env.PUSH_ROOT_PATH }}/${{ env.PUSH_STABLE_PATH }}; fi
@@ -83,10 +83,10 @@ jobs:
         mv ./docs/temp.json ./docs/index.json
 
     - name: Push
-      if: ${{ github.event_name != 'pull_request' }}
+      if: github.repository_owner == 'ShineyDev' && github.event_name != 'pull_request'
       continue-on-error: true
       working-directory: docs
-      run: |
+      run: |-
         git config user.name ${{ env.AUTH_LOGIN }}
         git config user.email ${{ env.AUTH_EMAIL }}
         git add .
