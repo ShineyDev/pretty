@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from typing import Any, TypeVar
     from typing_extensions import ParamSpec
 
+import os
 import re
 import sys
 
@@ -52,6 +53,7 @@ pretty_theme: dict[str, Any] = {
     "ast_operator_sgr": ("38;2;128;128;128", "39"),
     # customizing character display
     "char_cap": "\u2514",
+    "char_pathnamesep": os.sep,
     "char_pipe": "\u2502",
     "char_quote": "\u0022",
     # colorizing literal types
