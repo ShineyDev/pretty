@@ -9,25 +9,23 @@ Glossary
         :term:`on or off <boolean value>` the
         :term:`main hook <pretty_hook.pth>` for pretty.
 
-        .. tip::
+        When this environment variable is set to a
+        :term:`truthy value <boolean value>`, all pretty modules
+        will be hooked, unless the module is explicitly disabled
+        with its respective
+        :term:`PYTHONPRETTY... <PYTHONPRETTYTRACEBACK>` environment
+        variable.
 
-            When this environment variable is set to a
-            :term:`truthy value <boolean value>`, all pretty modules
-            will be hooked, unless the module is explicitly disabled
-            with its respective
-            :term:`PYTHONPRETTY... <PYTHONPRETTYTRACEBACK>` environment
-            variable.
+        When this environment variable is set to a
+        :term:`falsey value <boolean value>`, no pretty module
+        will be hooked, regardless of the value in its respective
+        :term:`PYTHONPRETTY... <PYTHONPRETTYTRACEBACK>` environment
+        variable.
 
-            When this environment variable is set to a
-            :term:`falsey value <boolean value>`, no pretty module
-            will be hooked, regardless of the value in its respective
-            :term:`PYTHONPRETTY... <PYTHONPRETTYTRACEBACK>` environment
-            variable.
-
-            When this environment variable is unset, only the
-            :term:`state <boolean value>` of each
-            :term:`PYTHONPRETTY... <PYTHONPRETTYTRACEBACK>` environment
-            variable is used.
+        When this environment variable is unset, only the
+        :term:`state <boolean value>` of each
+        :term:`PYTHONPRETTY... <PYTHONPRETTYTRACEBACK>` environment
+        variable is used.
 
     PYTHONPRETTYTHEME
 
@@ -35,14 +33,12 @@ Glossary
         :term:`theme <theme value>` by which a :term:`formatter` might
         format its output.
 
-        .. tip::
+        When this environment variable is set, its value will merge
+        with the default pretty theme via
+        ``default.update(custom)``.
 
-            When this environment variable is set, its value will merge
-            with the default pretty theme via
-            ``default.update(custom)``.
-
-            When this environment variable is unset, only the default
-            pretty theme is used.
+        When this environment variable is unset, only the default
+        pretty theme is used.
 
     PYTHONPRETTYTRACEBACK
 
@@ -50,10 +46,8 @@ Glossary
         :term:`on or off <boolean value>` the
         :func:`~pretty.traceback.hook` for pretty.traceback.
 
-		.. tip::
-
-            When this environment variable is unset,
-            :func:`~pretty.traceback.hook` is not called.
+        When this environment variable is unset,
+        :func:`~pretty.traceback.hook` is not called.
 
         .. important::
 
@@ -84,7 +78,7 @@ Glossary
         - ``no``
         - ``n``
 
-        .. note::
+        .. important::
 
             If the value of a boolean environment variable does not
             match any of the above values, it will fall back to its
