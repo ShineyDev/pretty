@@ -55,6 +55,12 @@ Glossary
             When this environment variable is unset,
             :func:`~pretty.traceback.hook` is not called.
 
+        .. important::
+
+            This environment variable is ignored when the
+            :term:`PYTHONPRETTY` environment variable is set to a
+            :term:`falsey value <boolean value>`.
+
     boolean value
 
         An environment variable with this value type will correspond to
