@@ -32,9 +32,17 @@ Glossary
     PYTHONPRETTYTHEME
 
         This environment variable can contain a
-        :term:`theme <theme value>` by which a
-        :class:`~pretty.traceback.TracebackFormatter` might format its
-        output.
+        :term:`theme <theme value>` by which a :term:`formatter` might
+        format its output.
+
+        .. tip::
+
+            When this environment variable is set, its value will merge
+            with the default pretty theme via
+            ``default.update(custom)``.
+
+            When this environment variable is unset, only the default
+            pretty theme is used.
 
     PYTHONPRETTYTRACEBACK
 
