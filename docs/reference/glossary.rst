@@ -84,6 +84,12 @@ Glossary
         - ``no``
         - ``n``
 
+        .. note::
+
+            If the value of a boolean environment variable does not
+            match any of the above values, it will fall back to its
+            unset behavior.
+
     theme value
 
         An environment variable with this value type will correspond to
