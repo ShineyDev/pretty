@@ -50,6 +50,11 @@ Glossary
         :term:`on or off <boolean value>` the
         :func:`~pretty.traceback.hook` for pretty.traceback.
 
+		.. tip::
+
+            When this environment variable is unset,
+            :func:`~pretty.traceback.hook` is not called.
+
     boolean value
 
         An environment variable with this value type will correspond to
