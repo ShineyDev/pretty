@@ -21,13 +21,17 @@ Glossary
 
     PYTHONPRETTYTHEME
 
-        This environment variable can contain a :term:`theme <theme value>` by which a formatter
+        This environment variable can contain a :term:`theme <json value>` by which a formatter
         might format format its output.
 
         When this environment variable is set, its value will merge with the default pretty theme
         via ``default.update(custom)``.
 
         When this environment variable is unset, only the default pretty theme is used.
+
+		You can find the meanings of the theme keys in the following mapping.
+
+		.. TODO
 
     PYTHONPRETTYTRACEBACK
 
@@ -64,11 +68,10 @@ Glossary
         When the value of a boolean environment variable does not match any of the above
         values, it will fall back to its unset behavior.
 
-    theme value
+    json value
 
-        An environment variable with this value type will correspond to a theme dictionary.
-
-        .. TODO
+        An environment variable with this value type corresponds to a JSON-encoded key-value
+        mapping.
 
     pretty_hook.pth
 
