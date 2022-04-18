@@ -29,18 +29,22 @@ Glossary
 
         When this environment variable is unset, only the default pretty theme is used.
 
-		You can find the meanings of the theme keys in the following mapping.
+        You can find the meanings of the theme keys in the following mapping.
 
-		.. TODO
+        .. TODO
 
     PYTHONPRETTYTRACEBACK
 
         This environment variable can toggle :term:`on or off <boolean value>` the
         :func:`~pretty.traceback.hook` for pretty.traceback.
 
-        When this environment variable is unset, or the :term:`PYTHONPRETTY` environment variable
-        is set to a :term:`falsey value <boolean value>`, :func:`pretty.traceback.hook` is not
-        called.
+        When this environment variable is set to a :term:`truthy value <boolean value>`, and the
+        :term:`PYTHONPRETTY` environment variable set to a :term:`truthy value <boolean value>` or
+        unset, :func:`pretty.traceback.hook` is called.
+
+        When this environment variable is set to a :term:`falsey value <boolean value>`, unset, or
+        the :term:`PYTHONPRETTY` environment variable is set to a
+        :term:`falsey value <boolean value>`, :func:`pretty.traceback.hook` is not called.
 
     boolean value
 
