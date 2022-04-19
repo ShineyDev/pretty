@@ -710,7 +710,8 @@ class DefaultTracebackFormatter(TracebackFormatter):
         else:
             line = frame.line
 
-        yield line
+        if line:
+            yield line
 
         if isinstance(frame, types.FrameType):
             locals = frame.f_locals
