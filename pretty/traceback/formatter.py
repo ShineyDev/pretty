@@ -701,7 +701,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     def format_frame(
         self: Self,
-        frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
+        frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],  # pyright: ignore[reportGeneralTypeIssues]
     ) -> Iterator[str]:
         frame, position = frame  # type: ignore
 
