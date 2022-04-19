@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable, Iterator
     from traceback import FrameSummary
     from types import FrameType, TracebackType
-    from typing import Any, TextIO, Type
+    from typing import Any, TextIO, Type, cast
     from typing_extensions import Self
 
 import abc
@@ -688,7 +688,11 @@ class DefaultTracebackFormatter(TracebackFormatter):
         self: Self,
         frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
     ) -> Iterator[str]:
-        frame, position = frame
+        frame, position = frame  # type: ignore
+
+        if TYPE_CHECKING:
+            frame: FrameSummary | FrameType
+            position: tuple[int, int | None, int | None, int | None]
 
         if isinstance(frame, types.FrameType):
             filename = frame.f_code.co_filename
