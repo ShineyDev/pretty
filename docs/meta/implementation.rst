@@ -15,13 +15,12 @@ pretty.traceback
 
 .. currentmodule:: pretty.traceback
 
-- The :class:`~pretty.traceback.TracebackFormatter` abstract class
-  moves some :mod:`traceback` module implementations around. You can
-  find each implementation in the following mapping.
+- The :class:`~pretty.traceback.TracebackFormatter` abstract class moves some :mod:`traceback`
+  module implementations around. You can find each implementation in the following mapping.
 
-  ======================================= ========================================================================================================================================================================================================================
+  ======================================= =========================================================
   :mod:`traceback`                        :class:`~pretty.traceback.TracebackFormatter`
-  ======================================= ========================================================================================================================================================================================================================
+  ======================================= =========================================================
   :func:`traceback.format_exception`      :attr:`TracebackFormatter.format_traceback(type, value, traceback) <TracebackFormatter.format_traceback>`
   :func:`traceback.format_exc`            :attr:`TracebackFormatter.format_traceback(type(sys.exc_info[1]), sys.exc_info[1], sys.exc_info[2]) <TracebackFormatter.format_traceback>`
   no implementation                       :attr:`TracebackFormatter.format_traceback(type(sys.last_value), sys.last_value, sys.last_traceback)  <TracebackFormatter.format_traceback>`
@@ -38,4 +37,4 @@ pretty.traceback
   :func:`traceback.print_tb`              :attr:`TracebackFormatter.print_stack( <TracebackFormatter.print_stack>` :attr:`TracebackFormatter.walk_stack(traceback) <TracebackFormatter.walk_stack>` :attr:`) <pretty.traceback.TracebackFormatter.print_stack>`
   :func:`traceback.walk_stack`            :attr:`TracebackFormatter.walk_stack(frame) <TracebackFormatter.walk_stack>`
   :func:`traceback.walk_tb`               :attr:`TracebackFormatter.walk_stack(traceback) <TracebackFormatter.walk_stack>`
-  ======================================= ========================================================================================================================================================================================================================
+  ======================================= =========================================================
