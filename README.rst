@@ -76,4 +76,5 @@ If you wish to use a formatter directly, initialize a new `PrettyTracebackFormat
 
 .. raw:: html
 
-    <h6 align="center">Copyright 2020-present ShineyDev<br>Inspired by <a href="https://github.com/Qix-/better-exceptions/">Qix-/better-exceptions</a>.</h6>
+    <h6 align="center">Inspired by <a href="https://github.com/Qix-/better-exceptions">Qix-/better-exceptions</a>.</h6>
+    <h6 align="center">Copyright 2020-present ShineyDev</h6>
