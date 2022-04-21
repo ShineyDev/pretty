@@ -65,6 +65,10 @@ rst_prolog = """
 .. |iter| replace:: This function returns an |iter_link|_.
 .. |iter_link| replace:: iterator
 .. _iter_link: https://docs.python.org/3/glossary.html#term-iterator
+
+.. |semver| replace:: |semver_link|_
+.. |semver_link| replace:: semantic versioning
+.. _semver_link: https://semver.org/
 """
 source_suffix = ".rst"
 

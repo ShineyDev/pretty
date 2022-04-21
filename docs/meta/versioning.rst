@@ -40,8 +40,3 @@ Compatible
 
 - Modifying an undocumented API.
 - Modifying the behavior of an API to fix a bug.
-
-
-.. |semver| replace:: |semver_link|_
-.. |semver_link| replace:: semantic versioning
-.. _semver_link: https://semver.org/
