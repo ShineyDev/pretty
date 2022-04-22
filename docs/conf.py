@@ -69,6 +69,34 @@ rst_prolog = """
 .. |semver| replace:: |semver_link|_
 .. |semver_link| replace:: semantic versioning
 .. _semver_link: https://semver.org/
+
+.. |sgr| replace:: |sgr_link|_
+.. |sgr_link| replace:: SGR
+.. _sgr_link: https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
+
+.. |token_comment| replace:: |token_comment_link|_
+.. |token_comment_link| replace:: comment tokens
+.. _token_comment_link: https://docs.python.org/3/reference/lexical_analysis.html#comments
+
+.. |token_delimiter| replace:: |token_delimiter_link|_
+.. |token_delimiter_link| replace:: delimiter tokens
+.. _token_delimiter_link: https://docs.python.org/3/reference/lexical_analysis.html#delimiters
+
+.. |token_keyword| replace:: |token_keyword_link|_
+.. |token_keyword_link| replace:: keyword tokens
+.. _token_keyword_link: https://docs.python.org/3/reference/lexical_analysis.html#keywords
+
+.. |token_name| replace:: |token_name_link|_
+.. |token_name_link| replace:: name tokens
+.. _token_name_link: https://docs.python.org/3/reference/lexical_analysis.html#identifiers
+
+.. |token_operator| replace:: |token_operator_link|_
+.. |token_operator_link| replace:: operator tokens
+.. _token_operator_link: https://docs.python.org/3/reference/lexical_analysis.html#operators
+
+.. |token_soft_keyword| replace:: |token_soft_keyword_link|_
+.. |token_soft_keyword_link| replace:: soft keyword tokens
+.. _token_soft_keyword_link: https://docs.python.org/3/reference/lexical_analysis.html#soft-keywords
 """
 source_suffix = ".rst"
 

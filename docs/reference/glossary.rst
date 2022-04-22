@@ -31,7 +31,74 @@ Glossary
 
         You can find the meanings of the theme keys in the following mapping.
 
-        .. TODO
+        .. describe:: ast_comment_sgr
+
+            The :term:`SGR value` given to |token_comment|.
+
+        .. describe:: ast_delimiter_sgr
+
+            The :term:`SGR value` given to the following |token_delimiter|.
+
+            - ``(``
+            - ``)``
+            - ``[``
+            - ``]``
+            - ``{``
+            - ``}``
+            - ``,``
+            - ``:``
+            - ``.``
+            - ``;``
+            - ``\``
+
+        .. describe:: ast_keyword_sgr
+        
+            The :term:`SGR value` given to the following |token_keyword|.
+
+            - ``_`` (in Python 3.10+ as described by |token_soft_keyword|)
+            - ``and``
+            - ``as``
+            - ``assert``
+            - ``async``
+            - ``await``
+            - ``break``
+            - ``case`` (in Python 3.10+ as described by |token_soft_keyword|)
+            - ``class``
+            - ``continue``
+            - ``def``
+            - ``del``
+            - ``elif``
+            - ``else``
+            - ``except``
+            - ``finally``
+            - ``for``
+            - ``from``
+            - ``global``
+            - ``if``
+            - ``import``
+            - ``in``
+            - ``is``
+            - ``lambda``
+            - ``match`` (in Python 3.10+ as described by |token_soft_keyword|)
+            - ``nonlocal``
+            - ``not``
+            - ``or``
+            - ``pass``
+            - ``raise``
+            - ``return``
+            - ``try``
+            - ``while``
+            - ``with``
+            - ``yield``
+
+        .. describe:: ast_name_sgr
+
+            The :term:`SGR value` given to |token_name| that do not fall under another ``ast_*`` or
+            ``literal_*``.
+
+        .. describe:: ast_operator_sgr
+
+            The :term:`SGR value` given to |token_operator|.
 
     PYTHONPRETTYTRACEBACK
 
@@ -82,3 +149,12 @@ Glossary
         A hook file is installed into site-packages when you install pretty. It allows pretty to
         hook into all Python sessions, but will only do so if you set one or more of the above
         :term:`environment variables <PYTHONPRETTY>` to a :term:`truthy value <boolean value>`.
+
+    SGR value
+
+        A theme item with this value type corresponds to a tuple of two |sgr| values, a single
+        |sgr| value, or ``None``.
+
+        The value ``None`` is used to indicate that the corresponding item should not be used.
+
+        ...
