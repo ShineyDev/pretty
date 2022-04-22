@@ -29,7 +29,7 @@ Glossary
 
         When this environment variable is unset, only the default pretty theme is used.
 
-        You can find the meanings of the theme keys in the following mapping.
+        The theme can contain the following keys.
 
         .. describe:: ast_comment_sgr
 
