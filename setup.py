@@ -64,10 +64,7 @@ extras_require = {
     "docs": extras_require_docs,
 }
 
-packages = [
-    "pretty",
-    "pretty.traceback",
-]
+packages = setuptools.find_packages()
 
 _version_regex = r"^version(?:\s*:\s*str)?\s*=\s*('|\")((?:[0-9]+\.)*[0-9]+(?:\.?([a-z]+)(?:\.?[0-9])?)?)\1$"
 
