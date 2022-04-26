@@ -41,7 +41,7 @@ Install
 Use
 ---
 
-If you wish to hook pretty.traceback into **all Python sessions**, set the `PYTHONPRETTYTRACEBACK <https://docs.shiney.dev/pretty/latest/meta/glossary#term-PYTHONPRETTYTRACEBACK>`_ environment variable to a `truthy value <https://docs.shiney.dev/pretty/latest/meta/glossary#term-boolean-value>`_.
+If you wish to hook pretty.traceback into **all Python sessions**, set the `PYTHONPRETTYTRACEBACK <https://docs.shiney.dev/pretty/latest/reference/glossary#term-PYTHONPRETTYTRACEBACK>`_ environment variable to a `truthy value <https://docs.shiney.dev/pretty/latest/reference/glossary#term-boolean-value>`_.
 
 .. code:: shell
 
@@ -51,7 +51,7 @@ If you wish to hook pretty.traceback into **all Python sessions**, set the `PYTH
 
     >>> 1 / 0
 
-If you wish to hook pretty.traceback into **a single Python session**, call `pretty.traceback.hook() <https://docs.shiney.dev/pretty/latest/traceback/hook>`_.
+If you wish to hook pretty.traceback into **a single Python session**, call `pretty.traceback.hook() <https://docs.shiney.dev/pretty/latest/reference/pretty/traceback/hook>`_.
 
 .. code:: python
 
@@ -60,7 +60,7 @@ If you wish to hook pretty.traceback into **a single Python session**, call `pre
     >>>
     >>> 1 / 0
 
-If you wish to use a formatter directly, initialize a new `PrettyTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/pretty>`_ or `DefaultTracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/default>`_, or build your own implementation on `TracebackFormatter <https://docs.shiney.dev/pretty/latest/traceback/formatter/abstract>`_.
+If you wish to use a formatter directly, initialize a new `PrettyTracebackFormatter <https://docs.shiney.dev/pretty/latest/reference/pretty/traceback/formatter/pretty>`_ or `DefaultTracebackFormatter <https://docs.shiney.dev/pretty/latest/reference/pretty/traceback/formatter/default>`_, or build your own implementation on `TracebackFormatter <https://docs.shiney.dev/pretty/latest/reference/pretty/traceback/formatter/abstract>`_.
 
 .. code:: python
 
