@@ -1,7 +1,7 @@
 pretty
 ======
 
-A Python library for prettier output and practical APIs.
+A Python library with practical APIs for prettier output.
 
 
 .. toctree::

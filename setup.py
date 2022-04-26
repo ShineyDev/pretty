@@ -93,7 +93,7 @@ if match.group(3) is not None:
 setuptools.setup(
     author="ShineyDev",
     cmdclass=cmdclass,
-    description="A Python library for prettier output and practical APIs.",
+    description="A Python library with practical APIs for prettier output.",
     extras_require=extras_require,
     include_package_data=True,
     license="Apache Software License",

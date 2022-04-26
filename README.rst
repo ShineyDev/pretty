@@ -27,7 +27,7 @@
 .. raw:: html
 
     <h1 align="center">ShineyDev/pretty</h1>
-    <p align="center">A Python library for prettier output and practical APIs.<br><a href="https://github.com/ShineyDev/pretty">source</a> | <a href="https://docs.shiney.dev/pretty">documentation</a></p>
+    <p align="center">A Python library with practical APIs for prettier output.<br><a href="https://github.com/ShineyDev/pretty">source</a> | <a href="https://docs.shiney.dev/pretty">documentation</a></p>
 
 
 Install
