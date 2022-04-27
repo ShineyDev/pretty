@@ -1,6 +1,3 @@
-.. currentmodule:: pretty
-
-
 Implementation
 ==============
 
