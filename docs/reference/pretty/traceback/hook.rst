@@ -1,7 +1,6 @@
-.. currentmodule:: pretty.traceback
-
-
 Hook
 ====
+
+.. currentmodule:: pretty.traceback
 
 .. autofunction:: hook

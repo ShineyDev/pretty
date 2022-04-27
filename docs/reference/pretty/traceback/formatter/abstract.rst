@@ -1,8 +1,7 @@
-.. currentmodule:: pretty.traceback
-
-
 TracebackFormatter
 ==================
+
+.. currentmodule:: pretty.traceback
 
 .. autoclass:: TracebackFormatter
     :members:
