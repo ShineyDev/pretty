@@ -106,8 +106,8 @@ Glossary
         :func:`~pretty.traceback.hook` for pretty.traceback.
 
         When this environment variable is set to a :term:`truthy value <boolean value>`, and the
-        :term:`PYTHONPRETTY` environment variable set to a :term:`truthy value <boolean value>` or
-        unset, :func:`pretty.traceback.hook` is called.
+        :term:`PYTHONPRETTY` environment variable is set to a :term:`truthy value <boolean value>`
+        or unset, :func:`pretty.traceback.hook` is called.
 
         When this environment variable is set to a :term:`falsey value <boolean value>`, unset, or
         the :term:`PYTHONPRETTY` environment variable is set to a
