@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Iterable
     from typing import Any, TypeVar
     from typing_extensions import ParamSpec
 
@@ -95,7 +95,7 @@ def format(string: str, **kwargs: Any) -> str:
     return "".join(result).replace("\x0F", "{").replace("\x0E", "}")
 
 
-def rindex(iterable, value, *, start=None, end=None):
+def rindex(iterable: Iterable[_T], value: _T, *, start: int = None, end: int = None) -> int:
     if isinstance(iterable, (bytes, str)):
         return iterable.rindex(value, start, end)
 
