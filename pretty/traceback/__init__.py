@@ -18,16 +18,28 @@ if TYPE_CHECKING:
 
 
 @overload
-def hook(cls: None = ..., *, theme: dict[str, Any] = ...) -> PrettyTracebackFormatter:
+def hook(
+    cls: None = ...,
+    *,
+    theme: dict[str, Any] = ...,
+) -> PrettyTracebackFormatter:
     ...
 
 
 @overload
-def hook(cls: Callable[_P, _TTF] = ..., *args: _P.args, **kwargs: _P.kwargs) -> _TTF:
+def hook(
+    cls: Callable[_P, _TTF] = ...,
+    *args: _P.args,
+    **kwargs: _P.kwargs,
+) -> _TTF:
     ...
 
 
-def hook(cls: Callable[_P, _TTF] | None = None, *args: _P.args, **kwargs: _P.kwargs) -> _TTF | PrettyTracebackFormatter:
+def hook(
+    cls: Callable[_P, _TTF] | None = None,
+    *args: _P.args,
+    **kwargs: _P.kwargs,
+) -> _TTF | PrettyTracebackFormatter:
     """
     Hooks pretty.traceback into the current Python session.
 
