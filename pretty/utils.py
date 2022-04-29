@@ -79,7 +79,10 @@ pretty_theme: dict[str, Any] = {
 _format_pattern = re.compile("{((?:\"(?:[^\\\"]|(\\\\)*\\\")*\"|'(?:[^\\']|(\\\\)*\\')*'|[^{}])+)}")
 
 
-def format(string: str, **kwargs: Any) -> str:
+def format(
+    string: str,
+    **kwargs: Any,
+) -> str:
     string = "\x0E".join(string.replace("{{", "\x0F").rsplit("}}"))
 
     result = list()
@@ -95,7 +98,13 @@ def format(string: str, **kwargs: Any) -> str:
     return "".join(result).replace("\x0F", "{").replace("\x0E", "}")
 
 
-def rindex(iterable: Iterable[_T], value: _T, *, start: int = None, end: int = None) -> int:
+def rindex(
+    iterable: Iterable[_T],
+    value: _T,
+    *,
+    start: int = None,
+    end: int = None,
+) -> int:
     if isinstance(iterable, (bytes, str)):
         return iterable.rindex(value, start, end)
 
@@ -115,7 +124,12 @@ def rindex(iterable: Iterable[_T], value: _T, *, start: int = None, end: int = N
     raise ValueError("value not found in iterable")
 
 
-def try_attr(obj: Any, name: str, *, default: Any) -> Any:
+def try_attr(
+    obj: Any,
+    name: str,
+    *,
+    default: Any,
+) -> Any:
     try:
         return getattr(obj, name)
     except Exception:
@@ -129,7 +143,11 @@ _bool_map = {
 _bool_map = {v: k for k in _bool_map.keys() for v in _bool_map[k]}
 
 
-def try_bool(obj: Any, *, default: _T) -> bool | _T:
+def try_bool(
+    obj: Any,
+    *,
+    default: _T,
+) -> bool | _T:
     if isinstance(obj, str):
         try:
             return _bool_map[obj.lower()]
@@ -142,7 +160,11 @@ def try_bool(obj: Any, *, default: _T) -> bool | _T:
             return default
 
 
-def try_name(obj: Any, *, default: _T) -> str | _T:
+def try_name(
+    obj: Any,
+    *,
+    default: _T,
+) -> str | _T:
     name = try_attr(obj, "__qualname__", default=None) or try_attr(obj, "__name__", default=None)
     if not name:
         return default
@@ -179,14 +201,22 @@ def try_name(obj: Any, *, default: _T) -> str | _T:
     return name
 
 
-def try_repr(obj: Any, *, default: _T) -> str | _T:
+def try_repr(
+    obj: Any,
+    *,
+    default: _T,
+) -> str | _T:
     try:
         return repr(obj)
     except Exception:
         return default
 
 
-def try_str(obj: Any, *, default: _T) -> str | _T:
+def try_str(
+    obj: Any,
+    *,
+    default: _T,
+) -> str | _T:
     try:
         return str(obj)
     except Exception:
