@@ -249,6 +249,7 @@ def wrap(wrapped: _FT) -> Callable[[_FT], _FT]:
 
 __all__ = [
     "format",
+    "rindex",
     "try_attr",
     "try_bool",
     "try_name",
