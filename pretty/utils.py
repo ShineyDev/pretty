@@ -95,13 +95,13 @@ def format(string: str, **kwargs: Any) -> str:
     return "".join(result).replace("\x0F", "{").replace("\x0E", "}")
 
 
-def rindex(iterator, value, *, start=None, end=None):
-    if isinstance(iterator, (bytes, str)):
-        return iterator.rindex(value, start, end)
+def rindex(iterable, value, *, start=None, end=None):
+    if isinstance(iterable, (bytes, str)):
+        return iterable.rindex(value, start, end)
 
-    iterator_length = len(iterator)
+    iterator_length = len(iterable)
 
-    for (reversed_i, element) in enumerate(reversed(iterator), 1):
+    for (reversed_i, element) in enumerate(reversed(iterable), 1):
         i = iterator_length - reversed_i
 
         if start is not None and i < start:
@@ -112,7 +112,7 @@ def rindex(iterator, value, *, start=None, end=None):
         if element == value:
             return i
 
-    raise ValueError("value not found in iterator")
+    raise ValueError("value not found in iterable")
 
 
 def try_attr(obj: Any, name: str, *, default: Any) -> Any:
