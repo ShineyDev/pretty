@@ -201,7 +201,10 @@ def wrap(wrapped: _FT) -> Callable[[_FT], _FT]:
             except Exception:
                 return wrapped(*args, **kwargs)
 
-        function.__dict__.update(wrapped.__dict__)
+        try:
+            function.__dict__.update(wrapped.__dict__)
+        except AttributeError:
+            pass
 
         function.__doc__ = wrapped.__doc__
         function.__name__ = wrapped.__name__
