@@ -17,6 +17,9 @@ if TYPE_CHECKING:
     _TTF = TypeVar("_TTF", bound=TracebackFormatter)
 
 
+_formatter = None
+
+
 @overload
 def hook(
     cls: None = ...,
@@ -86,7 +89,11 @@ def hook(
     :rtype: :class:`~pretty.traceback.TracebackFormatter`
     """
 
+    global _formatter
+
     formatter = cls and cls(*args, **kwargs) or PrettyTracebackFormatter(*args, **kwargs)
+
+    _formatter = formatter
 
     traceback.extract_stack = formatter._extract_stack  # type: ignore
     traceback.extract_tb = formatter._extract_tb  # type: ignore
