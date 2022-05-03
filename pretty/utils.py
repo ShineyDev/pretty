@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable
     from typing import Any, TypeVar
-    from typing_extensions import ParamSpec
 
 import os
 import re
