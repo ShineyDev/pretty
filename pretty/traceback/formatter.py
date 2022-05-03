@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable, Iterator
     from traceback import FrameSummary
     from types import FrameType, TracebackType
-    from typing import Any, TextIO, Type, cast
+    from typing import Any, TextIO, Type
     from typing_extensions import Self
 
 import abc
