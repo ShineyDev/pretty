@@ -123,6 +123,18 @@ def rindex(
     raise ValueError("value not found in iterable")
 
 
+def sweeten(string, sgr):
+    if not sgr:
+        return string
+
+    if isinstance(sgr, str):
+        sgr_start, sgr_end = sgr, "0"
+    else:
+        sgr_start, sgr_end = sgr
+
+    return f"\x1B[{sgr_start}m{string}\x1B[{sgr_end}m"
+
+
 def try_attr(
     obj: Any,
     name: str,
@@ -249,6 +261,7 @@ def wrap(wrapped: _FT) -> Callable[[_FT], _FT]:
 __all__ = [
     "format",
     "rindex",
+    "sweeten",
     "try_attr",
     "try_bool",
     "try_name",
