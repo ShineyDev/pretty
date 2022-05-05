@@ -57,7 +57,6 @@ def _main() -> None:
             theme.update(user_theme)
 
     enable_traceback = utils.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK"), default=None)
-
     if (enable_traceback is None and enable_all) or enable_traceback:
         try:
             traceback.hook(theme=theme)
