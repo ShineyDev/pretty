@@ -130,6 +130,10 @@ def sweeten(string, sgr):
     if not sgr:
         return string
 
+    ansi_enabled = try_bool(os.environ.get("PYTHONPRETTYANSI"), default=None)
+    if (ansi_enabled is None and try_bool(os.environ.get("NO_COLOR"), default=None)) or ansi_enabled is None or not ansi_enabled:
+        return string
+
     if isinstance(sgr, str):
         sgr_start, sgr_end = sgr, "0"
     else:

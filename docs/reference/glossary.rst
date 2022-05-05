@@ -19,6 +19,21 @@ Glossary
         When this environment variable is unset, only the :term:`state <boolean value>` of each
         :term:`PYTHONPRETTY... <PYTHONPRETTYTRACEBACK>` environment variable is used.
 
+    PYTHONPRETTYANSI
+
+        This environment variable can toggle :term:`on or off <boolean value>` ANSI output for
+        pretty.
+
+        When this environment variable is set to a :term:`truthy value <boolean value>`, ANSI
+        output will be enabled, regardless of the value in the :term:`NO_COLOR` environment
+        variable.
+
+        When this environment variable is set to a :term:`falsey value <boolean value>`, ANSI
+        output will be disabled.
+
+        When this environment variable is unset, the value of the :term:`NO_COLOR` environment
+        variable is considered before ANSI output defaults to enabled.
+
     PYTHONPRETTYTHEME
 
         This environment variable can contain a :term:`theme <json value>` by which a formatter
@@ -112,6 +127,11 @@ Glossary
         When this environment variable is set to a :term:`falsey value <boolean value>`, unset, or
         the :term:`PYTHONPRETTY` environment variable is set to a
         :term:`falsey value <boolean value>`, :func:`pretty.traceback.hook` is not called.
+
+    NO_COLOR
+
+        This environment variable can toggle :term:`on or off <boolean value>` ANSI output for all
+        `supporting software <https://no-color.org>`_.
 
     boolean value
 
