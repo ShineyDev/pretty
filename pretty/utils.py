@@ -54,7 +54,7 @@ pretty_theme: dict[str, Any] = {
     "char_cap": "\u2514",
     "char_pathnamesep": os.sep,
     "char_pipe": "\u2502",
-    "char_quote": "\u0022",
+    "char_quote": "'",
     # colorizing literal types
     "literal_bool_sgr": ("38;2;179;179;255", "39"),
     "literal_bytes_sgr": ("38;2;255;217;179", "39"),
