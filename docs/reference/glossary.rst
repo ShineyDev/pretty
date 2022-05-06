@@ -48,11 +48,11 @@ Glossary
 
         .. describe:: ast_comment_sgr
 
-            The :term:`SGR value` given to |token_comment|.
+            The :term:`SGR value` given to |token_comment| in an |ast|.
 
         .. describe:: ast_delimiter_sgr
 
-            The :term:`SGR value` given to the following |token_delimiter|.
+            The :term:`SGR value` given to the following |token_delimiter| in an |ast|.
 
             - ``(``
             - ``)``
@@ -68,7 +68,7 @@ Glossary
 
         .. describe:: ast_keyword_sgr
         
-            The :term:`SGR value` given to the following |token_keyword|.
+            The :term:`SGR value` given to the following |token_keyword| in an |ast|.
 
             - ``_`` (in Python 3.10+ as described by |token_soft_keyword|)
             - ``and``
@@ -108,12 +108,11 @@ Glossary
 
         .. describe:: ast_name_sgr
 
-            The :term:`SGR value` given to |token_name| that do not fall under another ``ast_*`` or
-            ``literal_*``.
+            The :term:`SGR value` given to |token_name| in an |ast|.
 
         .. describe:: ast_operator_sgr
 
-            The :term:`SGR value` given to |token_operator|.
+            The :term:`SGR value` given to |token_operator| in an |ast|.
 
     PYTHONPRETTYTRACEBACK
 

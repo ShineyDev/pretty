@@ -62,6 +62,10 @@ pygments_style = "friendly"
 root_doc = "index"
 rst_prolog = """
 
+.. |ast| replace:: |ast_link|_
+.. |ast_link| replace:: abstract syntax tree
+.. _ast_link: https://docs.python.org/3/library/ast.html
+
 .. |iter| replace:: This function returns an |iter_link|_.
 .. |iter_link| replace:: iterator
 .. _iter_link: https://docs.python.org/3/glossary.html#term-iterator
