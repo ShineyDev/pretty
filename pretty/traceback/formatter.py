@@ -886,7 +886,7 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
         *,
         theme: dict[str, Any] | None = None,
     ) -> None:
-        self.theme = theme or utils.pretty_theme
+        self.theme = (theme or utils.pretty_theme).copy()
 
 
 __all__ = [
