@@ -1,3 +1,9 @@
 inherit:
 - https://raw.githubusercontent.com/ShineyDev/.github/main/data/labels/_.yml
 - https://raw.githubusercontent.com/ShineyDev/.github/main/data/labels/automation-stale.yml
+
+groups:
+- name: Domain
+  labels:
+  - name: traceback
+    description: This is related to pretty.traceback.
