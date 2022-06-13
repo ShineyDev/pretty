@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable
-    from typing import Any, TypeVar
+    from typing import Any, Sized, TypeVar, cast
 
 import os
 import re
@@ -104,16 +104,16 @@ def rindex(
     iterable: Iterable[_T],
     value: _T,
     *,
-    start: int = None,
-    end: int = None,
+    start: int | None = None,
+    end: int | None = None,
 ) -> int:
-    if isinstance(iterable, (bytes, str)):
+    if (isinstance(iterable, bytes) and isinstance(value, bytes)) or (isinstance(iterable, bytes) and isinstance(value, bytes)):
         return iterable.rindex(value, start, end)
 
-    iterator_length = len(iterable)
+    iterable_length = len(iterable)
 
     for (reversed_i, element) in enumerate(reversed(iterable), 1):
-        i = iterator_length - reversed_i
+        i = iterable_length - reversed_i
 
         if start is not None and i < start:
             break
