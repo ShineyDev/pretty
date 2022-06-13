@@ -126,7 +126,10 @@ def rindex(
     raise ValueError("value not found in iterable")
 
 
-def sweeten(string, sgr):
+def sweeten(
+    string: str,
+    sgr: str | tuple[str, str] | None,
+) -> str:
     if not sgr:
         return string
 
