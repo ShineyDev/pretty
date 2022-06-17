@@ -113,7 +113,7 @@ def hook(
     traceback.walk_tb = formatter._walk_tb  # type: ignore
 
     def excepthook(*args):
-        formatter.print_exception(*args)
+        formatter.print_traceback(*args)
 
     sys.excepthook = excepthook
 
