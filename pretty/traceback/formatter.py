@@ -822,12 +822,12 @@ class DefaultTracebackFormatter(TracebackFormatter):
         *,
         limit: int | None = None,
     ) -> Iterator[tuple[FrameType, tuple[int, int | None, int | None, int | None]]]:
-        if isinstance(obj, types.TracebackType):
+        if limit is not None:
+            limit = max(limit, 0)
+        elif isinstance(obj, types.TracebackType):
             limit = limit or getattr(sys, "tracebacklimit", None)
             if limit and limit < 0:
                 limit = 0
-        elif limit:
-            limit = abs(limit)
 
         if isinstance(obj, types.FrameType):
             while obj is not None and limit != 0:
