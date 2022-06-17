@@ -695,9 +695,12 @@ class DefaultTracebackFormatter(TracebackFormatter):
             yield f"{type_name}\n"
 
         if sys.version_info >= (3, 11):
-            if value and value.__note__:
-                for line in value.__note__.splitlines():
-                    yield f"{line}\n"
+            notes = getattr(value, "__notes__", None)
+            if notes:
+                for note in notes:
+                    note = utils.try_str(note, default="<note.__str__ failed>")
+                    for line in note.splitlines():
+                        yield f"{line}\n"
 
     def format_frame(
         self: Self,
