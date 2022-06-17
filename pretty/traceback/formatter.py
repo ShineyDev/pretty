@@ -31,6 +31,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         self: Self,
         type: Type[BaseException] | Type[None],
         value: BaseException | None,
+        /,
     ) -> Iterator[str]:
         """
         |iter|
@@ -59,6 +60,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def format_frame(
         self: Self,
         frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
+        /,
     ) -> Iterator[str]:
         """
         |iter|
@@ -101,6 +103,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def format_stack(
         self: Self,
         stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
+        /,
     ) -> Iterator[str]:
         """
         |iter|
@@ -141,6 +144,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         type: Type[BaseException] | Type[None],
         value: BaseException | None,
         traceback: TracebackType | None,
+        /,
         *,
         chain: bool | None = None,
         limit: int | None = None,
@@ -178,6 +182,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         self: Self,
         type: Type[BaseException] | Type[None],
         value: BaseException | None,
+        /,
         *,
         stream: TextIO | None = None,
     ) -> None:
@@ -199,6 +204,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def print_frame(
         self: Self,
         frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
+        /,
         *,
         stream: TextIO | None = None,
     ) -> None:
@@ -229,6 +235,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def print_stack(
         self: Self,
         stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
+        /,
         *,
         stream: TextIO | None = None,
     ) -> None:
@@ -269,6 +276,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         type: Type[BaseException] | Type[None],
         value: BaseException | None,
         traceback: TracebackType | None,
+        /,
         *,
         chain: bool | None = None,
         limit: int | None = None,
@@ -302,6 +310,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def walk_stack(
         self: Self,
         obj: FrameType | TracebackType,
+        /,
         *,
         limit: int | None = None,
     ) -> Iterator[tuple[FrameType, tuple[int, int | None, int | None, int | None]]]:
@@ -340,6 +349,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         self: Self,
         type: Type[BaseException] | Type[None],
         value: BaseException | None,
+        /,
         *,
         stream: TextIO,
     ) -> None:
@@ -361,6 +371,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def write_frame(
         self: Self,
         frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
+        /,
         *,
         stream: TextIO,
     ) -> None:
@@ -391,6 +402,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     def write_stack(
         self: Self,
         stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
+        /,
         *,
         stream: TextIO,
     ) -> None:
@@ -425,6 +437,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         type: Type[BaseException] | Type[None],
         value: BaseException | None,
         traceback: TracebackType | None,
+        /,
         *,
         stream: TextIO,
         chain: bool | None = None,
@@ -685,6 +698,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
         self: Self,
         type: Type[BaseException] | Type[None],
         value: BaseException | None,
+        /,
     ) -> Iterator[str]:
         type_name = utils.try_name(type, default="<type.__name__ failed>")
         value_str = utils.try_str(value, default="<value.__str__ failed>")
@@ -705,6 +719,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
     def format_frame(
         self: Self,
         frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],  # pyright: ignore[reportGeneralTypeIssues]
+        /,
     ) -> Iterator[str]:
         frame, position = frame  # type: ignore
 
@@ -746,6 +761,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
     def format_stack(
         self: Self,
         stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
+        /,
     ) -> Iterator[str]:
         last_filename = None
         last_lineno = None
@@ -786,6 +802,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
         type: Type[BaseException] | Type[None],
         value: BaseException | None,
         traceback: TracebackType | None,
+        /,
         *,
         chain: bool | None = None,
         limit: int | None = None,
@@ -822,6 +839,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
     def walk_stack(
         self: Self,
         obj: FrameType | TracebackType,
+        /,
         *,
         limit: int | None = None,
     ) -> Iterator[tuple[FrameType, tuple[int, int | None, int | None, int | None]]]:
@@ -886,6 +904,7 @@ class PrettyTracebackFormatter(DefaultTracebackFormatter):
 
     def __init__(
         self: Self,
+        /,
         *,
         theme: dict[str, Any] | None = None,
     ) -> None:
