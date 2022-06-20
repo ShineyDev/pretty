@@ -31,7 +31,7 @@ def hook(
 
 @overload
 def hook(
-    cls: Callable[_P, _TTF] = ...,
+    cls: Callable[_P, _TTF],
     *args: _P.args,
     **kwargs: _P.kwargs,
 ) -> _TTF:
