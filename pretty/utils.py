@@ -2,8 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable
-    from typing import Any, Sized, TypeVar, cast
+    from collections.abc import Callable
+    from typing import Any, Sequence, TypeVar
 
 import os
 import re
@@ -101,7 +101,7 @@ def format(
 
 
 def rindex(
-    iterable: Iterable[_T],
+    iterable: Sequence[_T],
     value: _T,
     *,
     start: int | None = None,
