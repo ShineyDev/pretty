@@ -499,6 +499,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         tb: TracebackType | None = None,
         limit: int | None = None,
     ) -> StackSummary:
+        if not tb:
+            return traceback.StackSummary()
+
         generator = self.walk_stack(tb, limit=limit)
 
         if sys.version_info >= (3, 11):
