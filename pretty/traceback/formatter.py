@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable, Iterator
     from traceback import FrameSummary, StackSummary
     from types import FrameType, TracebackType
-    from typing import Any, TextIO, Type
+    from typing import Any, TextIO, Type, cast
     from typing_extensions import Self
 
 import abc
@@ -470,7 +470,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         f: FrameType | None = None,
         limit: int | None = None,
     ) -> StackSummary:
-        generator = self.walk_stack(f or sys._getframe().f_back, limit=limit)
+        frame = f or sys._getframe().f_back
+
+        if TYPE_CHECKING:
+            frame = cast(FrameType, frame)
+
+        generator = self.walk_stack(frame, limit=limit)
 
         if sys.version_info >= (3, 11):
             extract = traceback.StackSummary._extract_from_extended_frame_gen
