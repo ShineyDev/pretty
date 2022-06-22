@@ -61,6 +61,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         self: Self,
         frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
         /,
+        *,
+        display_locals: bool | None = None,
     ) -> Iterator[str]:
         """
         |iter|
@@ -90,6 +92,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                    ] \
                ]
             A frame.
+        display_locals: Optional[:class:`bool`]
+            Whether to display the locals in each frame. Defaults to
+            ``None`` when no value is given, but expects a boolean.
 
 
         :yields: :class:`str`
@@ -104,6 +109,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         self: Self,
         stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
         /,
+        *,
+        display_locals: bool | None = None,
     ) -> Iterator[str]:
         """
         |iter|
@@ -129,6 +136,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                    ] \
                ]
             A stack of frames.
+        display_locals: Optional[:class:`bool`]
+            Whether to display the locals in each frame. Defaults to
+            ``None`` when no value is given, but expects a boolean.
 
 
         :yields: :class:`str`
@@ -147,6 +157,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         /,
         *,
         chain: bool | None = None,
+        display_locals: bool | None = None,
         limit: int | None = None,
     ) -> Iterator[str]:
         """
@@ -167,6 +178,9 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A traceback.
         chain: :class:`bool`
             Whether to follow the traceback tree.
+        display_locals: Optional[:class:`bool`]
+            Whether to display the locals in each frame. Defaults to
+            ``None`` when no value is given, but expects a boolean.
         limit: :class:`int`
             The maximum number of frames to extract.
 
@@ -206,6 +220,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
         /,
         *,
+        display_locals: bool | None = None,
         stream: TextIO | None = None,
     ) -> None:
         """
@@ -226,17 +241,21 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                    ] \
                ]
             A frame.
+        display_locals: Optional[:class:`bool`]
+            Whether to display the locals in each frame. Defaults to
+            ``None`` when no value is given, but expects a boolean.
         stream: :func:`TextIO <open>`
             The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_frame(frame, stream=stream or sys.stderr)
+        self.write_frame(frame, display_locals=display_locals, stream=stream or sys.stderr)
 
     def print_stack(
         self: Self,
         stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
         /,
         *,
+        display_locals: bool | None = None,
         stream: TextIO | None = None,
     ) -> None:
         """
@@ -265,11 +284,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                    ] \
                ]
             A stack of frames.
+        display_locals: Optional[:class:`bool`]
+            Whether to display the locals in each frame. Defaults to
+            ``None`` when no value is given, but expects a boolean.
         stream: :func:`TextIO <open>`
             The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_stack(stack, stream=stream or sys.stderr)
+        self.write_stack(stack, display_locals=display_locals, stream=stream or sys.stderr)
 
     def print_traceback(
         self: Self,
@@ -279,6 +301,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         /,
         *,
         chain: bool | None = None,
+        display_locals: bool | None = None,
         limit: int | None = None,
         stream: TextIO | None = None,
     ) -> None:
@@ -298,13 +321,16 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A traceback.
         chain: :class:`bool`
             Whether to follow the traceback tree.
+        display_locals: Optional[:class:`bool`]
+            Whether to display the locals in each frame. Defaults to
+            ``None`` when no value is given, but expects a boolean.
         limit: :class:`int`
             The maximum number of frames to extract.
         stream: :func:`TextIO <open>`
             The stream to print to. Defaults to :data:`~sys.stderr`.
         """
 
-        self.write_traceback(type, value, traceback, chain=chain, limit=limit, stream=stream or sys.stderr)
+        self.write_traceback(type, value, traceback, chain=chain, display_locals=display_locals, limit=limit, stream=stream or sys.stderr)
 
     @abc.abstractmethod
     def walk_stack(
@@ -374,6 +400,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         /,
         *,
         stream: TextIO,
+        display_locals: bool | None = None,
     ) -> None:
         """
         Writes a frame to a stream.
@@ -395,9 +422,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A frame.
         stream: :func:`TextIO <open>`
             The stream to write to.
+        display_locals: Optional[:class:`bool`]
+            Whether to display the locals in each frame. Defaults to
+            ``None`` when no value is given, but expects a boolean.
         """
 
-        stream.write("".join(self.format_frame(frame)))
+        stream.write("".join(self.format_frame(frame, display_locals=display_locals)))
 
     def write_stack(
         self: Self,
@@ -405,6 +435,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         /,
         *,
         stream: TextIO,
+        display_locals: bool | None = None,
     ) -> None:
         """
         Writes a stack to a stream.
@@ -428,9 +459,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             A stack of frames.
         stream: :func:`TextIO <open>`
             The stream to write to.
+        display_locals: Optional[:class:`bool`]
+            Whether to display the locals in each frame. Defaults to
+            ``None`` when no value is given, but expects a boolean.
         """
 
-        stream.write("".join(self.format_stack(stack)))
+        stream.write("".join(self.format_stack(stack, display_locals=display_locals)))
 
     def write_traceback(
         self: Self,
@@ -441,6 +475,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         *,
         stream: TextIO,
         chain: bool | None = None,
+        display_locals: bool | None = None,
         limit: int | None = None,
     ) -> None:
         """
@@ -458,11 +493,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             The stream to write to.
         chain: :class:`bool`
             Whether to follow the traceback tree.
+        display_locals: Optional[:class:`bool`]
+            Whether to display the locals in each frame. Defaults to
+            ``None`` when no value is given, but expects a boolean.
         limit: :class:`int`
             The maximum number of frames to extract.
         """
 
-        stream.write("".join(self.format_traceback(type, value, traceback, chain=chain, limit=limit)))
+        stream.write("".join(self.format_traceback(type, value, traceback, chain=chain, display_locals=display_locals, limit=limit)))
 
     @utils.wrap(traceback.extract_stack)  # type: ignore
     def _extract_stack(
@@ -788,6 +826,8 @@ class DefaultTracebackFormatter(TracebackFormatter):
         self: Self,
         frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],  # pyright: ignore[reportGeneralTypeIssues]
         /,
+        *,
+        display_locals: bool | None = None,
     ) -> Iterator[str]:
         frame, position = frame  # type: ignore
 
@@ -814,22 +854,28 @@ class DefaultTracebackFormatter(TracebackFormatter):
         if line:
             yield line
 
-        if isinstance(frame, types.FrameType):
-            locals = frame.f_locals
-        else:
-            locals = frame.locals
+        if display_locals is None:
+            display_locals = False
 
-        if locals:
-            for (key, value) in sorted(locals.items()):
-                if isinstance(frame, types.FrameType):
-                    value = utils.try_repr(value, default="<value.__repr__ failed>")
+        if display_locals:
+            if isinstance(frame, types.FrameType):
+                locals = frame.f_locals
+            else:
+                locals = frame.locals
 
-                yield f"  {key} = {value}\n"
+            if locals:
+                for (key, value) in sorted(locals.items()):
+                    if isinstance(frame, types.FrameType):
+                        value = utils.try_repr(value, default="<value.__repr__ failed>")
+
+                    yield f"  {key} = {value}\n"
 
     def format_stack(
         self: Self,
         stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
         /,
+        *,
+        display_locals: bool | None = None,
     ) -> Iterator[str]:
         last_filename = None
         last_lineno = None
@@ -860,7 +906,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
             if recursion_times > self.recursion_cutoff:
                 continue
 
-            yield from self.format_frame((frame, position))
+            yield from self.format_frame((frame, position), display_locals=display_locals)
 
         if recursion_times > self.recursion_cutoff:
             yield utils.format(f"{self.recursion_message_format}\n", times=recursion_times - self.recursion_cutoff)
@@ -873,6 +919,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
         /,
         *,
         chain: bool | None = None,
+        display_locals: bool | None = None,
         limit: int | None = None,
         seen: set | None = None,
     ) -> Iterator[str]:
@@ -899,7 +946,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
         if traceback is not None:
             yield f"{self.traceback_header}\n"
 
-            for line in self.format_stack(self.walk_stack(traceback, limit=limit)):
+            for line in self.format_stack(self.walk_stack(traceback, limit=limit), display_locals=display_locals):
                 yield textwrap.indent(line, "  ")
 
         yield from self.format_exception(type, value)
