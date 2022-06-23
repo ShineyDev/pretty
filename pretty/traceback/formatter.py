@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable, Iterator
     from traceback import FrameSummary, StackSummary
     from types import FrameType, TracebackType
-    from typing import Any, TextIO, Type, cast
+    from typing import Any, TextIO, Type, cast, overload
     from typing_extensions import Self
 
 import abc
@@ -569,10 +569,32 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     if sys.version_info >= (3, 10):
 
-        @utils.wrap(traceback.format_exception)  # type: ignore
-        def _format_exception(  # type: ignore
+        @overload
+        def _format_exception(
+            self: Self,
+            exc: BaseException,
+            /,
+            limit: int | None = ...,
+            chain: bool = ...,
+        ) -> list[str]:
+            ...
+
+        @overload
+        def _format_exception(
             self: Self,
             exc: Type[BaseException] | None,
+            /,
+            value: BaseException | None,
+            tb: TracebackType | None,
+            limit: int | None = ...,
+            chain: bool = ...,
+        ) -> list[str]:
+            ...
+
+        @utils.wrap(traceback.format_exception)  # type: ignore
+        def _format_exception(
+            self: Self,
+            exc: BaseException | Type[BaseException] | None,
             /,
             value: BaseException | None = traceback._sentinel,  # type: ignore
             tb: TracebackType | None = traceback._sentinel,  # type: ignore
@@ -589,14 +611,31 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                         if not isinstance(exc, BaseException):
                             raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
 
-                    value, tb = exc, exc.__traceback__
+                    value, tb = exc, exc.__traceback__  # type: ignore
 
             return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
+
+        @overload
+        def _format_exception_only(
+            self: Self,
+            exc: BaseException,
+            /,
+        ) -> list[str]:
+            ...
+
+        @overload
+        def _format_exception_only(
+            self: Self,
+            exc: Type[BaseException] | None,
+            /,
+            value: BaseException | None,
+        ) -> list[str]:
+            ...
 
         @utils.wrap(traceback.format_exception_only)  # type: ignore
         def _format_exception_only(
             self: Self,
-            exc: Type[BaseException] | None,
+            exc: BaseException | Type[BaseException] | None,
             /,
             value: BaseException | None = traceback._sentinel,  # type: ignore
         ) -> list[str]:
@@ -608,7 +647,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                         if not isinstance(exc, BaseException):
                             raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
 
-                    value = exc
+                    value = exc  # type: ignore
 
             return list(self.format_exception(value.__class__, value))
 
@@ -669,10 +708,34 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     if sys.version_info >= (3, 10):
 
+        @overload
+        def _print_exception(
+            self: Self,
+            exc: BaseException,
+            /,
+            limit: int | None = ...,
+            file: TextIO | None = ...,
+            chain: bool = ...,
+        ) -> None:
+            ...
+
+        @overload
+        def _print_exception(
+            self: Self,
+            exc: Type[BaseException] | None,
+            /,
+            value: BaseException | None,
+            tb: TracebackType | None,
+            limit: int | None = ...,
+            file: TextIO | None = ...,
+            chain: bool = ...,
+        ) -> None:
+            ...
+
         @utils.wrap(traceback.print_exception)  # type: ignore
         def _print_exception(  # type: ignore
             self: Self,
-            exc: Type[BaseException] | None,
+            exc: BaseException | Type[BaseException] | None,
             /,
             value: BaseException | None = traceback._sentinel,  # type: ignore
             tb: TracebackType | None = traceback._sentinel,  # type: ignore
@@ -690,7 +753,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                         if not isinstance(exc, BaseException):
                             raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
 
-                    value, tb = exc, exc.__traceback__
+                    value, tb = exc, exc.__traceback__  # type: ignore
 
             self.print_traceback(value.__class__, value, tb, chain=chain, limit=limit, stream=file)
 
