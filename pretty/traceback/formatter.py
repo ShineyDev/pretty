@@ -808,7 +808,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         limit: int | None = None,
         file: TextIO | None = None,
     ) -> None:
-        self.print_stack(self.walk_stack(f or sys._getframe().f_back, limit=limit), stream=file)
+        frame = f or sys._getframe().f_back
+
+        if TYPE_CHECKING:
+            frame = cast(FrameType, frame)
+
+        self.print_stack(self.walk_stack(frame, limit=limit), stream=file)
 
     @utils.wrap(traceback.print_tb)  # type: ignore
     def _print_tb(
