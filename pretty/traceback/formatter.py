@@ -831,11 +831,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         f: FrameType | None,
     ) -> Iterator[tuple[FrameType, int]]:
         if sys.version_info >= (3, 11):
-            f = f or sys._getframe().f_back.f_back.f_back.f_back  # type: ignore
+            frame = f or sys._getframe().f_back.f_back.f_back.f_back  # type: ignore
         else:
-            f = f or sys._getframe().f_back.f_back  # type: ignore
+            frame = f or sys._getframe().f_back.f_back  # type: ignore
 
-        for frame, position in self.walk_stack(f):
+        if TYPE_CHECKING:
+            frame = cast(FrameType, frame)
+
+        for frame, position in self.walk_stack(frame):
             yield frame, position[0]
 
     @utils.wrap(traceback.walk_tb)  # type: ignore
