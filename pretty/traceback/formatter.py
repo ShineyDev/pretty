@@ -698,7 +698,10 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         tb: TracebackType | None,
         limit: int | None = None,
     ) -> list[str]:
-        return list(self.format_stack(self.walk_stack(tb, limit=limit)))
+        if not tb:
+            return list()
+        else:
+            return list(self.format_stack(self.walk_stack(tb, limit=limit)))
 
     @utils.wrap(traceback.print_exc)  # type: ignore
     def _print_exc(
