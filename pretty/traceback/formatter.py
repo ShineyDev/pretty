@@ -685,7 +685,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         f: FrameType | None = None,
         limit: int | None = None,
     ) -> list[str]:
-        return list(self.format_stack(self.walk_stack(f or sys._getframe().f_back, limit=limit)))
+        frame = f or sys._getframe().f_back
+
+        if TYPE_CHECKING:
+            frame = cast(FrameType, frame)
+
+        return list(self.format_stack(self.walk_stack(frame, limit=limit)))
 
     @utils.wrap(traceback.format_tb)  # type: ignore
     def _format_tb(
