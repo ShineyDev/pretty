@@ -1046,23 +1046,27 @@ class DefaultTracebackFormatter(TracebackFormatter):
                 limit = 0
 
         if isinstance(obj, types.FrameType):
-            while obj is not None and limit != 0:
-                yield obj, (obj.f_lineno, None, None, None)
-                obj = obj.f_back
+            frame = obj
+
+            while frame is not None and limit != 0:
+                yield frame, (frame.f_lineno, None, None, None)
+                frame = frame.f_back
 
                 if limit:
                     limit -= 1
         elif isinstance(obj, types.TracebackType):
-            while obj is not None and limit != 0:
-                if sys.version_info >= (3, 11):
-                    if obj.tb_lasti >= 0:
-                        yield obj.tb_frame, next(itertools.islice(obj.tb_frame.f_code.co_positions(), obj.tb_lasti // 2, None))
-                    else:
-                        yield obj.tb_frame, (obj.tb_lineno, None, None, None)
-                else:
-                    yield obj.tb_frame, (obj.tb_lineno, None, None, None)
+            traceback = obj
 
-                obj = obj.tb_next
+            while traceback is not None and limit != 0:
+                if sys.version_info >= (3, 11):
+                    if traceback.tb_lasti >= 0:
+                        yield traceback.tb_frame, next(itertools.islice(traceback.tb_frame.f_code.co_positions(), traceback.tb_lasti // 2, None))
+                    else:
+                        yield traceback.tb_frame, (traceback.tb_lineno, None, None, None)
+                else:
+                    yield traceback.tb_frame, (traceback.tb_lineno, None, None, None)
+
+                traceback = traceback.tb_next
 
                 if limit:
                     limit -= 1
