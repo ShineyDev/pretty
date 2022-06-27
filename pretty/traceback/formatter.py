@@ -569,27 +569,29 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     if sys.version_info >= (3, 10):
 
-        @overload
-        def _format_exception(
-            self: Self,
-            exc: BaseException,
-            /,
-            limit: int | None = ...,
-            chain: bool = ...,
-        ) -> list[str]:
-            ...
+        if TYPE_CHECKING:
 
-        @overload
-        def _format_exception(
-            self: Self,
-            exc: Type[BaseException] | None,
-            /,
-            value: BaseException | None,
-            tb: TracebackType | None,
-            limit: int | None = ...,
-            chain: bool = ...,
-        ) -> list[str]:
-            ...
+            @overload
+            def _format_exception(
+                self: Self,
+                exc: BaseException,
+                /,
+                limit: int | None = ...,
+                chain: bool = ...,
+            ) -> list[str]:
+                ...
+
+            @overload
+            def _format_exception(
+                self: Self,
+                exc: Type[BaseException] | None,
+                /,
+                value: BaseException | None,
+                tb: TracebackType | None,
+                limit: int | None = ...,
+                chain: bool = ...,
+            ) -> list[str]:
+                ...
 
         @utils.wrap(traceback.format_exception)  # type: ignore
         def _format_exception(
@@ -615,22 +617,24 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
             return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
 
-        @overload
-        def _format_exception_only(
-            self: Self,
-            exc: BaseException,
-            /,
-        ) -> list[str]:
-            ...
+        if TYPE_CHECKING:
 
-        @overload
-        def _format_exception_only(
-            self: Self,
-            exc: Type[BaseException] | None,
-            /,
-            value: BaseException | None,
-        ) -> list[str]:
-            ...
+            @overload
+            def _format_exception_only(
+                self: Self,
+                exc: BaseException,
+                /,
+            ) -> list[str]:
+                ...
+
+            @overload
+            def _format_exception_only(
+                self: Self,
+                exc: Type[BaseException] | None,
+                /,
+                value: BaseException | None,
+            ) -> list[str]:
+                ...
 
         @utils.wrap(traceback.format_exception_only)  # type: ignore
         def _format_exception_only(
@@ -716,29 +720,31 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     if sys.version_info >= (3, 10):
 
-        @overload
-        def _print_exception(
-            self: Self,
-            exc: BaseException,
-            /,
-            limit: int | None = ...,
-            file: TextIO | None = ...,
-            chain: bool = ...,
-        ) -> None:
-            ...
+        if TYPE_CHECKING:
 
-        @overload
-        def _print_exception(
-            self: Self,
-            exc: Type[BaseException] | None,
-            /,
-            value: BaseException | None,
-            tb: TracebackType | None,
-            limit: int | None = ...,
-            file: TextIO | None = ...,
-            chain: bool = ...,
-        ) -> None:
-            ...
+            @overload
+            def _print_exception(
+                self: Self,
+                exc: BaseException,
+                /,
+                limit: int | None = ...,
+                file: TextIO | None = ...,
+                chain: bool = ...,
+            ) -> None:
+                ...
+
+            @overload
+            def _print_exception(
+                self: Self,
+                exc: Type[BaseException] | None,
+                /,
+                value: BaseException | None,
+                tb: TracebackType | None,
+                limit: int | None = ...,
+                file: TextIO | None = ...,
+                chain: bool = ...,
+            ) -> None:
+                ...
 
         @utils.wrap(traceback.print_exception)  # type: ignore
         def _print_exception(  # type: ignore
