@@ -26,3 +26,19 @@ Environment
         When this environment variable is unset, the :term:`state <boolean value>` of each
         :term:`PYTHONPRETTY* <PYTHONPRETTYTRACEBACK>` environment variable is used to determine
         whether its respective module will be hooked.
+
+.. glossary::
+
+    PYTHONPRETTYANSI
+
+        This environment variable can toggle :term:`on or off <boolean value>` ANSI output for
+        pretty.
+
+        When this environment variable is set to a :term:`truthy value <boolean value>` ANSI output
+        will be enabled, regardless of the state of the :term:`NO_COLOR` environment variable.
+
+        When this environment variable is set to a :term:`falsey value <boolean value>` ANSI output
+        will be disabled, regardless of the state of the :term:`NO_COLOR` environment variable.
+
+        When this environment variable is unset the value of the :term:`NO_COLOR` environment
+        variable is considered, before ANSI output remains enabled by default.
