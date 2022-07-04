@@ -5,7 +5,7 @@ Environment
 
     PYTHONPRETTY
 
-        This environment variable can forcibly toggle :term:`on or off <boolean value>` the
+        This environment variable can toggle :term:`on or off <boolean value>` the
         :term:`main hook <pretty_hook.pth>` for pretty.
 
         When this environment variable is set to a :term:`truthy value <boolean value>` all pretty
