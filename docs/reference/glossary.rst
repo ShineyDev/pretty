@@ -3,22 +3,6 @@ Glossary
 
 .. glossary::
 
-    PYTHONPRETTY
-
-        This environment variable can toggle :term:`on or off <boolean value>` the
-        :term:`main hook <pretty_hook.pth>` for pretty.
-
-        When this environment variable is set to a :term:`truthy value <boolean value>`, all pretty
-        modules will be hooked, unless the module is explicitly disabled with its respective
-        :term:`PYTHONPRETTY... <PYTHONPRETTYTRACEBACK>` environment variable.
-
-        When this environment variable is set to a :term:`falsey value <boolean value>`, no pretty
-        module will be hooked, regardless of the value in its respective
-        :term:`PYTHONPRETTY... <PYTHONPRETTYTRACEBACK>` environment variable.
-
-        When this environment variable is unset, only the :term:`state <boolean value>` of each
-        :term:`PYTHONPRETTY... <PYTHONPRETTYTRACEBACK>` environment variable is used.
-
     PYTHONPRETTYANSI
 
         This environment variable can toggle :term:`on or off <boolean value>` ANSI output for
