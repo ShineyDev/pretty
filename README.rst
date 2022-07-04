@@ -37,41 +37,17 @@ Install
 
     $ python -m pip install --upgrade git+https://github.com/ShineyDev/pretty.git@main
 
+There is also a more in-depth `installation guide <https://docs.shiney.dev/pretty/latest/guide/installation>`_ in the documentation.
+
 
 Use
 ---
 
-If you wish to hook pretty.traceback into **all Python sessions**, set the `PYTHONPRETTYTRACEBACK <https://docs.shiney.dev/pretty/latest/reference/glossary#term-PYTHONPRETTYTRACEBACK>`_ environment variable to a `truthy value <https://docs.shiney.dev/pretty/latest/reference/glossary#term-boolean-value>`_.
-
 .. code:: shell
 
-    $ export PYTHONPRETTYTRACEBACK=1
+    $ export PYTHONPRETTY=1
 
-.. code:: python
-
-    >>> 1 / 0
-
-If you wish to hook pretty.traceback into **a single Python session**, call `pretty.traceback.hook() <https://docs.shiney.dev/pretty/latest/reference/pretty/traceback/hook>`_.
-
-.. code:: python
-
-    >>> import pretty
-    >>> pretty.traceback.hook()
-    >>>
-    >>> 1 / 0
-
-If you wish to use a formatter directly, initialize a new `PrettyTracebackFormatter <https://docs.shiney.dev/pretty/latest/reference/pretty/traceback/formatter/pretty>`_ or `DefaultTracebackFormatter <https://docs.shiney.dev/pretty/latest/reference/pretty/traceback/formatter/default>`_, or build your own implementation on `TracebackFormatter <https://docs.shiney.dev/pretty/latest/reference/pretty/traceback/formatter/abstract>`_.
-
-.. code:: python
-
-    >>> import pretty
-    >>>
-    >>> formatter = pretty.traceback.PrettyTracebackFormatter()
-    >>>
-    >>> try:
-    >>>     1 / 0
-    >>> except Exception as e:
-    >>>     formatter.print_traceback(type(e), e, e.__traceback__)
+There are also more in-depth `usage guides for each pretty module <https://docs.shiney.dev/pretty/latest/guide>`_ in the documentation.
 
 
 .. raw:: html

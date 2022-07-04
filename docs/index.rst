@@ -5,6 +5,15 @@ A Python library with practical APIs for prettier output.
 
 
 .. toctree::
+    :caption: Guide
+    :maxdepth: 1
+
+    guide/introduction
+    guide/installation
+    guide/environment
+    guide/traceback
+
+.. toctree::
     :caption: Reference
     :maxdepth: 2
 
