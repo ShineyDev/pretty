@@ -27,6 +27,21 @@ Environment
         :term:`PYTHONPRETTY* <PYTHONPRETTYTRACEBACK>` environment variable is used to determine
         whether its respective module will be hooked.
 
+    PYTHONPRETTYTRACEBACK
+
+        This environment variable can toggle :term:`on or off <boolean value>` the
+        :func:`~pretty.traceback.hook` for pretty.traceback.
+
+        When this environment variable is set to a :term:`truthy value <boolean value>`, after
+        considering the state of the :term:`PYTHONPRETTY` environment variable,
+        :func:`pretty.traceback.hook` is called.
+
+        When this environment variable is set to a :term:`falsey value <boolean value>`
+        :func:`pretty.traceback.hook` is not called.
+
+        When this environment variable is unset, after considering the state of the
+        :term:`PYTHONPRETTY` environment variable, :func:`pretty.traceback.hook` is not called.
+
 .. glossary::
 
     PYTHONPRETTYTHEME

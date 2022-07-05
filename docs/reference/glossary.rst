@@ -3,19 +3,6 @@ Glossary
 
 .. glossary::
 
-    PYTHONPRETTYTRACEBACK
-
-        This environment variable can toggle :term:`on or off <boolean value>` the
-        :func:`~pretty.traceback.hook` for pretty.traceback.
-
-        When this environment variable is set to a :term:`truthy value <boolean value>`, and the
-        :term:`PYTHONPRETTY` environment variable is set to a :term:`truthy value <boolean value>`
-        or unset, :func:`pretty.traceback.hook` is called.
-
-        When this environment variable is set to a :term:`falsey value <boolean value>`, unset, or
-        the :term:`PYTHONPRETTY` environment variable is set to a
-        :term:`falsey value <boolean value>`, :func:`pretty.traceback.hook` is not called.
-
     NO_COLOR
 
         This environment variable can toggle :term:`on or off <boolean value>` ANSI output for all
