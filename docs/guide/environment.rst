@@ -139,3 +139,8 @@ Environment
 
         When this environment variable is unset the value of the :term:`NO_COLOR` environment
         variable is considered, before ANSI output remains enabled by default.
+
+    NO_COLOR
+
+        This environment variable can toggle :term:`on or off <boolean value>` ANSI output for all
+        `supporting software <https://no-color.org>`_.

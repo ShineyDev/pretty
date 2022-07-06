@@ -3,11 +3,6 @@ Glossary
 
 .. glossary::
 
-    NO_COLOR
-
-        This environment variable can toggle :term:`on or off <boolean value>` ANSI output for all
-        `supporting software <https://no-color.org>`_.
-
     boolean value
 
         An environment variable with this value type corresponds to either the boolean value FALSE
