@@ -3,32 +3,6 @@ Glossary
 
 .. glossary::
 
-    boolean value
-
-        An environment variable with this value type corresponds to either the boolean value FALSE
-        or the boolean value TRUE.
-
-        The following case-insensitive values are considered FALSE:
-
-        - ``0``
-        - ``false``
-        - ``off``
-        - ``disable``
-        - ``no``
-        - ``n``
-
-        The following case-insensitive values are considered TRUE:
-
-        - ``1``
-        - ``true``
-        - ``on``
-        - ``enable``
-        - ``yes``
-        - ``y``
-
-        When the value of a boolean environment variable does not match any of the above
-        values, it will fall back to its unset behavior.
-
     json value
 
         An environment variable with this value type corresponds to a JSON-encoded key-value
