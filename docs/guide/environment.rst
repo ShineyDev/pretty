@@ -46,7 +46,7 @@ Environment
 
     PYTHONPRETTYTHEME
 
-        This environment variable can contain a :term:`theme <json value>` by which a formatter
+        This environment variable can contain a :term:`theme <JSON value>` by which a formatter
         might format its output.
 
         When this environment variable is set, its value will merge with the default pretty theme
@@ -172,3 +172,11 @@ Environment
 
         When the value of a boolean environment variable does not match any of the above
         values, it will fall back to its unset behavior.
+
+    JSON value
+
+        An environment variable with this value type corresponds to a JSON-encoded key-value
+        mapping.
+
+        When the value of a JSON environment variable does not parse, it will fall back to its
+        unset behavior.

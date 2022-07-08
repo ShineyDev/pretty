@@ -3,11 +3,6 @@ Glossary
 
 .. glossary::
 
-    json value
-
-        An environment variable with this value type corresponds to a JSON-encoded key-value
-        mapping.
-
     pretty_hook.pth
 
         A hook file is installed into site-packages when you install pretty. It allows pretty to
