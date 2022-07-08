@@ -180,3 +180,19 @@ Environment
 
         When the value of a JSON environment variable does not parse, it will fall back to its
         unset behavior.
+
+    SGR value
+
+        A theme item with this value type corresponds to a tuple of two |sgr| values, a single
+        |sgr| value, or ``None``.
+
+        When a theme item with this value type is set to ``None``, the corresponding theme item
+        will be ignored.
+
+        When a theme item with this value type is set to a tuple of two SGR values, for example
+        ``("38;2;255;179;255", "39")``, the values are used as the start and end format for the
+        corresponding token.
+
+        When a theme item with this value type is set to a single SGR value, for example ``"1"``,
+        the value is used as the start format for the corresponding token, with the end defaulting
+        to ``"0"``.
