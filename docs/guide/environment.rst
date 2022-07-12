@@ -1,6 +1,9 @@
 Environment
 ===========
 
+Toggle
+------
+
 .. glossary::
 
     PYTHONPRETTY
@@ -41,6 +44,10 @@ Environment
 
         When this environment variable is unset, after considering the state of the
         :term:`PYTHONPRETTY` environment variable, :func:`pretty.traceback.hook` is not called.
+
+
+Theme
+-----
 
 .. glossary::
 
@@ -124,6 +131,10 @@ Environment
 
             The :term:`SGR value` given to |token_operator| in an |ast|.
 
+
+Color
+-----
+
 .. glossary::
 
     PYTHONPRETTYANSI
@@ -144,6 +155,10 @@ Environment
 
         This environment variable can toggle :term:`on or off <boolean value>` ANSI output for all
         `supporting software <https://no-color.org>`_.
+
+
+Value
+-----
 
 .. glossary::
 
