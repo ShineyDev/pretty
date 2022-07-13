@@ -98,9 +98,9 @@ rst_prolog = """
 .. |token_operator_link| replace:: operator tokens
 .. _token_operator_link: https://docs.python.org/3/reference/lexical_analysis.html#operators
 
-.. |token_soft_keyword| replace:: |token_soft_keyword_link|_
-.. |token_soft_keyword_link| replace:: soft keyword tokens
-.. _token_soft_keyword_link: https://docs.python.org/3/reference/lexical_analysis.html#soft-keywords
+.. |token_keyword_soft| replace:: |token_keyword_soft_link|_
+.. |token_keyword_soft_link| replace:: soft keyword tokens
+.. _token_keyword_soft_link: https://docs.python.org/3/reference/lexical_analysis.html#soft-keywords
 """
 source_suffix = ".rst"
 

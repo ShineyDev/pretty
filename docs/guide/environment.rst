@@ -87,14 +87,14 @@ Theme
         
             The :term:`SGR value` given to the following |token_keyword| in an |ast|.
 
-            - ``_`` (in Python 3.10+ as described by |token_soft_keyword|)
+            - ``_`` (in Python 3.10+ as described by |token_keyword_soft|)
             - ``and``
             - ``as``
             - ``assert``
             - ``async``
             - ``await``
             - ``break``
-            - ``case`` (in Python 3.10+ as described by |token_soft_keyword|)
+            - ``case`` (in Python 3.10+ as described by |token_keyword_soft|)
             - ``class``
             - ``continue``
             - ``def``
@@ -111,7 +111,7 @@ Theme
             - ``in``
             - ``is``
             - ``lambda``
-            - ``match`` (in Python 3.10+ as described by |token_soft_keyword|)
+            - ``match`` (in Python 3.10+ as described by |token_keyword_soft|)
             - ``nonlocal``
             - ``not``
             - ``or``
