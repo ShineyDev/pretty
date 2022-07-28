@@ -10,4 +10,4 @@ Guide
     introduction
     installation
     environment
-    traceback
+    use/traceback

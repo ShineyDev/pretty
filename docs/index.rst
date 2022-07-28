@@ -11,7 +11,7 @@ A Python library with practical APIs for prettier output.
     guide/introduction
     guide/installation
     guide/environment
-    guide/traceback
+    guide/use/traceback
 
 .. toctree::
     :caption: Reference
