@@ -47,7 +47,7 @@ Use
 
     $ export PYTHONPRETTY=1
 
-There are also more in-depth `usage guides for each pretty module <https://docs.shiney.dev/pretty/latest/guide>`_ in the documentation.
+There are also more in-depth `usage guides <https://docs.shiney.dev/pretty/latest/guide/use>`_ in the documentation.
 
 
 .. raw:: html
