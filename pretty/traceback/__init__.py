@@ -46,11 +46,13 @@ def hook(
     """
     Hooks pretty.traceback into the current Python session.
 
-    .. note::
+
+    .. tip::
 
         You can set the :term:`PYTHONPRETTYTRACEBACK` environment
         variable to a :term:`truthy value <boolean value>` to hook
         pretty.traceback into all Python sessions.
+
 
     .. warning::
 
@@ -71,9 +73,9 @@ def hook(
         :class:`~pretty.traceback.TracebackFormatter` subclass
         overrides built-in :mod:`traceback` callables:
 
-        - The number and content of lines yielded by a ``format_*``
-          callable.
+        - The content yielded by a ``format_*`` callable.
         - The content printed by a ``print_*`` callable.
+
 
     Parameters
     ----------
