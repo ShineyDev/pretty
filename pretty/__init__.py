@@ -5,8 +5,9 @@ import json
 import os
 import sys
 
-from pretty import utils
-from pretty import traceback
+import pretty
+import pretty.utils
+import pretty.traceback
 
 
 class _VersionInfo(NamedTuple):
@@ -40,12 +41,12 @@ def _main() -> None:
     #
     #       See https://docs.python.org/3/library/site.html.
 
-    enable_all = utils.try_bool(os.environ.get("PYTHONPRETTY"), default=None)
+    enable_all = pretty.utils.try_bool(os.environ.get("PYTHONPRETTY"), default=None)
 
     if enable_all is False:
         return
 
-    theme = utils.pretty_theme.copy()
+    theme = pretty.utils.pretty_theme.copy()
 
     env_theme = os.environ.get("PYTHONPRETTYTHEME")
     if env_theme is not None:
@@ -56,9 +57,9 @@ def _main() -> None:
         else:
             theme.update(user_theme)
 
-    if utils.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK"), default=enable_all):
+    if pretty.utils.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK"), default=enable_all):
         try:
-            traceback.hook(theme=theme)
+            pretty.traceback.hook(theme=theme)
         except Exception as e:
             _fail(e, "failed to hook pretty.traceback")
 
