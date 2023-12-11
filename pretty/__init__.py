@@ -22,17 +22,12 @@ version: str = "2.0.0a"
 version_info: _VersionInfo = _VersionInfo(2, 0, 0, "alpha", 0)
 
 
-def _fail(e, m):
-    if not hasattr(sys, "last_value"):
-        try:
-            sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
-        except Exception:
-            pass
-        else:
-            print(f"ERROR:pretty:{m}. see traceback.print_last().")
-            return
-
-    print(f"ERROR:pretty:{m}.")
+def _fail(e: Exception, m: str) -> None:
+    if hasattr(sys, "last_value") and sys.last_value is not None:
+        print(f"ERROR:pretty:{m}.")
+    else:
+        sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
+        print(f"ERROR:pretty:{m}. see traceback.print_last().")
 
 
 def _main() -> None:
