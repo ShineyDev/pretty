@@ -5,7 +5,6 @@ import json
 import os
 import sys
 
-import pretty
 import pretty.utils
 import pretty.traceback
 
