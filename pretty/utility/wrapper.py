@@ -10,6 +10,28 @@ if TYPE_CHECKING:
     _T = TypeVar("_T")
 
 
+def wrap(
+    wrapped: Callable[_P, _T],
+    /,
+) -> Callable[[Callable[_P, _T]], Callable[_P, _T]]:
+    def decorator(
+        wrapper: Callable[_P, _T],
+        /,
+    ) -> Callable[_P, _T]:
+        wrapper.__doc__ = wrapped.__doc__
+        wrapper.__name__ = wrapped.__name__
+        wrapper.__qualname__ = wrapped.__qualname__
+
+        try:
+            wrapper.__wrapped__ = wrapped
+        except AttributeError:
+            pass
+
+        return wrapper
+
+    return decorator
+
+
 def wrap_fallback(
     wrapped: Callable[_P, _T],
     /,
@@ -18,6 +40,9 @@ def wrap_fallback(
         wrapper: Callable[_P, _T],
         /,
     ) -> Callable[_P, _T]:
+        wrapper = wrap(wrapped)(wrapper)
+
+        @wrap(wrapper)
         def inner(
             *args: _P.args,
             **kwargs: _P.kwargs,
@@ -27,18 +52,12 @@ def wrap_fallback(
             except Exception:
                 return wrapped(*args, **kwargs)
 
-        inner.__doc__ = wrapped.__doc__
-        inner.__name__ = wrapped.__name__
-        inner.__qualname__ = wrapped.__qualname__
-
-        inner.__wrapped__ = wrapper
-        wrapper.__wrapped__ = wrapped
-
         return inner
 
     return decorator
 
 
 __all__ = [
+    "wrap",
     "wrap_fallback",
 ]
