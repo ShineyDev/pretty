@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
     from typing import Any, Sequence, TypeVar
 
 import os
@@ -11,8 +10,6 @@ import sys
 
 if TYPE_CHECKING:
     _T = TypeVar("_T")
-
-    _FT = TypeVar("_FT", bound=Callable[..., Any])
 
 
 # NOTE: SGR color values are HSV(x°, 30%, 100%) where;
