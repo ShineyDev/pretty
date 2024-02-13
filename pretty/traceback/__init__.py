@@ -10,11 +10,12 @@ import traceback
 
 from pretty.traceback.formatter import *
 from pretty.traceback.formatter import __all__ as _formatter__all__
+from pretty.utility import MISSING
 
 
 if TYPE_CHECKING:
     _P = ParamSpec("_P")
-    _TTF = TypeVar("_TTF", bound=TracebackFormatter)
+    _FT = TypeVar("_FT", bound=TracebackFormatter)
 
 
 _formatter = None
@@ -22,7 +23,6 @@ _formatter = None
 
 @overload
 def hook(
-    cls: None = ...,
     *,
     theme: dict[str, Any] = ...,
 ) -> PrettyTracebackFormatter:
@@ -31,18 +31,20 @@ def hook(
 
 @overload
 def hook(
-    cls: Callable[_P, _TTF],
+    cls: Callable[_P, _FT],
+    /,
     *args: _P.args,
     **kwargs: _P.kwargs,
-) -> _TTF:
+) -> _FT:
     ...
 
 
 def hook(
-    cls: Callable[_P, _TTF] | None = None,
+    cls: Callable[_P, _FT] = MISSING,
+    /,
     *args: _P.args,
     **kwargs: _P.kwargs,
-) -> _TTF | PrettyTracebackFormatter:
+) -> _FT | PrettyTracebackFormatter:
     """
     Hooks pretty.traceback into the current Python session.
 
@@ -93,9 +95,7 @@ def hook(
 
     global _formatter
 
-    formatter = cls and cls(*args, **kwargs) or PrettyTracebackFormatter(*args, **kwargs)
-
-    _formatter = formatter
+    _formatter = formatter = cls and cls(*args, **kwargs) or PrettyTracebackFormatter(*args, **kwargs)
 
     traceback.extract_stack = formatter._extract_stack  # type: ignore
     traceback.extract_tb = formatter._extract_tb  # type: ignore
