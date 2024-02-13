@@ -11,8 +11,9 @@ import json
 import os
 import sys
 
-import pretty.utils
-import pretty.traceback
+import pretty
+from pretty import traceback as traceback
+from pretty import utils as utils
 
 
 class _VersionInfo(NamedTuple):
@@ -72,4 +73,7 @@ def _main_catchall() -> None:
         _fail(e, "failed to initialize pretty")
 
 
-__all__ = []
+__all__ = [
+    "traceback",
+    "utils",
+]
