@@ -37,3 +37,8 @@ def wrap_fallback(
         return inner
 
     return decorator
+
+
+__all__ = [
+    "wrap_fallback",
+]
