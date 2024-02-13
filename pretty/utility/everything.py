@@ -6,7 +6,6 @@ if TYPE_CHECKING:
     from typing import Any, Sequence, TypeVar
 
 import os
-import re
 import sys
 
 
@@ -76,28 +75,6 @@ pretty_theme: dict[str, Any] = {
     "traceback_scope_key_sgr": ("38;2;191;191;191", "39"),
     "traceback_source_sgr": None,
 }
-
-
-_format_pattern = re.compile("{((?:\"(?:[^\\\"]|(\\\\)*\\\")*\"|'(?:[^\\']|(\\\\)*\\')*'|[^{}])+)}")
-
-
-def format(
-    string: str,
-    **kwargs: Any,
-) -> str:
-    string = "\x0E".join(string.replace("{{", "\x0F").rsplit("}}"))
-
-    result = list()
-
-    index = 0
-    for match in re.finditer(_format_pattern, string):
-        result.append(string[index : match.start(0)])
-        result.append(str(eval(match.group(1), None, kwargs)))
-        index = match.end(0)
-
-    result.append(string[index:])
-
-    return "".join(result).replace("\x0F", "{").replace("\x0E", "}")
 
 
 def rindex(
@@ -269,7 +246,6 @@ def wrap(wrapped: _FT) -> Callable[[_FT], _FT]:
 
 
 __all__ = [
-    "format",
     "rindex",
     "sweeten",
     "try_attr",

@@ -885,7 +885,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
     context_header = "During handling of the above exception, another exception occurred:"
     location_format = "File \"{filename}\", line {lineno}, in {name}"  # fmt: skip
     recursion_cutoff = 3
-    recursion_message_format = "[Previous line repeated {times} more time{'' if times == 1 else 's'}]"
+    recursion_message_format = "[Previous line repeated {times} more time{times_s}]"
     traceback_header = "Traceback (most recent call last):"
 
     def format_exception(
@@ -932,7 +932,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
         lineno = position[0]
 
-        yield pretty.utility.format(f"{self.location_format}\n", filename=filename, lineno=lineno, name=name)
+        yield self.location_format.format(filename=filename, lineno=lineno, name=name) + "\n"
 
         if isinstance(frame, types.FrameType):
             line = linecache.getline(filename, lineno)
@@ -982,7 +982,8 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
             if current_filename != last_filename or current_lineno != last_lineno or current_name != last_name:
                 if recursion_times > self.recursion_cutoff:
-                    yield pretty.utility.format(f"{self.recursion_message_format}\n", times=recursion_times - self.recursion_cutoff)
+                    times = recursion_times - self.recursion_cutoff
+                    yield self.recursion_message_format.format(times=times, times_s="" if times == 1 else "s") + "\n"
 
                 last_filename = current_filename
                 last_lineno = current_lineno
@@ -997,7 +998,8 @@ class DefaultTracebackFormatter(TracebackFormatter):
             yield from self.format_frame((frame, position), display_locals=display_locals)
 
         if recursion_times > self.recursion_cutoff:
-            yield pretty.utility.format(f"{self.recursion_message_format}\n", times=recursion_times - self.recursion_cutoff)
+            times = recursion_times - self.recursion_cutoff
+            yield self.recursion_message_format.format(times=times, times_s="" if times == 1 else "s") + "\n"
 
     def format_traceback(
         self: Self,
