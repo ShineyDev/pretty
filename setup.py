@@ -71,6 +71,9 @@ _version_regex = r"^version(?:\s*:\s*str)?\s*=\s*('|\")((?:[0-9]+\.)*[0-9]+(?:\.
 with open("pretty/__init__.py") as stream:
     match = re.search(_version_regex, stream.read(), re.MULTILINE)
 
+if not match:
+    raise RuntimeError("could not find version")
+
 version = match.group(2)
 
 if match.group(3) is not None:
@@ -92,6 +95,7 @@ if match.group(3) is not None:
 
 setuptools.setup(
     author="ShineyDev",
+    author_email="contact@shiney.dev",
     cmdclass=cmdclass,
     description="A Python library with practical APIs for prettier output.",
     extras_require=extras_require,
