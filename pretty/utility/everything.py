@@ -221,30 +221,6 @@ def try_str(
         return default
 
 
-def wrap(wrapped: _FT) -> Callable[[_FT], _FT]:
-    def decorator(wrapper: _FT) -> _FT:
-        def function(*args, **kwargs):
-            try:
-                return wrapper(*args, **kwargs)
-            except Exception:
-                return wrapped(*args, **kwargs)
-
-        try:
-            function.__dict__.update(wrapped.__dict__)
-        except AttributeError:
-            pass
-
-        function.__doc__ = wrapped.__doc__
-        function.__name__ = wrapped.__name__
-        function.__qualname__ = wrapped.__qualname__
-        function.__module__ = wrapped.__module__
-        function.__wrapped__ = wrapped
-
-        return function  # type: ignore
-
-    return decorator
-
-
 __all__ = [
     "rindex",
     "sweeten",
@@ -253,5 +229,4 @@ __all__ = [
     "try_name",
     "try_repr",
     "try_str",
-    "wrap",
 ]

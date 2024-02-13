@@ -504,7 +504,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_traceback(type, value, traceback, chain=chain, display_locals=display_locals, limit=limit)))
 
-    @pretty.utility.wrap(traceback.extract_stack)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.extract_stack)  # type: ignore
     def _extract_stack(
         self: Self,
         f: FrameType | None = None,
@@ -533,7 +533,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         return stack
 
-    @pretty.utility.wrap(traceback.extract_tb)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.extract_tb)  # type: ignore
     def _extract_tb(
         self: Self,
         tb: TracebackType | None = None,
@@ -559,7 +559,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         return stack
 
-    @pretty.utility.wrap(traceback.format_exc)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.format_exc)  # type: ignore
     def _format_exc(
         self: Self,
         limit: int | None = None,
@@ -595,7 +595,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             ) -> list[str]:
                 ...
 
-        @pretty.utility.wrap(traceback.format_exception)  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.format_exception)  # type: ignore
         def _format_exception(
             self: Self,
             exc: BaseException | Type[BaseException] | None,
@@ -638,7 +638,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             ) -> list[str]:
                 ...
 
-        @pretty.utility.wrap(traceback.format_exception_only)  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.format_exception_only)  # type: ignore
         def _format_exception_only(
             self: Self,
             exc: BaseException | Type[BaseException] | None,
@@ -659,7 +659,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     else:
 
-        @pretty.utility.wrap(traceback.format_exception)  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.format_exception)  # type: ignore
         def _format_exception(  # type: ignore
             self: Self,
             etype: type[BaseException] | None,
@@ -670,7 +670,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ) -> list[str]:
             return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
 
-        @pretty.utility.wrap(traceback.format_exception_only)  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.format_exception_only)  # type: ignore
         def _format_exception_only(
             self: Self,
             etype: type[BaseException] | None,
@@ -678,14 +678,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ) -> list[str]:
             return list(self.format_exception(value.__class__, value))
 
-    @pretty.utility.wrap(traceback.format_list)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.format_list)  # type: ignore
     def _format_list(
         self: Self,
         extracted_list: list[FrameSummary | tuple[str, int, str, str]],
     ) -> list[str]:
         return list(self.format_stack((traceback.FrameSummary(filename, lineno, name, line=line), (lineno, None, None, None)) for (filename, lineno, name, line) in extracted_list))
 
-    @pretty.utility.wrap(traceback.format_stack)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.format_stack)  # type: ignore
     def _format_stack(
         self: Self,
         f: FrameType | None = None,
@@ -698,7 +698,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         return list(self.format_stack(self.walk_stack(frame, limit=limit)))
 
-    @pretty.utility.wrap(traceback.format_tb)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.format_tb)  # type: ignore
     def _format_tb(
         self: Self,
         tb: TracebackType | None,
@@ -709,7 +709,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         else:
             return list(self.format_stack(self.walk_stack(tb, limit=limit)))
 
-    @pretty.utility.wrap(traceback.print_exc)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.print_exc)  # type: ignore
     def _print_exc(
         self,
         limit: int | None = None,
@@ -748,7 +748,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             ) -> None:
                 ...
 
-        @pretty.utility.wrap(traceback.print_exception)  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.print_exception)  # type: ignore
         def _print_exception(  # type: ignore
             self: Self,
             exc: BaseException | Type[BaseException] | None,
@@ -775,7 +775,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     else:
 
-        @pretty.utility.wrap(traceback.print_exception)  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.print_exception)  # type: ignore
         def _print_exception(  # type: ignore
             self: Self,
             etype: type[BaseException] | None,
@@ -787,7 +787,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ) -> None:
             self.print_traceback(value.__class__, value, tb, chain=chain, limit=limit, stream=file)
 
-    @pretty.utility.wrap(traceback.print_last)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.print_last)  # type: ignore
     def _print_last(
         self: Self,
         limit: int | None = None,
@@ -801,7 +801,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.print_traceback(value.__class__, value, traceback, chain=chain, limit=limit, stream=file)
 
-    @pretty.utility.wrap(traceback.print_list)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.print_list)  # type: ignore
     def _print_list(
         self: Self,
         extracted_list: list[FrameSummary | tuple[str, int, str, str]],
@@ -809,7 +809,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     ) -> None:
         self.print_stack(((traceback.FrameSummary(filename, lineno, name, line=line), (lineno, None, None, None)) for (filename, lineno, name, line) in extracted_list), stream=file)
 
-    @pretty.utility.wrap(traceback.print_stack)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.print_stack)  # type: ignore
     def _print_stack(
         self: Self,
         f: FrameType | None = None,
@@ -823,7 +823,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         self.print_stack(self.walk_stack(frame, limit=limit), stream=file)
 
-    @pretty.utility.wrap(traceback.print_tb)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.print_tb)  # type: ignore
     def _print_tb(
         self: Self,
         tb: TracebackType | None,
@@ -833,7 +833,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         if tb:
             self.print_stack(self.walk_stack(tb, limit=limit), stream=file)
 
-    @pretty.utility.wrap(traceback.walk_stack)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.walk_stack)  # type: ignore
     def _walk_stack(
         self: Self,
         f: FrameType | None,
@@ -849,7 +849,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         for frame, position in self.walk_stack(frame):
             yield frame, position[0]
 
-    @pretty.utility.wrap(traceback.walk_tb)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.walk_tb)  # type: ignore
     def _walk_tb(
         self: Self,
         tb: TracebackType,
