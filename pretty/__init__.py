@@ -55,7 +55,8 @@ def _main() -> None:
         except json.JSONDecodeError as e:
             _fail(e, "failed to load PYTHONPRETTYTHEME, falling back to default")
         else:
-            theme.update(user_theme)
+            if isinstance(user_theme, dict):
+                theme.update(user_theme)
 
     if pretty.utils.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK"), default=enable_all):
         try:

@@ -193,8 +193,8 @@ Value
         An environment variable with this value type corresponds to a JSON-encoded key-value
         mapping.
 
-        When the value of a JSON environment variable does not parse, it will fall back to its
-        unset behavior.
+        When the value of a JSON environment variable does not parse or does not produce a mapping,
+        it will fall back to its unset behavior.
 
     SGR value
 
