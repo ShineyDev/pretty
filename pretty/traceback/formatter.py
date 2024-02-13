@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Iterator
-    from typing import Any, TextIO, Type, cast, overload
+    from typing import Any, TextIO, cast, overload
     from typing_extensions import Self
 
     from traceback import FrameSummary, StackSummary
@@ -18,6 +18,7 @@ import traceback
 import types
 
 import pretty
+from pretty.utility import MISSING
 
 
 class TracebackFormatter(metaclass=abc.ABCMeta):
@@ -30,7 +31,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def format_exception(
         self: Self,
-        type: Type[BaseException] | Type[None],
+        type: type[BaseException] | type[None],
         value: BaseException | None,
         /,
     ) -> Iterator[str]:
@@ -63,7 +64,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
         /,
         *,
-        display_locals: bool | None = None,
+        display_locals: bool = MISSING,
     ) -> Iterator[str]:
         """
         |iter|
@@ -111,7 +112,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
         /,
         *,
-        display_locals: bool | None = None,
+        display_locals: bool = MISSING,
     ) -> Iterator[str]:
         """
         |iter|
@@ -152,14 +153,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def format_traceback(
         self: Self,
-        type: Type[BaseException] | Type[None],
+        type: type[BaseException] | type[None],
         value: BaseException | None,
         traceback: TracebackType | None,
         /,
         *,
-        chain: bool | None = None,
-        display_locals: bool | None = None,
-        limit: int | None = None,
+        chain: bool = MISSING,
+        display_locals: bool = MISSING,
+        limit: int = MISSING,
     ) -> Iterator[str]:
         """
         |iter|
@@ -195,11 +196,11 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_exception(
         self: Self,
-        type: Type[BaseException] | Type[None],
+        type: type[BaseException] | type[None],
         value: BaseException | None,
         /,
         *,
-        stream: TextIO | None = None,
+        stream: TextIO = MISSING,
     ) -> None:
         """
         Prints an exception to :data:`~sys.stderr`.
@@ -221,8 +222,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
         /,
         *,
-        display_locals: bool | None = None,
-        stream: TextIO | None = None,
+        display_locals: bool = MISSING,
+        stream: TextIO = MISSING,
     ) -> None:
         """
         Prints a frame to :data:`~sys.stderr`.
@@ -256,8 +257,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         stack: Iterable[tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]]],
         /,
         *,
-        display_locals: bool | None = None,
-        stream: TextIO | None = None,
+        display_locals: bool = MISSING,
+        stream: TextIO = MISSING,
     ) -> None:
         """
         Prints a stack to :data:`~sys.stderr`.
@@ -296,15 +297,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def print_traceback(
         self: Self,
-        type: Type[BaseException] | Type[None],
+        type: type[BaseException] | type[None],
         value: BaseException | None,
         traceback: TracebackType | None,
         /,
         *,
-        chain: bool | None = None,
-        display_locals: bool | None = None,
-        limit: int | None = None,
-        stream: TextIO | None = None,
+        chain: bool = MISSING,
+        display_locals: bool = MISSING,
+        limit: int = MISSING,
+        stream: TextIO = MISSING,
     ) -> None:
         """
         Prints a traceback to :data:`~sys.stderr`.
@@ -339,7 +340,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         obj: FrameType | TracebackType,
         /,
         *,
-        limit: int | None = None,
+        limit: int = MISSING,
     ) -> Iterator[tuple[FrameType, tuple[int, int | None, int | None, int | None]]]:
         """
         |iter|
@@ -374,7 +375,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def write_exception(
         self: Self,
-        type: Type[BaseException] | Type[None],
+        type: type[BaseException] | type[None],
         value: BaseException | None,
         /,
         *,
@@ -401,7 +402,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         /,
         *,
         stream: TextIO,
-        display_locals: bool | None = None,
+        display_locals: bool = MISSING,
     ) -> None:
         """
         Writes a frame to a stream.
@@ -436,7 +437,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         /,
         *,
         stream: TextIO,
-        display_locals: bool | None = None,
+        display_locals: bool = MISSING,
     ) -> None:
         """
         Writes a stack to a stream.
@@ -469,15 +470,15 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     def write_traceback(
         self: Self,
-        type: Type[BaseException] | Type[None],
+        type: type[BaseException] | type[None],
         value: BaseException | None,
         traceback: TracebackType | None,
         /,
         *,
         stream: TextIO,
-        chain: bool | None = None,
-        display_locals: bool | None = None,
-        limit: int | None = None,
+        chain: bool = MISSING,
+        display_locals: bool = MISSING,
+        limit: int = MISSING,
     ) -> None:
         """
         Writes a traceback to a stream.
@@ -661,7 +662,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         @pretty.utility.wrap(traceback.format_exception)  # type: ignore
         def _format_exception(  # type: ignore
             self: Self,
-            etype: Type[BaseException] | None,
+            etype: type[BaseException] | None,
             value: BaseException | None,
             tb: TracebackType | None,
             limit: int | None = None,
@@ -672,7 +673,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         @pretty.utility.wrap(traceback.format_exception_only)  # type: ignore
         def _format_exception_only(
             self: Self,
-            etype: Type[BaseException] | None,
+            etype: type[BaseException] | None,
             value: BaseException | None,
         ) -> list[str]:
             return list(self.format_exception(value.__class__, value))
@@ -777,7 +778,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         @pretty.utility.wrap(traceback.print_exception)  # type: ignore
         def _print_exception(  # type: ignore
             self: Self,
-            etype: Type[BaseException] | None,
+            etype: type[BaseException] | None,
             value: BaseException | None,
             tb: TracebackType | None,
             limit: int | None = None,
@@ -889,7 +890,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     def format_exception(
         self: Self,
-        type: Type[BaseException] | Type[None],
+        type: type[BaseException] | type[None],
         value: BaseException | None,
         /,
     ) -> Iterator[str]:
@@ -1000,7 +1001,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     def format_traceback(
         self: Self,
-        type: Type[BaseException] | Type[None],
+        type: type[BaseException] | type[None],
         value: BaseException | None,
         traceback: TracebackType | None,
         /,
