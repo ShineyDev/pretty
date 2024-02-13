@@ -138,23 +138,6 @@ _bool_map = {
 _bool_map = {v: k for k in _bool_map.keys() for v in _bool_map[k]}
 
 
-def try_bool(
-    obj: Any,
-    *,
-    default: _T,
-) -> bool | _T:
-    if isinstance(obj, str):
-        try:
-            return _bool_map[obj.lower()]
-        except KeyError:
-            return default
-    else:
-        try:
-            return bool(obj)
-        except Exception:
-            return default
-
-
 def try_name(
     obj: Any,
     *,
@@ -222,7 +205,6 @@ __all__ = [
     "rindex",
     "sweeten",
     "try_attr",
-    "try_bool",
     "try_name",
     "try_repr",
     "try_str",
