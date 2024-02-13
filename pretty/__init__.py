@@ -13,7 +13,7 @@ import sys
 
 import pretty
 from pretty import traceback as traceback
-from pretty import utils as utils
+from pretty import utility as utility
 
 
 class _VersionInfo(NamedTuple):
@@ -42,12 +42,12 @@ def _main() -> None:
     #
     #       See https://docs.python.org/3/library/site.html.
 
-    enable_all = pretty.utils.try_bool(os.environ.get("PYTHONPRETTY"), default=None)
+    enable_all = pretty.utility.try_bool(os.environ.get("PYTHONPRETTY"), default=None)
 
     if enable_all is False:
         return
 
-    theme = pretty.utils.pretty_theme.copy()
+    theme = pretty.utility.pretty_theme.copy()
 
     env_theme = os.environ.get("PYTHONPRETTYTHEME")
     if env_theme is not None:
@@ -59,7 +59,7 @@ def _main() -> None:
             if isinstance(user_theme, dict):
                 theme.update(user_theme)
 
-    if pretty.utils.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK"), default=enable_all):
+    if pretty.utility.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK"), default=enable_all):
         try:
             pretty.traceback.hook(theme=theme)
         except Exception as e:
@@ -75,5 +75,5 @@ def _main_catchall() -> None:
 
 __all__ = [
     "traceback",
-    "utils",
+    "utility",
 ]
