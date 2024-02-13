@@ -1,3 +1,9 @@
+"""
+pretty: A Python library with practical APIs for prettier output.
+
+TODO(introduction)
+"""
+
 from __future__ import annotations
 from typing import NamedTuple
 
