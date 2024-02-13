@@ -114,9 +114,11 @@ def get_environment_logging(
     if value is MISSING:
         return default
 
-    integer: int = try_integer(value, default=MISSING)
-
-    if integer is not MISSING:
+    try:
+        integer = int(value)
+    except ValueError:
+        pass
+    else:
         return integer
 
     try:
