@@ -59,7 +59,7 @@ def _main() -> None:
             else:
                 logger.warning("PYTHONPRETTYTHEME not a mapping, falling back to default")
 
-    if pretty.utility.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK"), default=enable_all):
+    if pretty.utility.get_environment_boolean("PYTHONPRETTYTRACEBACK", default=enable_all):
         try:
             pretty.traceback.hook(theme=theme)
         except Exception as e:
