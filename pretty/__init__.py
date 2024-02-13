@@ -30,10 +30,18 @@ version_info: _VersionInfo = _VersionInfo(2, 0, 0, "alpha", 0)
 
 def _fail(e: Exception, m: str) -> None:
     if hasattr(sys, "last_value") and sys.last_value is not None:
-        print(f"ERROR:pretty:{m}.")
+        _log("ERROR", f"{m}.")
     else:
         sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
-        print(f"ERROR:pretty:{m}. see traceback.print_last().")
+        _log("ERROR", f"{m}. see traceback.print_last().")
+
+
+def _log(
+    level: str,    
+    message: str,
+    /,
+) -> None:
+    print(f"{level}:pretty:{message}")  # TODO: use logging, so that this can be disabled
 
 
 def _main() -> None:
