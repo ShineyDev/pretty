@@ -70,6 +70,8 @@ def _main() -> None:
         else:
             if isinstance(user_theme, dict):
                 theme.update(user_theme)
+            else:
+                _log("WARNING", "PYTHONPRETTYTHEME not a mapping, falling back to default")
 
     if pretty.utility.try_bool(os.environ.get("PYTHONPRETTYTRACEBACK"), default=enable_all):
         try:
