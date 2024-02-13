@@ -20,7 +20,7 @@ jobs:
 
     steps:
     - name: Stale
-      uses: actions/stale@v3
+      uses: actions/stale@v9
       with:
         repo-token: ${{ env.AUTH_TOKEN }}
         days-before-stale: 30
@@ -49,7 +49,7 @@ jobs:
 
     steps:
     - name: Unstale
-      uses: actions/github-script@v3
+      uses: actions/github-script@v7
       with:
         github-token: ${{ env.AUTH_TOKEN }}
         script: |-

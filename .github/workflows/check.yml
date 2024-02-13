@@ -5,24 +5,22 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  PYTHON_VERSION: 3.12
+
 jobs:
   job:
-    strategy:
-      fail-fast: false
-      matrix:
-        PYTHON_VERSION: ["3.8", "3.9", "3.10"]
-
     name: Check
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.PYTHON_VERSION }}
-      uses: actions/setup-python@v2
+    - name: Set up Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.PYTHON_VERSION }}
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install ${{ github.event.repository.name }}
       run: |-
@@ -31,7 +29,7 @@ jobs:
         python -m pip install --upgrade .
 
     - name: Set up Node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         node-version: lts/*
 
@@ -40,5 +38,31 @@ jobs:
 
     - name: Check
       run: |-
-        pyright ./${{ github.event.repository.name }}
-        pyright --verifytypes ${{ github.event.repository.name }} --ignoreexternal
+        pyright ./${{ github.event.repository.name }} --outputjson \
+        | jq -r '.generalDiagnostics[] | [.file, .severity, .range.start.line+1, .range.start.character+1, .range.end.line+1, .range.end.character+1, .message] | @tsv' \
+        | while IFS=$'\t' read -r file severity line col endLine endColumn message; do \
+          severity=$([ "$severity" == "information" ] && echo "notice" || echo "$severity" ); \
+          file=$(python -c "import os; print(os.path.relpath('$file', '.'))"); \
+          echo "$file#L$line"; \
+          echo "::$severity file=$file,line=$line,col=$col,endLine=$endLine,endColumn=$endColumn::$message"; \
+        done
+        python3 -c "exit(${PIPESTATUS[0]})"
+
+    - name: Verify
+      run: |-
+        jsonOut=$(pyright --verifytypes ${{ github.event.repository.name }} --ignoreexternal --outputjson) || true
+        typeComplete=$(echo $jsonOut | jq -r '.summary.errorCount | if . == 0 then 0 else 1 end')
+        packageDir=$(echo $jsonOut | jq -r '.typeCompleteness.packageRootDirectory')
+        echo $jsonOut | jq -r '.typeCompleteness.symbols[].diagnostics[] | select((.file != "") and (.message | startswith("No docstring found") | not)) | [.file, .severity, has("range"), .range.start.line+1, .range.start.character+1, .range.end.line+1, .range.end.character+1, .message] | @tsv' \
+        | while IFS=$'\t' read -r file severity hasRange line col endLine endColumn message; do \
+            severity=$([ "$severity" == "information" ] && echo "notice" || echo "$severity" ); \
+            file=$(python -c "import os; print(os.path.relpath('$file', os.path.dirname('$packageDir')))"); \
+            if [ "$hasRange" == "true" ]; then \
+              echo "$file#L$line"; \
+              echo "::$severity title=Verify,file=$file,line=$line,col=$col,endLine=$endLine,endColumn=$endColumn::$message"; \
+            else \
+              echo "$file"; \
+              echo "::$severity title=Verify,file=$file::$message"; \
+            fi; \
+        done
+        python -c "exit($typeComplete)"
