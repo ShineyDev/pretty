@@ -10,7 +10,6 @@ from typing import NamedTuple
 import json
 import logging
 import os
-import sys
 
 import pretty
 from pretty import traceback as traceback
