@@ -3,10 +3,11 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Iterator
-    from traceback import FrameSummary, StackSummary
-    from types import FrameType, TracebackType
     from typing import Any, TextIO, Type, cast, overload
     from typing_extensions import Self
+
+    from traceback import FrameSummary, StackSummary
+    from types import FrameType, TracebackType
 
 import abc
 import itertools
