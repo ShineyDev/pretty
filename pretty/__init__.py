@@ -14,6 +14,7 @@ import os
 import pretty
 from pretty import traceback as traceback
 from pretty import utility as utility
+from pretty.utility import MISSING
 
 
 class _VersionInfo(NamedTuple):
@@ -37,7 +38,7 @@ def _main() -> None:
     #
     #       See https://docs.python.org/3/library/site.html.
 
-    enable_all = pretty.utility.get_environment_boolean("PYTHONPRETTY", default=None)
+    enable_all = pretty.utility.get_environment_boolean("PYTHONPRETTY", default=MISSING)
 
     if enable_all is False:
         return
