@@ -37,7 +37,7 @@ def _main() -> None:
     #
     #       See https://docs.python.org/3/library/site.html.
 
-    enable_all = pretty.utility.try_bool(os.environ.get("PYTHONPRETTY"), default=None)
+    enable_all = pretty.utility.get_environment_boolean("PYTHONPRETTY", default=None)
 
     if enable_all is False:
         return
