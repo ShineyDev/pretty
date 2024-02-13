@@ -28,12 +28,16 @@ version: str = "2.0.0a"
 version_info: _VersionInfo = _VersionInfo(2, 0, 0, "alpha", 0)
 
 
-def _fail(e: Exception, m: str) -> None:
+def _fail(
+    exc_value: Exception,
+    message: str,
+    /,
+) -> None:
     if hasattr(sys, "last_value") and sys.last_value is not None:
-        _log("ERROR", f"{m}.")
+        _log("ERROR", f"{message}.")
     else:
-        sys.last_type, sys.last_value, sys.last_traceback = type(e), e, e.__traceback__
-        _log("ERROR", f"{m}. see traceback.print_last().")
+        sys.last_type, sys.last_value, sys.last_traceback = type(exc_value), exc_value, exc_value.__traceback__
+        _log("ERROR", f"{message}. see traceback.print_last().")
 
 
 def _log(
