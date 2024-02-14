@@ -33,7 +33,11 @@
 Install
 -------
 
-**Warning**: This installation may be unstable. If you're looking for a stable release, go `here <https://github.com/ShineyDev/pretty/tags>`_.
+.. pull-quote::
+
+    [!WARNING]
+
+    This installation may be unstable. If you're looking for a stable release, go `here <https://github.com/ShineyDev/pretty/tags>`_.
 
 .. code:: shell
 
