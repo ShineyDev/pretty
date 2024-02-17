@@ -91,9 +91,7 @@ jobs:
               repo,
             });
 
-            console.log(response);
-
-            const default_branch = response.default_branch;
+            const default_branch = response.data.default_branch;
 
             response = await github.rest.pulls.create({
               owner,
@@ -103,7 +101,7 @@ jobs:
               title: "${{ env.COMMIT_MESSAGE }}",
             });
 
-            const issue_number = response.number;
+            const issue_number = response.data.number;
 
             response = await github.rest.issues.addLabels({
               owner,
