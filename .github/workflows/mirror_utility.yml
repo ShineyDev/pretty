@@ -99,7 +99,7 @@ jobs:
               base: default_branch,
               head: "${{ env.LOCAL_BRANCH }}",
               title: "${{ env.COMMIT_MESSAGE }}",
-            })
+            });
 
             # response = await github.rest.pulls.create({  # library bug
             #   owner,
