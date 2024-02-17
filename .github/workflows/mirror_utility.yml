@@ -49,7 +49,7 @@ jobs:
       run: |-
         rm -fr local/${{ env.LOCAL_MIRROR_PATH }}
         mkdir -p local/${{ env.LOCAL_MIRROR_PATH }}
-        cp -a remote/${{ env.REMOTE_MIRROR_PATH }}/ local/${{ env.LOCAL_MIRROR_PATH }}/
+        cp -a remote/${{ env.REMOTE_MIRROR_PATH }}/. local/${{ env.LOCAL_MIRROR_PATH }}/
         export IFS=";"
         for file in "${{ env.EXCLUDES }}"; do
             rm local/${{ env.LOCAL_MIRROR_PATH }}/$file
