@@ -9,7 +9,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # TODO: remove
+  contents: write
+  pull-requests: write
 
 env:
   LOCAL_REPOSITORY: ${{ github.repository }}
@@ -102,7 +103,7 @@ jobs:
 
             const issue_number = response.number;
 
-            response.rest.issues.addLabels({
+            response = github.rest.issues.addLabels({
               owner,
               repo,
               issue_number,
