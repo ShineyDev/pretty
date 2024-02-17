@@ -101,13 +101,13 @@ jobs:
               title: "${{ env.COMMIT_MESSAGE }}",
             });
 
-            # response = await github.rest.pulls.create({  # library bug
-            #   owner,
-            #   repo,
-            #   base: default_branch,
-            #   head: "${{ env.LOCAL_BRANCH }}",
-            #   title: "${{ env.COMMIT_MESSAGE }}",
-            # });
+            // response = await github.rest.pulls.create({  // NOTE: library bug
+            //   owner,
+            //   repo,
+            //   base: default_branch,
+            //   head: "${{ env.LOCAL_BRANCH }}",
+            //   title: "${{ env.COMMIT_MESSAGE }}",
+            // });
 
             const issue_number = response.number;
 
@@ -116,5 +116,5 @@ jobs:
               repo,
               issue_number,
               labels: "${{ env.PULL_LABELS }}".split(";"),
-            })
+            });
           }
