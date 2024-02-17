@@ -78,7 +78,7 @@ jobs:
           const owner = "${{ github.repository_owner }}";
           const repo = "${{ github.event.repository.name }}";
 
-          response = github.rest.pulls.list({
+          response = await github.rest.pulls.list({
             owner,
             repo,
             head: "${{ github.repository_owner }}:${{ env.LOCAL_BRANCH }}",
@@ -86,14 +86,14 @@ jobs:
           })
 
           if (!response.length) {
-            response = github.rest.repos.get({
+            response = await github.rest.repos.get({
               owner,
               repo,
             });
 
             const default_branch = response.default_branch;
 
-            response = github.rest.pulls.create({
+            response = await github.rest.pulls.create({
               owner,
               repo,
               base: default_branch,
@@ -103,7 +103,7 @@ jobs:
 
             const issue_number = response.number;
 
-            response = github.rest.issues.addLabels({
+            response = await github.rest.issues.addLabels({
               owner,
               repo,
               issue_number,
