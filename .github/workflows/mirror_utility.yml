@@ -66,7 +66,7 @@ jobs:
         git add .
         git commit -m "${{ env.COMMIT_MESSAGE }}" -m "${{ env.REMOTE_REPOSITORY }}@$(echo $(cd ../remote; git rev-parse HEAD))"
         git remote set-url origin https://x-access-token:${{ env.AUTH_TOKEN }}@github.com/${{ env.LOCAL_REPOSITORY }}
-        git push --force origin ${{ env.LOCAL_BRANCH }}
+        git push --force origin HEAD:${{ env.LOCAL_BRANCH }}
 
     - name: Request
       uses: actions/github-script@v7
@@ -84,7 +84,7 @@ jobs:
             state: "open",
           })
 
-          if (!response.data.length) {
+          if (!response.data?.length) {
             response = github.rest.repos.get({
               owner,
               repo,
