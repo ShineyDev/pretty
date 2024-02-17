@@ -1,0 +1,66 @@
+name: Mirror
+
+on:
+  push:
+    paths:
+    - .github/workflows/mirror_utility.yml
+  schedule:
+  - cron: 0 0 * * 0
+  workflow_dispatch:
+
+permissions:
+  contents: write  # TODO: remove
+
+env:
+  LOCAL_REPOSITORY: ${{ github.repository }}
+  REMOTE_REPOSITORY: ${{ github.event.repository.owner }}/utility
+
+  AUTH_EMAIL: github-actions[bot]@users.noreply.github.com
+  AUTH_NAME: github-actions[bot]
+  AUTH_TOKEN: ${{ github.token }}
+
+  COMMIT_MESSAGE: update mirror of ${{ github.event.repository.owner }}/utility
+
+  EXCLUDES: py.typed
+  LOCAL_MIRROR_PATH: ${{ github.event.repository.name }}/utility/_mirror
+  REMOTE_MIRROR_PATH: utility
+
+jobs:
+  job:
+    name: Mirror
+    runs-on: ubuntu-latest
+
+    if: github.repository_owner == 'ShineyDev'
+
+    steps:
+    - name: Checkout ${{ env.LOCAL_REPOSITORY }}
+      uses: actions/checkout@v4
+      with:
+        path: local
+
+    - name: Checkout ${{ env.REMOTE_REPOSITORY }}
+      uses: actions/checkout@v4
+      with:
+        path: remote
+        repository: ${{ env.REMOTE_REPOSITORY }}
+        token: ${{ env.AUTH_TOKEN }}
+
+    - name: Mirror
+      run: |-
+        rm -fr local/${{ env.LOCAL_MIRROR_PATH }}
+        mkdir -p local/${{ env.LOCAL_MIRROR_PATH }}
+        cp -a remote/${{ env.REMOTE_MIRROR_PATH }} local/${{ env.LOCAL_MIRROR_PATH }}
+        export IFS=";"
+        for file in "${{ env.EXCLUDES }}"; do
+            rm local/${{ env.LOCAL_MIRROR_PATH }}/$file
+        done
+
+    - name: Push
+      working-directory: local
+      run: |-
+        git config user.email ${{ env.AUTH_EMAIL }}
+        git config user.name ${{ env.AUTH_NAME }}
+        git add .
+        git commit -m "${{ env.COMMIT_MESSAGE }}" -m "${{ env.REMOTE_REPOSITORY }}@$(echo $(cd ../remote; git rev-parse HEAD))"
+        git remote set-url origin https://x-access-token:${{ env.AUTH_TOKEN }}@github.com/${{ env.LOCAL_REPOSITORY }}
+        git push

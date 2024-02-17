@@ -7,6 +7,14 @@ reportUnnecessaryTypeIgnoreComment = "warning"
 enableExperimentalFeatures = true
 pythonVersion = "3.8"
 typeCheckingMode = "basic"
+ignore = [
+    "pretty/utility/_mirror"
+]
 
 [tool.black]
 line-length = 200
+exclude = '''
+(
+    ^/pretty/utility/_mirror/.*
+)
+'''

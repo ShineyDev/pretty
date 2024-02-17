@@ -14,6 +14,10 @@ def wrap(
     wrapped: Callable[_P, _T],
     /,
 ) -> Callable[[Callable[_P, _T]], Callable[_P, _T]]:
+    """
+    TODO
+    """
+
     def decorator(
         wrapper: Callable[_P, _T],
         /,
@@ -21,11 +25,7 @@ def wrap(
         wrapper.__doc__ = wrapped.__doc__
         wrapper.__name__ = wrapped.__name__
         wrapper.__qualname__ = wrapped.__qualname__
-
-        try:
-            wrapper.__wrapped__ = wrapped
-        except AttributeError:
-            pass
+        wrapper.__wrapped__ = wrapped
 
         return wrapper
 
@@ -36,6 +36,10 @@ def wrap_fallback(
     wrapped: Callable[_P, _T],
     /,
 ) -> Callable[[Callable[_P, _T]], Callable[_P, _T]]:
+    """
+    TODO
+    """
+
     def decorator(
         wrapper: Callable[_P, _T],
         /,
