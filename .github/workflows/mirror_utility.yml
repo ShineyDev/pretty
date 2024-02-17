@@ -13,13 +13,13 @@ permissions:
 
 env:
   LOCAL_REPOSITORY: ${{ github.repository }}
-  REMOTE_REPOSITORY: ${{ github.event.repository.owner }}/utility
+  REMOTE_REPOSITORY: ShineyDev/utility
 
   AUTH_EMAIL: github-actions[bot]@users.noreply.github.com
   AUTH_NAME: github-actions[bot]
   AUTH_TOKEN: ${{ github.token }}
 
-  COMMIT_MESSAGE: update mirror of ${{ github.event.repository.owner }}/utility
+  COMMIT_MESSAGE: update mirror of ShineyDev/utility
 
   EXCLUDES: py.typed
   LOCAL_MIRROR_PATH: ${{ github.event.repository.name }}/utility/_mirror
