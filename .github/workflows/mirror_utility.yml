@@ -91,23 +91,17 @@ jobs:
               repo,
             });
 
+            console.log(response);
+
             const default_branch = response.default_branch;
 
-            response = await github.request("POST /repos/{owner}/{repo}/pulls", {
+            response = await github.rest.pulls.create({
               owner,
               repo,
               base: default_branch,
               head: "${{ env.LOCAL_BRANCH }}",
               title: "${{ env.COMMIT_MESSAGE }}",
             });
-
-            // response = await github.rest.pulls.create({  // NOTE: library bug
-            //   owner,
-            //   repo,
-            //   base: default_branch,
-            //   head: "${{ env.LOCAL_BRANCH }}",
-            //   title: "${{ env.COMMIT_MESSAGE }}",
-            // });
 
             const issue_number = response.number;
 
