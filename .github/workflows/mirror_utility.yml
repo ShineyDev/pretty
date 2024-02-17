@@ -85,7 +85,7 @@ jobs:
             state: "open",
           })
 
-          if (!response.length) {
+          if (!response.data) {
             response = await github.rest.repos.get({
               owner,
               repo,
