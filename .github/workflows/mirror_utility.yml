@@ -75,7 +75,7 @@ jobs:
           let response;
 
           const owner = "${{ github.repository_owner }}";
-          const repo = ${{ github.event.repository.name }};
+          const repo = "${{ github.event.repository.name }}";
 
           response = github.rest.pulls.list({
             owner,
