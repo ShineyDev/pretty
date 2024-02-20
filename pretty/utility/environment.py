@@ -90,7 +90,7 @@ if TYPE_CHECKING:
     def get_environment_logging(
         name: str,
         /,
-    ) -> int | None:
+    ) -> bool | int | None:
         ...
 
     @overload
@@ -99,7 +99,7 @@ if TYPE_CHECKING:
         /,
         *,
         default: _T,
-    ) -> int | _T:
+    ) -> bool | int | _T:
         ...
 
 
@@ -108,18 +108,19 @@ def get_environment_logging(
     /,
     *,
     default: _T = None,
-) -> int | _T:
+) -> bool | int | _T:
     value: str = get_environment(name, default=MISSING)
 
     if value is MISSING:
         return default
 
     try:
-        integer = int(value)
-    except ValueError:
+        boolean = _value_bool_map[value]
+    except KeyError:
         pass
     else:
-        return integer
+        if boolean is not False:
+            return default
 
     try:
         return logging._nameToLevel[value]

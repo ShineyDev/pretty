@@ -43,7 +43,8 @@ def _main() -> None:
     if enable_all is False:
         return
 
-    logger.setLevel(pretty.utility.get_environment_logging("PYTHONPRETTYLOGGING", default=logging.INFO))
+    if (level := pretty.utility.get_environment_logging("PYTHONPRETTYLOGGING", default=logging.INFO)) is not False:
+        logger.setLevel(level)
 
     theme = pretty.utility.pretty_theme.copy()
 
