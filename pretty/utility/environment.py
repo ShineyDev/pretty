@@ -9,8 +9,7 @@ if TYPE_CHECKING:
 import logging
 import os
 
-from pretty.utility.transform import try_integer
-from pretty.utility.typing import MISSING
+from pretty.utility import MISSING
 
 
 if TYPE_CHECKING:
