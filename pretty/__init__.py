@@ -29,7 +29,7 @@ version: str = "2.0.0a"
 version_info: _VersionInfo = _VersionInfo(2, 0, 0, "alpha", 0)
 
 
-logger = utility.get_logger("pretty")
+logger = logging.getLogger("pretty")
 
 
 def _main() -> None:
@@ -43,8 +43,22 @@ def _main() -> None:
     if enable_all is False:
         return
 
-    if (level := pretty.utility.get_environment_logging("PYTHONPRETTYLOGGING", default=logging.INFO)) is not False:
+    # NOTE: when pretty is initialized via pretty.pth, logging needs to
+    #       be enabled with some defaults by default. notably,
+    if (level := pretty.utility.get_environment_logging("PYTHONPRETTYLOGGING", default=logging.WARNING)) is not False:
+        #   we want to hide from user-defined handlers;
+        logger.propagate = False
+        #   we want to use a very simple format;
+        formatter = logging.Formatter(logging.BASIC_FORMAT)  # TODO: special minimal format for exceptions here
+        #   we want to write to the *current* stderr stream; and
+        handler = utility.CurrentStandardErrorStreamHandler()
+        handler.setFormatter(formatter)
+        #   we want to see WARNING, ERROR, and CRITICAL messages.
         logger.setLevel(level)
+    #       like much else in pretty, this behavior is customizable;
+    #       users are able to disable the logger via
+    #       PYTHONPRETTYLOGGING=0 or update the level of the logger via
+    #       PYTHONPRETTYLOGGING=DEBUG.
 
     theme = pretty.utility.pretty_theme.copy()
 

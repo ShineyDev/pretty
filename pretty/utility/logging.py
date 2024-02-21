@@ -2,39 +2,38 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from logging import Logger
+    from _typeshed import SupportsWrite
+    from typing_extensions import Self
 
 import logging
+import sys
 
 
-def get_logger(
-    name: str,
-    /,
-) -> Logger:
-    manager = logging.Logger.manager
+class CurrentStandardErrorStreamHandler(logging.StreamHandler):
+    """
+    |internal|
 
-    logging._acquireLock()  # type: ignore  # _acquireLock does exist
+    TODO
+    """
 
-    if (l := manager.loggerDict.get(name)) and not isinstance(l, logging.PlaceHolder):
-        logging._releaseLock()  # type: ignore  # _releaseLock does exist
-        return manager.getLogger(name)
+    def __init__(
+        self: Self,
+        /,
+    ) -> None:
+        """
+        Initialize the handler.
+        """  # NOTE: this is required
 
-    logging._releaseLock()  # type: ignore  # _releaseLock does exist
+        super(logging.StreamHandler, self).__init__(logging.NOTSET)
 
-    logger = logging.getLogger(name)
-
-    logger.setLevel(logging.INFO)
-
-    formatter = logging.Formatter(logging.BASIC_FORMAT)
-
-    handler = logging.StreamHandler()
-    handler.setFormatter(formatter)
-
-    logger.addHandler(handler)
-
-    return logger
+    @property
+    def stream(
+        self: Self,
+        /,
+    ) -> SupportsWrite[str]:
+        return sys.stderr
 
 
 __all__ = [
-    "get_logger",
+    "CurrentStandardErrorStreamHandler",
 ]
