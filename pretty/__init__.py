@@ -39,6 +39,21 @@ def hook(
     *,
     theme: dict[str, Any] = MISSING,
 ) -> None:
+    """
+    Hooks pretty into the current Python session.
+
+    This function respects the value of all
+    :term:`PYTHONPRETTY* <PYTHONPRETTYTRACEBACK>` environment variables
+    except for :term:`PYTHONPRETTY` and :term:`PYTHONPRETTYTHEME`,
+    effectively allowing users to delay the initialization of pretty.
+
+    .. tip::
+
+        You can set the :term:`PYTHONPRETTY` environment variable to a
+        :term:`truthy value <boolean value>` to hook pretty into all
+        Python sessions.
+    """
+
     theme = theme if theme is not MISSING else utility.pretty_theme.copy()
 
     _hook(True, theme=theme)
