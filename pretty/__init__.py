@@ -45,7 +45,7 @@ def _main() -> None:
 
     # NOTE: when pretty is initialized via pretty.pth, logging needs to
     #       be enabled with some defaults by default. notably,
-    if (level := pretty.utility.get_environment_logging("PYTHONPRETTYLOGGING", default=logging.WARNING)) is not False:
+    if (level := pretty.utility.get_environment_logging("PYTHONPRETTYLOGGER", default=logging.WARNING)) is not False:
         #   we want to hide from user-defined handlers;
         logger.propagate = False
         #   we want to use a very simple format;
@@ -57,8 +57,8 @@ def _main() -> None:
         logger.setLevel(level)
     #       like much else in pretty, this behavior is customizable;
     #       users are able to disable the logger via
-    #       PYTHONPRETTYLOGGING=0 or update the level of the logger via
-    #       PYTHONPRETTYLOGGING=DEBUG.
+    #       PYTHONPRETTYLOGGER=0 or update the level of the logger via
+    #       PYTHONPRETTYLOGGER=DEBUG.
 
     theme = pretty.utility.pretty_theme.copy()
 
