@@ -98,7 +98,7 @@ def _main() -> None:
             if isinstance(user_theme, dict):
                 theme.update(user_theme)
             else:
-                logger.warning(f"value in {utility.environment_theme} is not a mapping, falling back to default")
+                logger.error(f"value in {utility.environment_theme} is not a mapping, falling back to default")
 
     _hook(enable_all, theme=theme)
 
