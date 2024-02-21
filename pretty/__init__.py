@@ -35,7 +35,6 @@ version_info: _VersionInfo = _VersionInfo(2, 0, 0, "alpha", 0)
 logger = logging.getLogger(__name__)
 
 
-
 def hook(
     *,
     theme: dict[str, Any] = MISSING,
