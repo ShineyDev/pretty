@@ -5,7 +5,10 @@ TODO(introduction)
 """
 
 from __future__ import annotations
-from typing import NamedTuple
+from typing import NamedTuple, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Any
 
 import json
 import logging
@@ -30,6 +33,30 @@ version_info: _VersionInfo = _VersionInfo(2, 0, 0, "alpha", 0)
 
 
 logger = logging.getLogger(__name__)
+
+
+
+def hook(
+    *,
+    theme: dict[str, Any] = MISSING,
+) -> None:
+    theme = theme if theme is not MISSING else utility.pretty_theme.copy()
+
+    _hook(True, theme=theme)
+
+
+def _hook(
+    enable_all: bool,
+    *,
+    theme: dict[str, Any],
+) -> None:
+    if pretty.utility.get_environment_boolean(utility.environment_traceback, default=enable_all):
+        try:
+            pretty.traceback.hook(theme=theme)
+        except Exception as e:
+            logger.error("failed to hook pretty.traceback", e)
+        else:
+            logger.info("hooked pretty.traceback")
 
 
 def _main() -> None:
@@ -74,13 +101,7 @@ def _main() -> None:
             else:
                 logger.warning(f"{utility.environment_theme} not a mapping, falling back to default")
 
-    if pretty.utility.get_environment_boolean(utility.environment_traceback, default=enable_all):
-        try:
-            pretty.traceback.hook(theme=theme)
-        except Exception as e:
-            logger.error("failed to hook pretty.traceback", e)
-        else:
-            logger.info("hooked pretty.traceback")
+    _hook(enable_all, theme=theme)
 
 
 def _main_catchall() -> None:
