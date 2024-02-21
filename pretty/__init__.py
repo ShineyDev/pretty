@@ -29,7 +29,7 @@ version: str = "2.0.0a"
 version_info: _VersionInfo = _VersionInfo(2, 0, 0, "alpha", 0)
 
 
-logger = logging.getLogger("pretty")
+logger = logging.getLogger(__name__)
 
 
 def _main() -> None:
@@ -38,14 +38,14 @@ def _main() -> None:
     #
     #       See https://docs.python.org/3/library/site.html.
 
-    enable_all = pretty.utility.get_environment_boolean("PYTHONPRETTY", default=MISSING)
+    enable_all = pretty.utility.get_environment_boolean(utility.environment_root, default=MISSING)
 
     if enable_all is False:
         return
 
     # NOTE: when pretty is initialized via pretty.pth, logging needs to
     #       be enabled with some defaults by default. notably,
-    if (level := pretty.utility.get_environment_logging("PYTHONPRETTYLOGGER", default=logging.WARNING)) is not False:
+    if (level := pretty.utility.get_environment_logging(utility.environment_logger, default=logging.WARNING)) is not False:
         #   we want to hide from user-defined handlers;
         logger.propagate = False
         #   we want to use a very simple format;
@@ -56,25 +56,25 @@ def _main() -> None:
         #   we want to see WARNING, ERROR, and CRITICAL messages.
         logger.setLevel(level)
     #       like much else in pretty, this behavior is customizable;
-    #       users are able to disable the logger via
-    #       PYTHONPRETTYLOGGER=0 or update the level of the logger via
-    #       PYTHONPRETTYLOGGER=DEBUG.
+    #       users are able to disable the logger with a falsey boolean
+    #       value or update the level of the logger with a value equal
+    #       to a key in the logging._nameToLevel mapping.
 
     theme = pretty.utility.pretty_theme.copy()
 
-    env_theme = os.environ.get("PYTHONPRETTYTHEME")
+    env_theme = os.environ.get(utility.environment_theme)
     if env_theme is not None:
         try:
             user_theme = json.loads(env_theme)
         except json.JSONDecodeError as e:
-            logger.error("failed to load PYTHONPRETTYTHEME, falling back to default", e)
+            logger.error(f"failed to load {utility.environment_theme}, falling back to default", e)
         else:
             if isinstance(user_theme, dict):
                 theme.update(user_theme)
             else:
-                logger.warning("PYTHONPRETTYTHEME not a mapping, falling back to default")
+                logger.warning(f"{utility.environment_theme} not a mapping, falling back to default")
 
-    if pretty.utility.get_environment_boolean("PYTHONPRETTYTRACEBACK", default=enable_all):
+    if pretty.utility.get_environment_boolean(utility.environment_traceback, default=enable_all):
         try:
             pretty.traceback.hook(theme=theme)
         except Exception as e:

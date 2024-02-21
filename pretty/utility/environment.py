@@ -12,6 +12,14 @@ import os
 from pretty.utility import MISSING
 
 
+_environment_prefix = "PYTHONPRETTY"
+environment_logger = f"{_environment_prefix}LOGGER"
+environment_logging = f"{_environment_prefix}LOGGING"
+environment_root = _environment_prefix
+environment_theme = f"{_environment_prefix}THEME"
+environment_traceback = f"{_environment_prefix}TRACEBACK"
+
+
 if TYPE_CHECKING:
 
     @overload
@@ -128,6 +136,11 @@ def get_environment_logging(
 
 
 __all__ = [
+    "environment_logger",
+    "environment_logging",
+    "environment_root",
+    "environment_theme",
+    "environment_traceback",
     "get_environment",
     "get_environment_boolean",
     "get_environment_logging",
