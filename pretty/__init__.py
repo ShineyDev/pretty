@@ -67,8 +67,8 @@ def _hook(
     if pretty.utility.get_environment_boolean(utility.environment_traceback, default=enable_all):
         try:
             pretty.traceback.hook(theme=theme)
-        except Exception as e:
-            logger.error("an unexpected error occurred during initialization of pretty.traceback", e)
+        except Exception:
+            logger.exception("an unexpected error occurred during initialization of pretty.traceback")
         else:
             logger.info("hooked pretty.traceback")
 
@@ -107,8 +107,8 @@ def _main() -> None:
     if env_theme is not None:
         try:
             user_theme = json.loads(env_theme)
-        except json.JSONDecodeError as e:
-            logger.error(f"value in {utility.environment_theme} is not valid json, falling back to default", e)
+        except json.JSONDecodeError:
+            logger.exception(f"value in {utility.environment_theme} is not valid json, falling back to default")
         else:
             if isinstance(user_theme, dict):
                 theme.update(user_theme)
@@ -123,8 +123,8 @@ def _main_catchall() -> None:
 
     try:
         _main()
-    except Exception as e:
-        logger.error("an unexpected error occurred during initialization of pretty", e)
+    except Exception:
+        logger.exception("an unexpected error occurred during initialization of pretty")
 
     logger.debug("initialization end")
 
