@@ -94,6 +94,7 @@ def _main() -> None:
         #   we want to write to the *current* stderr stream; and
         handler = utility.CurrentStandardErrorStreamHandler()
         handler.setFormatter(formatter)
+        logger.addHandler(handler)
         #   we want to see WARNING, ERROR, and CRITICAL messages.
         logger.setLevel(level)
     #       like much else in pretty, this behavior is customizable;
