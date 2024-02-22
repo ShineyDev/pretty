@@ -90,7 +90,7 @@ def _main() -> None:
         #   we want to hide from user-defined handlers;
         logger.propagate = False
         #   we want to use a very simple format;
-        formatter = logging.Formatter(logging.BASIC_FORMAT)  # TODO: special minimal format for exceptions here
+        formatter = utility.MinimalExceptionFormatter(logging.BASIC_FORMAT)
         #   we want to write to the *current* stderr stream; and
         handler = utility.CurrentStandardErrorStreamHandler()
         handler.setFormatter(formatter)
