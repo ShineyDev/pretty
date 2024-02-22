@@ -64,9 +64,9 @@ class MinimalExceptionFormatter(logging.Formatter):
         sys.last_traceback = exc_traceback
 
         if SUPPORTS_SYSLASTEXC:
-            return " (See sys.last_exc)"
+            return " (see sys.last_exc)"
         else:
-            return " (See sys.last_value)"
+            return " (see sys.last_value)"
 
 
 class CurrentStandardErrorStreamHandler(logging.StreamHandler):
