@@ -13,7 +13,7 @@ class BuildPTH(distutils.command.build.build):
     def run(self):
         super().run()
 
-        path = os.path.join(os.path.dirname(__file__), "pretty_hook.pth")
+        path = os.path.join(os.path.dirname(__file__), "pretty.pth")
         dest = os.path.join(self.build_lib, os.path.basename(path))
         self.copy_file(path, dest)
 
@@ -22,7 +22,7 @@ class DevelopPTH(setuptools.command.develop.develop):
     def run(self):
         super().run()
 
-        path = os.path.join(os.path.dirname(__file__), "pretty_hook.pth")
+        path = os.path.join(os.path.dirname(__file__), "pretty.pth")
         dest = os.path.join(self.install_dir, os.path.basename(path))
         self.copy_file(path, dest)
 
@@ -31,7 +31,7 @@ class EasyInstallPTH(setuptools.command.easy_install.easy_install):
     def run(self):
         super().run()
 
-        path = os.path.join(os.path.dirname(__file__), "pretty_hook.pth")
+        path = os.path.join(os.path.dirname(__file__), "pretty.pth")
         dest = os.path.join(self.install_dir, os.path.basename(path))
         self.copy_file(path, dest)
 
@@ -40,7 +40,7 @@ class InstallLibPTH(setuptools.command.install_lib.install_lib):
     def run(self):
         super().run()
 
-        path = os.path.join(os.path.dirname(__file__), "pretty_hook.pth")
+        path = os.path.join(os.path.dirname(__file__), "pretty.pth")
         dest = os.path.join(self.install_dir, os.path.basename(path))
         self.copy_file(path, dest)
 
