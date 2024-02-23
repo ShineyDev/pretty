@@ -1172,7 +1172,12 @@ class DefaultTracebackFormatter(TracebackFormatter):
             while traceback is not None and limit != 0:
                 if sys.version_info >= (3, 11):
                     if traceback.tb_lasti >= 0:
-                        yield traceback.tb_frame, next(itertools.islice(traceback.tb_frame.f_code.co_positions(), traceback.tb_lasti // 2, None))
+                        start_line, end_line, start_column, end_column = next(itertools.islice(traceback.tb_frame.f_code.co_positions(), traceback.tb_lasti // 2, None))
+
+                        if start_line is None:
+                            start_line = traceback.tb_lineno
+
+                        yield traceback.tb_frame, (start_line, end_line, start_column, end_column)
                     else:
                         yield traceback.tb_frame, (traceback.tb_lineno, None, None, None)
                 else:
