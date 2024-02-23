@@ -16,6 +16,9 @@ _version_regex = r"^version(?:\s*:\s*str)?\s*=\s*('|\")((?:[0-9]+\.)*[0-9]+(?:\.
 with open("../pretty/__init__.py") as stream:
     match = re.search(_version_regex, stream.read(), re.MULTILINE)
 
+if not match:
+    raise RuntimeError("could not find version")
+
 release = "v" + match.group(2)
 version = release
 
