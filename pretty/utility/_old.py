@@ -86,7 +86,7 @@ def rindex(
 
     iterable_length = len(iterable)
 
-    for (reversed_i, element) in enumerate(reversed(iterable), 1):
+    for reversed_i, element in enumerate(reversed(iterable), 1):
         i = iterable_length - reversed_i
 
         if start is not None and i < start:

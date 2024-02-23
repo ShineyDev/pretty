@@ -89,7 +89,7 @@ if match.group(3) is not None:
         out, _ = process.communicate()
         if out:
             version += "+g" + out.decode("utf-8").strip()
-    except (Exception) as e:
+    except Exception as e:
         pass
 
 

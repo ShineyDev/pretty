@@ -523,7 +523,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             extract = traceback.StackSummary.extract
 
             def generator_function():
-                for (frame, position) in generator:
+                for frame, position in generator:
                     yield frame, position[0]
 
             generator = generator_function()
@@ -550,7 +550,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             extract = traceback.StackSummary.extract
 
             def generator_function():
-                for (frame, position) in generator:
+                for frame, position in generator:
                     yield frame, position[0]
 
             generator = generator_function()
@@ -580,8 +580,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 /,
                 limit: int | None = ...,
                 chain: bool = ...,
-            ) -> list[str]:
-                ...
+            ) -> list[str]: ...
 
             @overload
             def _format_exception(
@@ -592,8 +591,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 tb: TracebackType | None,
                 limit: int | None = ...,
                 chain: bool = ...,
-            ) -> list[str]:
-                ...
+            ) -> list[str]: ...
 
         @pretty.utility.wrap_fallback(traceback.format_exception)  # type: ignore
         def _format_exception(
@@ -626,8 +624,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 self: Self,
                 exc: BaseException,
                 /,
-            ) -> list[str]:
-                ...
+            ) -> list[str]: ...
 
             @overload
             def _format_exception_only(
@@ -635,8 +632,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 exc: Type[BaseException] | None,
                 /,
                 value: BaseException | None,
-            ) -> list[str]:
-                ...
+            ) -> list[str]: ...
 
         @pretty.utility.wrap_fallback(traceback.format_exception_only)  # type: ignore
         def _format_exception_only(
@@ -732,8 +728,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 limit: int | None = ...,
                 file: TextIO | None = ...,
                 chain: bool = ...,
-            ) -> None:
-                ...
+            ) -> None: ...
 
             @overload
             def _print_exception(
@@ -745,8 +740,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 limit: int | None = ...,
                 file: TextIO | None = ...,
                 chain: bool = ...,
-            ) -> None:
-                ...
+            ) -> None: ...
 
         @pretty.utility.wrap_fallback(traceback.print_exception)  # type: ignore
         def _print_exception(  # type: ignore
@@ -952,7 +946,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
                 locals = frame.locals
 
             if locals:
-                for (key, value) in sorted(locals.items()):
+                for key, value in sorted(locals.items()):
                     if isinstance(frame, types.FrameType):
                         value = pretty.utility.try_repr(value, default="<value.__repr__ failed>")
 
@@ -970,7 +964,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
         last_name = None
         recursion_times = 0
 
-        for (frame, position) in stack:
+        for frame, position in stack:
             if isinstance(frame, types.FrameType):
                 current_filename = frame.f_code.co_filename
                 current_name = frame.f_code.co_name

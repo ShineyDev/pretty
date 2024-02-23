@@ -26,8 +26,7 @@ if TYPE_CHECKING:
     def get_environment(
         name: str,
         /,
-    ) -> str | None:
-        ...
+    ) -> str | None: ...
 
     @overload
     def get_environment(
@@ -35,8 +34,7 @@ if TYPE_CHECKING:
         /,
         *,
         default: _T,
-    ) -> str | _T:
-        ...
+    ) -> str | _T: ...
 
 
 def get_environment(
@@ -61,8 +59,7 @@ if TYPE_CHECKING:
     def get_environment_boolean(
         name: str,
         /,
-    ) -> bool | None:
-        ...
+    ) -> bool | None: ...
 
     @overload
     def get_environment_boolean(
@@ -70,8 +67,7 @@ if TYPE_CHECKING:
         /,
         *,
         default: _T,
-    ) -> bool | _T:
-        ...
+    ) -> bool | _T: ...
 
 
 def get_environment_boolean(
@@ -97,8 +93,7 @@ if TYPE_CHECKING:
     def get_environment_logging(
         name: str,
         /,
-    ) -> bool | int | None:
-        ...
+    ) -> bool | int | None: ...
 
     @overload
     def get_environment_logging(
@@ -106,8 +101,7 @@ if TYPE_CHECKING:
         /,
         *,
         default: _T,
-    ) -> bool | int | _T:
-        ...
+    ) -> bool | int | _T: ...
 
 
 def get_environment_logging(

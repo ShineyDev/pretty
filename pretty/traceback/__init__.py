@@ -25,8 +25,7 @@ _formatter = None
 def hook(
     *,
     theme: dict[str, Any] = ...,
-) -> PrettyTracebackFormatter:
-    ...
+) -> PrettyTracebackFormatter: ...
 
 
 @overload
@@ -35,8 +34,7 @@ def hook(
     /,
     *args: _P.args,
     **kwargs: _P.kwargs,
-) -> _FT:
-    ...
+) -> _FT: ...
 
 
 def hook(
