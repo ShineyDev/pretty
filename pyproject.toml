@@ -8,13 +8,13 @@ enableExperimentalFeatures = true
 pythonVersion = "3.8"
 typeCheckingMode = "basic"
 ignore = [
-    "pretty/utility/_mirror"
+    "**/utility/_mirror"
 ]
 
 [tool.black]
 line-length = 200
 exclude = '''
 (
-    ^/pretty/utility/_mirror/.*
+    ^/[a-zA-Z0-9_]+/utility/_mirror/.*
 )
 '''

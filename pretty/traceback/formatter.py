@@ -523,7 +523,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         generator = self.walk_stack(frame, **options)
 
         if sys.version_info >= (3, 11):
-            extract = traceback.StackSummary._extract_from_extended_frame_gen
+            extract = traceback.StackSummary._extract_from_extended_frame_gen  # type: ignore  # StackSummary._extract_from_extended_frame_gen does exist
         else:
             extract = traceback.StackSummary.extract
 
@@ -555,7 +555,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         generator = self.walk_stack(tb, **options)
 
         if sys.version_info >= (3, 11):
-            extract = traceback.StackSummary._extract_from_extended_frame_gen
+            extract = traceback.StackSummary._extract_from_extended_frame_gen  # type: ignore  # StackSummary._extract_from_extended_frame_gen does exist
         else:
             extract = traceback.StackSummary.extract
 
@@ -595,6 +595,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 self: Self,
                 exc: BaseException,
                 /,
+                *,
                 limit: int | None = ...,
                 chain: bool = ...,
             ) -> list[str]: ...
@@ -602,7 +603,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             @overload
             def _format_exception(
                 self: Self,
-                exc: Type[BaseException] | None,
+                exc: type[BaseException] | None,
                 /,
                 value: BaseException | None,
                 tb: TracebackType | None,
@@ -613,24 +614,24 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         @pretty.utility.wrap_fallback(traceback.format_exception)  # type: ignore  # it doesn't like self
         def _format_exception(
             self: Self,
-            exc: BaseException | Type[BaseException] | None,
+            exc: BaseException | type[BaseException] | None,
             /,
-            value: BaseException | None = traceback._sentinel,  # type: ignore
-            tb: TracebackType | None = traceback._sentinel,  # type: ignore
+            value: BaseException | None = traceback._sentinel,  # type: ignore  # traceback._sentinel does exist
+            tb: TracebackType | None = traceback._sentinel,  # type: ignore  # traceback._sentinel does exist
             limit: int | None = None,
             chain: bool = True,
         ) -> list[str]:
-            if (value is traceback._sentinel) != (tb is traceback._sentinel):  # type: ignore
+            if (value is traceback._sentinel) != (tb is traceback._sentinel):  # type: ignore  # traceback._sentinel does exist
                 raise ValueError("Both or neither of value and tb must be given")
-            elif value is traceback._sentinel:  # type: ignore
+            elif value is traceback._sentinel:  # type: ignore  # traceback._sentinel does exist
                 if exc is None:
                     value, tb = None, None
                 else:
                     if sys.version_info >= (3, 11):
                         if not isinstance(exc, BaseException):
-                            raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
+                            raise TypeError(f"Exception expected for value, {type(exc).__name__} found")
 
-                    value, tb = exc, exc.__traceback__  # type: ignore
+                    value, tb = exc, exc.__traceback__  # type: ignore  # this isn't my problem
 
             options: dict[str, Any] = {
                 "chain": chain,
@@ -653,7 +654,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             @overload
             def _format_exception_only(
                 self: Self,
-                exc: Type[BaseException] | None,
+                exc: type[BaseException] | None,
                 /,
                 value: BaseException | None,
             ) -> list[str]: ...
@@ -661,19 +662,19 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         @pretty.utility.wrap_fallback(traceback.format_exception_only)  # type: ignore  # it doesn't like self
         def _format_exception_only(
             self: Self,
-            exc: BaseException | Type[BaseException] | None,
+            exc: BaseException | type[BaseException] | None,
             /,
-            value: BaseException | None = traceback._sentinel,  # type: ignore
+            value: BaseException | None = traceback._sentinel,  # type: ignore  # traceback._sentinel does exist
         ) -> list[str]:
-            if value is traceback._sentinel:  # type: ignore
+            if value is traceback._sentinel:  # type: ignore  # traceback._sentinel does exist
                 if exc is None:
                     value = None
                 else:
                     if sys.version_info >= (3, 11):
                         if not isinstance(exc, BaseException):
-                            raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
+                            raise TypeError(f"Exception expected for value, {type(exc).__name__} found")
 
-                    value = exc  # type: ignore
+                    value = exc  # type: ignore  # this isn't my problem
 
             return list(self.format_exception(value.__class__, value))
 
@@ -776,6 +777,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 self: Self,
                 exc: BaseException,
                 /,
+                *,
                 limit: int | None = ...,
                 file: TextIO | None = ...,
                 chain: bool = ...,
@@ -784,7 +786,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             @overload
             def _print_exception(
                 self: Self,
-                exc: Type[BaseException] | None,
+                exc: type[BaseException] | None,
                 /,
                 value: BaseException | None,
                 tb: TracebackType | None,
@@ -796,25 +798,25 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         @pretty.utility.wrap_fallback(traceback.print_exception)  # type: ignore  # it doesn't like self
         def _print_exception(
             self: Self,
-            exc: BaseException | Type[BaseException] | None,
+            exc: BaseException | type[BaseException] | None,
             /,
-            value: BaseException | None = traceback._sentinel,  # type: ignore
-            tb: TracebackType | None = traceback._sentinel,  # type: ignore
+            value: BaseException | None = traceback._sentinel,  # type: ignore  # traceback._sentinel does exist
+            tb: TracebackType | None = traceback._sentinel,  # type: ignore  # traceback._sentinel does exist
             limit: int | None = None,
             file: TextIO | None = None,
             chain: bool = True,
         ) -> None:
-            if (value is traceback._sentinel) != (tb is traceback._sentinel):  # type: ignore
+            if (value is traceback._sentinel) != (tb is traceback._sentinel):  # type: ignore  # traceback._sentinel does exist
                 raise ValueError("Both or neither of value and tb must be given")
-            elif value is traceback._sentinel:  # type: ignore
+            elif value is traceback._sentinel:  # type: ignore  # traceback._sentinel does exist
                 if exc is None:
                     value, tb = None, None
                 else:
                     if sys.version_info >= (3, 11):
                         if not isinstance(exc, BaseException):
-                            raise TypeError(f"Exception expected for value, {exc.__class__.__name__} found")
+                            raise TypeError(f"Exception expected for value, {type(exc).__name__} found")
 
-                    value, tb = exc, exc.__traceback__  # type: ignore
+                    value, tb = exc, exc.__traceback__  # type: ignore  # this isn't my problem
 
             options: dict[str, Any] = {
                 "chain": chain,
