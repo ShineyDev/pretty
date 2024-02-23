@@ -504,7 +504,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         stream.write("".join(self.format_traceback(type, value, traceback, chain=chain, display_locals=display_locals, limit=limit)))
 
-    @pretty.utility.wrap_fallback(traceback.extract_stack)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.extract_stack)  # type: ignore  # it doesn't like self
     def _extract_stack(
         self: Self,
         f: FrameType | None = None,
@@ -515,7 +515,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         if TYPE_CHECKING:
             frame = cast(FrameType, frame)
 
-        generator = self.walk_stack(frame, limit=limit)
+        options: dict[str, Any] = dict()
+
+        if limit is not None:
+            options["limit"] = limit
+
+        generator = self.walk_stack(frame, **options)
 
         if sys.version_info >= (3, 11):
             extract = traceback.StackSummary._extract_from_extended_frame_gen
@@ -533,7 +538,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         return stack
 
-    @pretty.utility.wrap_fallback(traceback.extract_tb)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.extract_tb)  # type: ignore  # it doesn't like self
     def _extract_tb(
         self: Self,
         tb: TracebackType | None = None,
@@ -542,7 +547,12 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         if not tb:
             return traceback.StackSummary()
 
-        generator = self.walk_stack(tb, limit=limit)
+        options: dict[str, Any] = dict()
+
+        if limit is not None:
+            options["limit"] = limit
+
+        generator = self.walk_stack(tb, **options)
 
         if sys.version_info >= (3, 11):
             extract = traceback.StackSummary._extract_from_extended_frame_gen
@@ -559,7 +569,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         return stack
 
-    @pretty.utility.wrap_fallback(traceback.format_exc)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.format_exc)  # type: ignore  # it doesn't like self
     def _format_exc(
         self: Self,
         limit: int | None = None,
@@ -567,7 +577,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     ) -> str:
         _, value, traceback = sys.exc_info()
 
-        return "".join(self.format_traceback(value.__class__, value, traceback, chain=chain, limit=limit))
+        options: dict[str, Any] = {
+            "chain": chain,
+        }
+
+        if limit is not None:
+            options["limit"] = limit
+
+        return "".join(self.format_traceback(value.__class__, value, traceback, chain=chain, **options))
 
     if sys.version_info >= (3, 10):
 
@@ -593,7 +610,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 chain: bool = ...,
             ) -> list[str]: ...
 
-        @pretty.utility.wrap_fallback(traceback.format_exception)  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.format_exception)  # type: ignore  # it doesn't like self
         def _format_exception(
             self: Self,
             exc: BaseException | Type[BaseException] | None,
@@ -615,7 +632,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
                     value, tb = exc, exc.__traceback__  # type: ignore
 
-            return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
+            options: dict[str, Any] = {
+                "chain": chain,
+            }
+
+            if limit is not None:
+                options["limit"] = limit
+
+            return list(self.format_traceback(value.__class__, value, tb, **options))
 
         if TYPE_CHECKING:
 
@@ -634,7 +658,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 value: BaseException | None,
             ) -> list[str]: ...
 
-        @pretty.utility.wrap_fallback(traceback.format_exception_only)  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.format_exception_only)  # type: ignore  # it doesn't like self
         def _format_exception_only(
             self: Self,
             exc: BaseException | Type[BaseException] | None,
@@ -655,8 +679,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
     else:
 
-        @pretty.utility.wrap_fallback(traceback.format_exception)  # type: ignore
-        def _format_exception(  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.format_exception)  # type: ignore  # it doesn't like self
+        def _format_exception(
             self: Self,
             etype: type[BaseException] | None,
             value: BaseException | None,
@@ -664,9 +688,16 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             limit: int | None = None,
             chain: bool = True,
         ) -> list[str]:
-            return list(self.format_traceback(value.__class__, value, tb, chain=chain, limit=limit))
+            options: dict[str, Any] = {
+                "chain": chain,
+            }
 
-        @pretty.utility.wrap_fallback(traceback.format_exception_only)  # type: ignore
+            if limit is not None:
+                options["limit"] = limit
+
+            return list(self.format_traceback(value.__class__, value, tb, **options))
+
+        @pretty.utility.wrap_fallback(traceback.format_exception_only)  # type: ignore  # it doesn't like self
         def _format_exception_only(
             self: Self,
             etype: type[BaseException] | None,
@@ -674,14 +705,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         ) -> list[str]:
             return list(self.format_exception(value.__class__, value))
 
-    @pretty.utility.wrap_fallback(traceback.format_list)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.format_list)  # type: ignore  # it doesn't like self
     def _format_list(
         self: Self,
         extracted_list: list[FrameSummary | tuple[str, int, str, str]],
     ) -> list[str]:
         return list(self.format_stack((traceback.FrameSummary(filename, lineno, name, line=line), (lineno, None, None, None)) for (filename, lineno, name, line) in extracted_list))
 
-    @pretty.utility.wrap_fallback(traceback.format_stack)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.format_stack)  # type: ignore  # it doesn't like self
     def _format_stack(
         self: Self,
         f: FrameType | None = None,
@@ -692,9 +723,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         if TYPE_CHECKING:
             frame = cast(FrameType, frame)
 
-        return list(self.format_stack(self.walk_stack(frame, limit=limit)))
+        options = dict()
 
-    @pretty.utility.wrap_fallback(traceback.format_tb)  # type: ignore
+        if limit is not None:
+            options["limit"] = limit
+
+        return list(self.format_stack(self.walk_stack(frame, **options)))
+
+    @pretty.utility.wrap_fallback(traceback.format_tb)  # type: ignore  # it doesn't like self
     def _format_tb(
         self: Self,
         tb: TracebackType | None,
@@ -703,9 +739,14 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         if not tb:
             return list()
         else:
-            return list(self.format_stack(self.walk_stack(tb, limit=limit)))
+            options = dict()
 
-    @pretty.utility.wrap_fallback(traceback.print_exc)  # type: ignore
+            if limit is not None:
+                options["limit"] = limit
+
+            return list(self.format_stack(self.walk_stack(tb, **options)))
+
+    @pretty.utility.wrap_fallback(traceback.print_exc)  # type: ignore  # it doesn't like self
     def _print_exc(
         self,
         limit: int | None = None,
@@ -714,7 +755,17 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
     ) -> None:
         _, value, traceback = sys.exc_info()
 
-        self.print_traceback(value.__class__, value, traceback, chain=chain, limit=limit, stream=file)
+        options: dict[str, Any] = {
+            "chain": chain,
+        }
+
+        if file is not None:
+            options["stream"] = file
+
+        if limit is not None:
+            options["limit"] = limit
+
+        self.print_traceback(value.__class__, value, traceback, **options)
 
     if sys.version_info >= (3, 10):
 
@@ -742,8 +793,8 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
                 chain: bool = ...,
             ) -> None: ...
 
-        @pretty.utility.wrap_fallback(traceback.print_exception)  # type: ignore
-        def _print_exception(  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.print_exception)  # type: ignore  # it doesn't like self
+        def _print_exception(
             self: Self,
             exc: BaseException | Type[BaseException] | None,
             /,
@@ -765,12 +816,22 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
                     value, tb = exc, exc.__traceback__  # type: ignore
 
-            self.print_traceback(value.__class__, value, tb, chain=chain, limit=limit, stream=file)
+            options: dict[str, Any] = {
+                "chain": chain,
+            }
+
+            if file is not None:
+                options["stream"] = file
+
+            if limit is not None:
+                options["limit"] = limit
+
+            self.print_traceback(value.__class__, value, tb, **options)
 
     else:
 
-        @pretty.utility.wrap_fallback(traceback.print_exception)  # type: ignore
-        def _print_exception(  # type: ignore
+        @pretty.utility.wrap_fallback(traceback.print_exception)  # type: ignore  # it doesn't like self
+        def _print_exception(
             self: Self,
             etype: type[BaseException] | None,
             value: BaseException | None,
@@ -779,9 +840,19 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
             file: TextIO | None = None,
             chain: bool = True,
         ) -> None:
-            self.print_traceback(value.__class__, value, tb, chain=chain, limit=limit, stream=file)
+            options: dict[str, Any] = {
+                "chain": chain,
+            }
 
-    @pretty.utility.wrap_fallback(traceback.print_last)  # type: ignore
+            if file is not None:
+                options["stream"] = file
+
+            if limit is not None:
+                options["limit"] = limit
+
+            self.print_traceback(value.__class__, value, tb, **options)
+
+    @pretty.utility.wrap_fallback(traceback.print_last)  # type: ignore  # it doesn't like self
     def _print_last(
         self: Self,
         limit: int | None = None,
@@ -793,17 +864,32 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
 
         value, traceback = sys.last_value, sys.last_traceback
 
-        self.print_traceback(value.__class__, value, traceback, chain=chain, limit=limit, stream=file)
+        options: dict[str, Any] = {
+            "chain": chain,
+        }
 
-    @pretty.utility.wrap_fallback(traceback.print_list)  # type: ignore
+        if file is not None:
+            options["stream"] = file
+
+        if limit is not None:
+            options["limit"] = limit
+
+        self.print_traceback(value.__class__, value, traceback, **options)
+
+    @pretty.utility.wrap_fallback(traceback.print_list)  # type: ignore  # it doesn't like self
     def _print_list(
         self: Self,
         extracted_list: list[FrameSummary | tuple[str, int, str, str]],
         file: TextIO | None = None,
     ) -> None:
-        self.print_stack(((traceback.FrameSummary(filename, lineno, name, line=line), (lineno, None, None, None)) for (filename, lineno, name, line) in extracted_list), stream=file)
+        options: dict[str, Any] = dict()
 
-    @pretty.utility.wrap_fallback(traceback.print_stack)  # type: ignore
+        if file is not None:
+            options["stream"] = file
+
+        self.print_stack(((traceback.FrameSummary(filename, lineno, name, line=line), (lineno, None, None, None)) for (filename, lineno, name, line) in extracted_list), **options)
+
+    @pretty.utility.wrap_fallback(traceback.print_stack)  # type: ignore  # it doesn't like self
     def _print_stack(
         self: Self,
         f: FrameType | None = None,
@@ -815,9 +901,19 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         if TYPE_CHECKING:
             frame = cast(FrameType, frame)
 
-        self.print_stack(self.walk_stack(frame, limit=limit), stream=file)
+        walk_options: dict[str, Any] = dict()
 
-    @pretty.utility.wrap_fallback(traceback.print_tb)  # type: ignore
+        if limit is not None:
+            walk_options["limit"] = limit
+
+        print_options: dict[str, Any] = dict()
+
+        if file is not None:
+            walk_options["stream"] = file
+
+        self.print_stack(self.walk_stack(frame, **walk_options), **print_options)
+
+    @pretty.utility.wrap_fallback(traceback.print_tb)  # type: ignore  # it doesn't like self
     def _print_tb(
         self: Self,
         tb: TracebackType | None,
@@ -825,17 +921,27 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         file: TextIO | None = None,
     ) -> None:
         if tb:
-            self.print_stack(self.walk_stack(tb, limit=limit), stream=file)
+            walk_options: dict[str, Any] = dict()
 
-    @pretty.utility.wrap_fallback(traceback.walk_stack)  # type: ignore
+            if limit is not None:
+                walk_options["limit"] = limit
+
+            print_options: dict[str, Any] = dict()
+
+            if file is not None:
+                walk_options["stream"] = file
+
+            self.print_stack(self.walk_stack(tb, **walk_options), **print_options)
+
+    @pretty.utility.wrap_fallback(traceback.walk_stack)  # type: ignore  # it doesn't like self
     def _walk_stack(
         self: Self,
         f: FrameType | None,
     ) -> Iterator[tuple[FrameType, int]]:
         if sys.version_info >= (3, 11):
-            frame = f or sys._getframe().f_back.f_back.f_back.f_back  # type: ignore
+            frame = f or sys._getframe().f_back.f_back.f_back.f_back  # type: ignore  # frame -4 does exist here when called normally
         else:
-            frame = f or sys._getframe().f_back.f_back  # type: ignore
+            frame = f or sys._getframe().f_back.f_back  # type: ignore  # frame -2 does exist here when called normally
 
         if TYPE_CHECKING:
             frame = cast(FrameType, frame)
@@ -843,7 +949,7 @@ class TracebackFormatter(metaclass=abc.ABCMeta):
         for frame, position in self.walk_stack(frame):
             yield frame, position[0]
 
-    @pretty.utility.wrap_fallback(traceback.walk_tb)  # type: ignore
+    @pretty.utility.wrap_fallback(traceback.walk_tb)  # type: ignore  # it doesn't like self
     def _walk_tb(
         self: Self,
         tb: TracebackType,
@@ -906,32 +1012,32 @@ class DefaultTracebackFormatter(TracebackFormatter):
 
     def format_frame(
         self: Self,
-        frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],  # pyright: ignore[reportGeneralTypeIssues]
+        frame: tuple[FrameSummary | FrameType, tuple[int, int | None, int | None, int | None]],
         /,
         *,
         display_locals: bool | None = None,
     ) -> Iterator[str]:
-        frame, position = frame  # type: ignore
+        frame_summary, frame_position = frame
 
         if TYPE_CHECKING:
-            frame: FrameSummary | FrameType
-            position: tuple[int, int | None, int | None, int | None]
+            frame_summary: FrameSummary | FrameType
+            frame_position: tuple[int, int | None, int | None, int | None]
 
-        if isinstance(frame, types.FrameType):
-            filename = frame.f_code.co_filename
-            name = frame.f_code.co_name
+        if isinstance(frame_summary, types.FrameType):
+            filename = frame_summary.f_code.co_filename
+            name = frame_summary.f_code.co_name
         else:
-            filename = frame.filename
-            name = frame.name
+            filename = frame_summary.filename
+            name = frame_summary.name
 
-        lineno = position[0]
+        lineno = frame_position[0]
 
         yield self.location_format.format(filename=filename, lineno=lineno, name=name) + "\n"
 
-        if isinstance(frame, types.FrameType):
+        if isinstance(frame_summary, types.FrameType):
             line = linecache.getline(filename, lineno)
         else:
-            line = frame.line
+            line = frame_summary.line
 
         if line:
             yield line
@@ -940,14 +1046,14 @@ class DefaultTracebackFormatter(TracebackFormatter):
             display_locals = False
 
         if display_locals:
-            if isinstance(frame, types.FrameType):
-                locals = frame.f_locals
+            if isinstance(frame_summary, types.FrameType):
+                locals = frame_summary.f_locals
             else:
-                locals = frame.locals
+                locals = frame_summary.locals
 
             if locals:
                 for key, value in sorted(locals.items()):
-                    if isinstance(frame, types.FrameType):
+                    if isinstance(frame_summary, types.FrameType):
                         value = pretty.utility.try_repr(value, default="<value.__repr__ failed>")
 
                     yield f"  {key} = {value}\n"
@@ -964,15 +1070,15 @@ class DefaultTracebackFormatter(TracebackFormatter):
         last_name = None
         recursion_times = 0
 
-        for frame, position in stack:
-            if isinstance(frame, types.FrameType):
-                current_filename = frame.f_code.co_filename
-                current_name = frame.f_code.co_name
+        for frame_summary, frame_position in stack:
+            if isinstance(frame_summary, types.FrameType):
+                current_filename = frame_summary.f_code.co_filename
+                current_name = frame_summary.f_code.co_name
             else:
-                current_filename = frame.filename
-                current_name = frame.name
+                current_filename = frame_summary.filename
+                current_name = frame_summary.name
 
-            current_lineno = position[0]
+            current_lineno = frame_position[0]
 
             if current_filename != last_filename or current_lineno != last_lineno or current_name != last_name:
                 if recursion_times > self.recursion_cutoff:
@@ -989,7 +1095,7 @@ class DefaultTracebackFormatter(TracebackFormatter):
             if recursion_times > self.recursion_cutoff:
                 continue
 
-            yield from self.format_frame((frame, position), display_locals=display_locals)
+            yield from self.format_frame((frame_summary, frame_position), display_locals=display_locals)
 
         if recursion_times > self.recursion_cutoff:
             times = recursion_times - self.recursion_cutoff
