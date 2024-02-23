@@ -6,8 +6,6 @@ from pretty.utility.environment import *
 from pretty.utility.environment import __all__ as _environment__all__
 from pretty.utility.logging import *
 from pretty.utility.logging import __all__ as _logging__all__
-from pretty.utility.version import *
-from pretty.utility.version import __all__ as _version__all__
 
 
 __all__ = [  # pyright: ignore[reportUnsupportedDunderAll]
@@ -15,5 +13,4 @@ __all__ = [  # pyright: ignore[reportUnsupportedDunderAll]
     *_internal_old__all__,
     *_environment__all__,
     *_logging__all__,
-    *_version__all__,
 ]

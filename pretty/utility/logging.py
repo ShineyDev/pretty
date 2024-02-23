@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 import logging
 import sys
 
-from pretty.utility.version import SUPPORTS_SYSLASTEXC
+from pretty.utility import SUPPORTS_SYSLASTEXC
 
 
 class MinimalExceptionFormatter(logging.Formatter):
