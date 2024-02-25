@@ -13,6 +13,7 @@ from pretty.utility import MISSING
 
 
 _environment_prefix = "PYTHONPRETTY"
+environment_color = f"{_environment_prefix}COLOR"
 environment_logger = f"{_environment_prefix}LOGGER"
 environment_logging = f"{_environment_prefix}LOGGING"
 environment_root = _environment_prefix

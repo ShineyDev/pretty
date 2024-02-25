@@ -104,6 +104,18 @@ rst_prolog = """
 .. |token_keyword_soft| replace:: |token_keyword_soft_link|_
 .. |token_keyword_soft_link| replace:: soft keyword tokens
 .. _token_keyword_soft_link: https://docs.python.org/3/reference/lexical_analysis.html#soft-keywords
+
+.. |FORCE_COLOR| replace:: |FORCE_COLOR_link|_
+.. |FORCE_COLOR_link| replace:: FORCE_COLOR
+.. _FORCE_COLOR_link: https://force-color.org/
+
+.. |NO_COLOR| replace:: |NO_COLOR_link|_
+.. |NO_COLOR_link| replace:: NO_COLOR
+.. _NO_COLOR_link: https://no-color.org/
+
+.. |PYTHON_COLORS| replace:: |PYTHON_COLORS_link|_
+.. |PYTHON_COLORS_link| replace:: PYTHON_COLORS
+.. _PYTHON_COLORS_link: https://docs.python.org/3.13/using/cmdline.html#using-on-controlling-color
 """
 source_suffix = ".rst"
 
