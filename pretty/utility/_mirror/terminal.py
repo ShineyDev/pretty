@@ -29,7 +29,7 @@ def apply_ansi_sgr(
     if sgr is None:
         return string
 
-    if stream is not MISSING and not wants_ansi(stream):
+    if stream is not MISSING and not wants_ansi_sgr(stream):
         return string
 
     if isinstance(sgr, str):
