@@ -4,8 +4,28 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import TextIO
 
-from pretty.utility import wants_ansi_sgr as _wants_ansi_sgr, MISSING
+from pretty.utility import apply_ansi_sgr as _apply_ansi_sgr, wants_ansi_sgr as _wants_ansi_sgr, MISSING
 from pretty.utility.environment import get_environment_boolean, environment_color
+
+
+def apply_ansi_sgr(
+    string: str,
+    sgr: str | tuple[str, str] | None,
+    /,
+    *,
+    stream: TextIO = MISSING,
+) -> str:
+    """
+    TODO
+    """
+
+    if sgr is None:
+        return string
+
+    if stream is not MISSING and not wants_ansi_sgr(stream):
+        return string
+
+    return _apply_ansi_sgr(string, sgr, stream=stream)
 
 
 def wants_ansi_sgr(
@@ -54,5 +74,6 @@ def wants_ansi_sgr(
 
 
 __all__ = [
+    "apply_ansi_sgr",
     "wants_ansi_sgr",
 ]
