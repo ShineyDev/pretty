@@ -11,17 +11,17 @@ from pretty.utility import supports_ansi, MISSING
 from pretty.utility.environment import get_environment_boolean, environment_color
 
 
-def wants_ansi(
+def wants_ansi_sgr(
     stream: TextIO = MISSING,
     /,
 ) -> bool:
     """
     Determines whether a stream advertises that it both wants and
-    supports ANSI escape sequences to be used in its output.
+    supports ANSI SGR escape sequences to be used in its output.
 
     Specifically, this function does the following, in this order:
 
-    - If the stream advertises that it wants ANSI escape sequences
+    - If the stream advertises that it wants ANSI SGR escape sequences
       continue, otherwise return False.
         - If :term:`PYTHONPRETTYCOLOR` is set to a
           :term:`falsey value <boolean value>` return False.
@@ -47,7 +47,7 @@ def wants_ansi(
     -------
     :class:`bool`
         Whether the stream advertises that it both supports and wants
-        ANSI escape sequences to be used in its output.
+        ANSI SGR escape sequences to be used in its output.
     """
 
     if get_environment_boolean(environment_color) is False:
@@ -70,5 +70,5 @@ def wants_ansi(
 
 
 __all__ = [
-    "wants_ansi",
+    "wants_ansi_sgr",
 ]
