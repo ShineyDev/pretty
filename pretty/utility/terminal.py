@@ -50,7 +50,7 @@ def wants_ansi(
         ANSI escape sequences to be used in its output.
     """
 
-    if (pretty_color := get_environment_boolean(environment_color)) is False:
+    if get_environment_boolean(environment_color) is False:
         return False
 
     if sys.version_info >= (3, 13):
