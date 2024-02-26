@@ -7,8 +7,8 @@ from typing import NamedTuple
 
 from .cache import *
 from .cache import __all__ as _cache__all__
-from .color import *
-from .color import __all__ as _color__all__
+from .terminal import *
+from .terminal import __all__ as _terminal__all__
 from .typing import *
 from .typing import __all__ as _typing__all__
 from .version import *
@@ -35,7 +35,7 @@ version_info: _VersionInfo = _VersionInfo(0, 1, 0, "alpha", 0)
 
 __all__ = [  # pyright: ignore[reportUnsupportedDunderAll]
     *_cache__all__,
-    *_color__all__,
+    *_terminal__all__,
     *_typing__all__,
     *_version__all__,
     *_warning__all__,

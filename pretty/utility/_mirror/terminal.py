@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import TextIO
 
+import ctypes
 import sys
 
 from .typing import MISSING
@@ -13,7 +14,7 @@ if sys.platform == "win32":
     from .windows import get_console_mode, OutputConsoleMode
 
 
-def supports_color(
+def supports_ansi(
     stream: TextIO = MISSING,
     /,
 ) -> bool:
@@ -22,8 +23,13 @@ def supports_color(
     """
 
     if sys.platform == "win32":
-        if isinstance(console_mode := get_console_mode(stream), OutputConsoleMode):
-            return bool(console_mode & OutputConsoleMode.ENABLE_VIRTUAL_TERMINAL_PROCESSING)
+        try:
+            console_mode = get_console_mode(stream)
+        except ctypes.WinError:
+            return False
+        else:
+            if isinstance(console_mode, OutputConsoleMode):
+                return bool(console_mode & OutputConsoleMode.ENABLE_VIRTUAL_TERMINAL_PROCESSING)
 
     if stream is MISSING:
         stream = sys.stdout
@@ -32,5 +38,5 @@ def supports_color(
 
 
 __all__ = [
-    "supports_color",
+    "supports_ansi",
 ]
