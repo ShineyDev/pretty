@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 import os
 import sys
 
-from pretty.utility import supports_color, MISSING
+from pretty.utility import supports_ansi, MISSING
 from pretty.utility.environment import get_environment_boolean, environment_color
 
 
@@ -66,7 +66,7 @@ def wants_ansi(
     if os.environ.get("TERM") == "dumb":
         return False
 
-    return supports_color(stream)
+    return supports_ansi(stream)
 
 
 __all__ = [
