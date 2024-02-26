@@ -4,10 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import TextIO
 
-import os
-import sys
-
-from pretty.utility import supports_ansi, MISSING
+from pretty.utility import wants_ansi_sgr as _wants_ansi_sgr, MISSING
 from pretty.utility.environment import get_environment_boolean, environment_color
 
 
@@ -53,20 +50,7 @@ def wants_ansi_sgr(
     if get_environment_boolean(environment_color) is False:
         return False
 
-    if sys.version_info >= (3, 13):
-        if os.environ.get("PYTHON_COLORS") == "0":
-            return False
-
-    if "NO_COLOR" in os.environ.keys():
-        return False
-
-    if "FORCE_COLOR" in os.environ.keys():
-        return True
-
-    if os.environ.get("TERM") == "dumb":
-        return False
-
-    return supports_ansi(stream)
+    return _wants_ansi_sgr(stream)
 
 
 __all__ = [
