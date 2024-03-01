@@ -5,6 +5,8 @@ utility: A Python package with utilities I use in several of my other projects.
 from __future__ import annotations
 from typing import NamedTuple
 
+import sys
+
 from .cache import *
 from .cache import __all__ as _cache__all__
 from .terminal import *
@@ -15,8 +17,13 @@ from .version import *
 from .version import __all__ as _version__all__
 from .warning import *
 from .warning import __all__ as _warning__all__
-from .windows import *
-from .windows import __all__ as _windows__all__
+
+if sys.platform == "win32":
+    from .windows import *
+    from .windows import __all__ as _windows__all__
+else:
+    _windows__all__ = ()
+
 from .wrapper import *
 from .wrapper import __all__ as _wrapper__all__
 
